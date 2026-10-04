@@ -1,0 +1,615 @@
+/* =========================================================
+   ABOUT — SECTION 02
+   Concept: "the road is seen before it is walked".
+   The section is an artboard (fixed aspect ratio). All sizes
+   use cqw so type and geometry scale together with the SVG road.
+   Numbers here must match DESKTOP / MOBILE in AboutSection.tsx.
+
+   Color and type reuse the site's own tokens (--sky / --white /
+   --muted / --sky-light / --navy-950 from index.css) instead of
+   ad hoc hex values, so the section reads as the same voice as
+   the Hero, not a separate palette bolted on.
+   ========================================================= */
+
+.ab {
+  position: relative;
+  overflow: hidden;
+
+  /* deep, dark navy — darker than the first pass, so the glows and the
+     lit road still read as the brightest things on screen (like they did
+     against near-black), while the base itself stays unmistakably blue,
+     never grey or flat black */
+  background: linear-gradient(
+    180deg,
+    var(--navy-950) 0%,
+    #07111b 18%,
+    #091420 55%,
+    #07111b 100%
+  );
+  color: var(--white);
+}
+
+/* threshold: a thin horizon of light where the hero ends */
+.ab::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 4%,
+    rgba(159, 216, 245, 0.3) 68%,
+    transparent 96%
+  );
+}
+
+/* =========================================================
+   ENTRANCE — reveal on scroll.
+   No CSS hides this content. [data-reveal] elements and the `.ab-label i`
+   underline render fully visible by default, exactly like any other text
+   on the page. AboutSection.tsx's GSAP scroll-scrubbed timeline is the
+   ONLY thing that ever sets them to a hidden starting state (via
+   gsap.set), and only once its setup has actually started running —
+   wrapped in a try/catch with a hard timeout fallback there. So this
+   file can never be the reason text stays invisible: worst case, the
+   text simply shows with no animation.
+   ========================================================= */
+
+/* ---------- atmosphere: depth from light, not from a new background ---------- */
+
+.ab-atmo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ab-glow {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.ab-glow--a {
+  --s: min(64vw, 920px);
+  width: var(--s);
+  top: 2%;
+  left: 68%;
+  margin-left: calc(var(--s) / -2);
+  /* dialed back down — the darker background already gives these enough
+     contrast; pushing the opacity further just made them read as flat,
+     obvious "glow blobs" instead of ambient light */
+  background: radial-gradient(closest-side, rgba(159, 216, 245, 0.12), rgba(159, 216, 245, 0));
+}
+
+.ab-glow--b {
+  --s: min(52vw, 760px);
+  width: var(--s);
+  top: 40%;
+  left: 26%;
+  margin-left: calc(var(--s) / -2);
+  background: radial-gradient(closest-side, rgba(159, 216, 245, 0.08), rgba(159, 216, 245, 0));
+}
+
+.ab-glow--c {
+  --s: min(56vw, 820px);
+  width: var(--s);
+  top: 76%;
+  left: 72%;
+  margin-left: calc(var(--s) / -2);
+  background: radial-gradient(closest-side, rgba(159, 216, 245, 0.08), rgba(159, 216, 245, 0));
+}
+
+/* ---------- artboard ---------- */
+
+.ab-scene {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  aspect-ratio: 1440 / 3060;
+  container-type: inline-size;
+}
+
+/* ---------- label ---------- */
+
+.ab-label {
+  position: absolute;
+  top: 5.6%;
+  right: 8%;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 0;
+
+  /* identical to every other section's eyebrow (.exp-eyebrow, .prt-eyebrow…) */
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  color: var(--sky);
+}
+
+.ab-label i {
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+/* ---------- title: three lines, three different positions ---------- */
+
+.ab-title {
+  position: absolute;
+  top: 8.5%;
+  right: 0;
+  left: 0;
+  z-index: 2;
+
+  margin: 0;
+
+  /* the section's opening statement: a little under its original size,
+     scaling with the artboard so it always keeps its place above the
+     description (same weight/color as the site's section titles) */
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 4.8cqw;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0; /* Arabic joins: never track it out */
+  /* the two framing lines sit a step quieter, so "الطريق" is the light */
+  color: rgba(245, 247, 248, 0.78);
+}
+
+.ab-line {
+  display: block;
+  overflow: hidden; /* mask for the rise-in */
+  padding: 0.14em 0;
+  margin-block: -0.14em;
+}
+
+/* Word-level split + mask (each `.ab-word` and its clipping wrapper) is
+   generated at runtime by GSAP SplitText (`type: 'words', mask: 'words'`
+   in AboutSection.tsx) — never split smaller than a word, since Arabic
+   letters join within a word and splitting by letter would break that
+   joining. No CSS here needs to describe that structure: SplitText sets
+   the wrapper's `display`/`overflow` itself.
+
+   Used for both the title lines (animated word-by-word, since each line
+   is short) and the description paragraph — there the words are the
+   same SplitText split, but AboutSection.tsx groups them by their own
+   vertical position into visual lines afterwards (SplitText's built-in
+   `type: 'lines'` uses a left-to-right line-break check that misreads
+   RTL Arabic) and reveals a line's words together, so the long
+   paragraph animates in readable chunks instead of either 20+
+   individually-timed words (imperceptible at normal scroll speed) or
+   one flat block. */
+.ab-word {
+  /* CRITICAL: CSS transforms have NO effect at all on a plain inline,
+     non-replaced element (spec behavior, not a bug) — and `tag: 'span'`
+     in AboutSection.tsx makes each word exactly that: a plain <span>.
+     Without this line, GSAP's `yPercent` silently does nothing (the
+     browser ignores the transform), so the word sits in its final
+     position from frame one with no visible reveal at all — this is
+     GreenSock's own documented caveat for SplitText with `tag: 'span'`.
+     `inline-block` keeps the word flowing inline with the rest of the
+     Arabic text (unlike `block`, which would break the line), while
+     making it a real box that transforms actually apply to. */
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* SplitText's auto-generated mask wrapper (class = wordsClass + "-mask")
+   is a plain <span> too, for the same reason as `.ab-word` above — give
+   it the same fix so the overflow-clip it relies on to hide the word's
+   pre-reveal position works reliably. */
+.ab-word-mask {
+  display: inline-block;
+}
+
+/* the title lines rise out of their .ab-line mask — transforms need a box */
+.ab-line-text {
+  display: inline-block;
+}
+
+.ab-line--1 {
+  width: fit-content;
+  margin-right: 8%;
+}
+
+/* the word "الطريق" is the memorable element of the section —
+   distinct on purpose, but sized to sit with the rest, not over it */
+.ab-line--2 {
+  width: fit-content;
+  margin-right: 8%; /* same right edge as the other two lines */
+  text-align: right;
+  font-size: 8.4cqw;
+  line-height: 1.15;
+  padding-block: 0.2em;
+  margin-block: -0.1em;
+}
+
+.ab-way {
+  display: inline-block !important;
+  font-weight: 600;
+  color: var(--white);
+  will-change: transform;
+
+  /* "الطريق" is the lit word of the title — the same language the rest
+     of the site uses for its key word (sky light): white warming into
+     sky from top to bottom, and a soft band of light that sweeps across
+     it every few seconds, as if the traveling light just passed over it */
+  background-image:
+    linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0) 38%,
+      rgba(255, 255, 255, 0.95) 50%,
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(180deg, #ffffff 15%, #cdeafa 70%, #9fd8f5 100%);
+  background-size:
+    260% 100%,
+    100% 100%;
+  background-position:
+    130% 0,
+    0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* the painted area must cover the letters' tails (ق) — a clipped
+     background only paints inside the box, so give it room above and
+     below without moving anything */
+  padding-block: 0.18em;
+  margin-block: -0.18em;
+
+  animation: ab-way-sweep 6s ease-in-out 1.5s infinite;
+}
+
+@keyframes ab-way-sweep {
+  0%,
+  60% {
+    background-position:
+      130% 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      -30% 0,
+      0 0;
+  }
+}
+
+.ab-line--3 {
+  width: fit-content;
+  margin-right: 8%;
+  text-align: right;
+}
+
+/* ---------- description ---------- */
+
+.ab-desc {
+  position: absolute;
+  top: 27.1%;
+  left: 20%;
+  z-index: 2;
+
+  width: 34%;
+  margin: 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 2;
+  color: var(--muted);
+}
+
+/* ---------- the road ---------- */
+
+.ab-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+
+  /* the road fades out at the section's end, ready to hand over to the next one */
+  -webkit-mask-image: linear-gradient(to bottom, #000 93%, transparent);
+  mask-image: linear-gradient(to bottom, #000 93%, transparent);
+}
+
+.ab-svg--m {
+  display: none;
+}
+
+.ab-track {
+  fill: none;
+  stroke: rgba(159, 216, 245, 0.3);
+  stroke-linecap: round;
+}
+
+.ab-fill {
+  fill: none;
+  stroke: var(--sky);
+  stroke-linecap: round;
+  stroke-opacity: 0.85;
+}
+
+/* scroll-progress range of the road (from its start to the exit) */
+.ab-zone {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: calc(var(--dzy) * 1%);
+  height: calc((100 - var(--dzy)) * 1%);
+  pointer-events: none;
+}
+
+.ab-dot {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  /* a real 96px box (not 0×0) that fully contains the glow, centered on
+     the point it's moved to — so it can be its own GPU layer that just
+     slides, without Safari clipping or dulling the glow */
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.ab-dot i {
+  position: absolute;
+  top: 43px;
+  left: 43px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  /* a hot white center fading to sky at the edge — reads as a light
+     source, not a flat disc */
+  background: radial-gradient(circle, #ffffff 0%, #eaf8ff 45%, var(--sky) 100%);
+
+  /* layered glow: tight bright rim → soft sky bloom → wide faint aura */
+  box-shadow:
+    0 0 0 3px rgba(221, 243, 255, 0.16),
+    0 0 8px 2px rgba(221, 243, 255, 0.6),
+    0 0 20px 4px rgba(159, 216, 245, 0.35);
+
+  animation: ab-shine 2.4s ease-in-out infinite;
+}
+
+/* the core gently breathes brighter/dimmer, like a real light */
+@keyframes ab-shine {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.15);
+  }
+}
+
+/* a soft pool of light the dot carries with it, lighting the page
+   around the road as it travels */
+.ab-dot::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(159, 216, 245, 0.1) 0%,
+    rgba(159, 216, 245, 0.035) 40%,
+    rgba(159, 216, 245, 0) 70%
+  );
+  animation: ab-aura 2.4s ease-in-out infinite;
+}
+
+@keyframes ab-aura {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+/* a slow breath while waiting for the first scroll */
+.ab-dot::after {
+  content: '';
+  position: absolute;
+  top: 33px;
+  left: 33px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(159, 216, 245, 0.4);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.ab-dot.is-idle::after {
+  animation: ab-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes ab-breathe {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.55);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+/* ---------- stations ---------- */
+
+.ab-st {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--dy) * 1%);
+  left: calc(var(--dx) * 1%);
+  width: 0;
+  height: 0;
+}
+
+.ab-node {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(159, 216, 245, 0.55);
+  border-radius: 50%;
+  background: var(--navy-950);
+}
+
+.ab-st-body {
+  position: absolute;
+  right: 100%;
+  margin-right: 2.6cqw;
+  margin-top: -0.55em; /* node sits on the word's optical centre */
+  width: 34cqw;
+  padding-bottom: 1.05cqw;
+
+  /* the same size and weight for all three stations — only the
+     resting opacity (set in AboutSection.tsx, STATIONS[].alpha)
+     tells حيرة from معرفة from خطوة */
+  font-size: 4cqw; /* the station word — clearly a heading */
+  text-align: right;
+}
+
+.ab-st-word {
+  display: block;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--white);
+}
+
+.ab-st-note {
+  display: block;
+  margin-top: 10px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+.ab-rule {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(to left, rgba(159, 216, 245, 0.25), rgba(159, 216, 245, 0));
+  transform-origin: 100% 50%;
+}
+
+/* =========================================================
+   MOBILE — the road hugs the right edge, text sits beside it
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .ab-scene {
+    aspect-ratio: 400 / 2120;
+  }
+
+  .ab-svg--d {
+    display: none;
+  }
+
+  .ab-svg--m {
+    display: block;
+  }
+
+  .ab-zone {
+    top: calc(var(--mzy) * 1%);
+    height: calc((100 - var(--mzy)) * 1%);
+  }
+
+  .ab-label {
+    top: 4.1%;
+    right: 5%;
+    font-size: 12px;
+  }
+
+  .ab-title {
+    top: 6.8%;
+    font-size: 8cqw;
+  }
+
+  .ab-line--1 {
+    margin-right: 5%;
+  }
+
+  .ab-line--2 {
+    width: 90%;
+    margin-right: 5%;
+    text-align: right;
+    font-size: 14.5cqw;
+  }
+
+  .ab-line--3 {
+    width: 90%;
+    margin-right: 5%;
+  }
+
+  .ab-desc {
+    top: 18.2%;
+    right: 19%;
+    left: 5%;
+    width: auto;
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  .ab-st {
+    top: calc(var(--my) * 1%);
+    left: calc(var(--mx) * 1%);
+  }
+
+  .ab-st-body {
+    width: 58cqw;
+    margin-right: 5cqw;
+    padding-bottom: 3cqw;
+    font-size: 9cqw;
+  }
+
+  .ab-st-note {
+    font-size: 14px;
+    line-height: 1.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-way,
+  .ab-dot.is-idle::after,
+  .ab-dot i,
+  .ab-dot::before {
+    animation: none;
+  }
+}

@@ -1,0 +1,1257 @@
+/* =========================================================
+   /team — فريق مسار (phone first)
+   Same navy and single sky light as the rest of the site.
+   IBM Plex Sans Arabic for titles and names, Cairo for the rest.
+   ========================================================= */
+
+.tm,
+.tm-card-layer {
+  --tm-sky: 159, 216, 245;
+  --tm-card: #0d1b28;
+  --tm-line: rgba(159, 216, 245, 0.32);
+  --tm-hair: rgba(255, 255, 255, 0.08);
+  --tm-soft: rgba(245, 247, 248, 0.72);
+
+}
+
+.tm {
+  min-height: 100vh;
+  padding: 104px 0 96px;
+  background: #07111b;
+  color: var(--white);
+}
+
+.tm--chart {
+  padding-bottom: 0;
+}
+
+.tm-wrap {
+  width: min(calc(100% - 40px), 720px);
+  margin: 0 auto;
+}
+
+.tm-wrap--wide {
+  width: min(calc(100% - 24px), 1400px);
+  margin-top: 16px;
+}
+
+.tm-title {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.tm-sub {
+  margin: 4px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.tm-hint {
+  margin: 10px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  color: var(--sky);
+}
+
+/* =========================================================
+   the zoom frame
+   ========================================================= */
+
+.tm-stage {
+  position: relative;
+  overflow: hidden;
+  height: 60vh;
+  border: 1px solid rgba(var(--tm-sky), 0.12);
+  border-radius: 18px;
+  background-color: #081420;
+  background-image: radial-gradient(rgba(var(--tm-sky), 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.tm-stage[data-dragging] {
+  cursor: grabbing;
+}
+
+.tm-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.tm-zoom {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid rgba(var(--tm-sky), 0.2);
+  border-radius: 999px;
+  background: rgba(13, 30, 44, 0.92);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  cursor: default;
+}
+
+.tm-zoom button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tm-zoom button:hover {
+  background: rgba(var(--tm-sky), 0.1);
+}
+
+.tm-zoom svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.tm-zoom-pct {
+  min-width: 42px;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tm-zoom .tm-zoom-fit {
+  width: auto;
+  height: 30px;
+  margin-inline-start: 4px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--sky);
+  color: #07111b;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tm-zoom .tm-zoom-fit:hover {
+  background: #b9e4f8;
+}
+
+/* =========================================================
+   the chart — laid out left-to-right so the connector lines are
+   simple; the nodes themselves are right-to-left
+   ========================================================= */
+
+.tm-org {
+  direction: ltr;
+  width: max-content;
+  padding: 28px;
+}
+
+.tm-org ul {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 22px 0 0;
+  list-style: none;
+}
+
+.tm-org > ul {
+  padding-top: 0;
+}
+
+.tm-org li {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 8px 0;
+}
+
+/* the elbows: a line across the top of each child, joined to the
+   line coming down from the parent */
+.tm-org li::before,
+.tm-org li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 22px;
+  border-top: 1.5px solid var(--tm-line);
+}
+
+.tm-org li::after {
+  right: auto;
+  left: 50%;
+  border-left: 1.5px solid var(--tm-line);
+}
+
+.tm-org li:only-child::before,
+.tm-org li:only-child::after {
+  display: none;
+}
+
+.tm-org li:only-child {
+  padding-top: 0;
+}
+
+.tm-org li:first-child::before,
+.tm-org li:last-child::after {
+  border: 0;
+}
+
+.tm-org li:last-child::before {
+  border-right: 1.5px solid var(--tm-line);
+  border-top-right-radius: 8px;
+}
+
+.tm-org li:first-child::after {
+  border-top-left-radius: 8px;
+}
+
+.tm-org ul ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 22px;
+  border-left: 1.5px solid var(--tm-line);
+}
+
+/* the leadership stands a little apart from the rest of the chart */
+.tm-org > ul > li > ul {
+  padding-top: 56px;
+}
+
+.tm-org > ul > li > ul::before {
+  height: 56px;
+}
+
+/* a vertical run of nodes joined by short lines */
+.tm-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tm-chain > i {
+  width: 1.5px;
+  height: 16px;
+  background: var(--tm-line);
+}
+
+.tm-chain > i.tm-i-long {
+  height: 22px;
+}
+
+/* president and deputy side by side, the line down starts between them */
+.tm-duo {
+  display: flex;
+  align-items: stretch;
+}
+
+.tm-duo > .tm-node {
+  align-self: center;
+  width: 220px;
+}
+
+.tm-duo-link {
+  position: relative;
+  width: 36px;
+}
+
+.tm-duo-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--tm-line);
+}
+
+.tm-duo-link::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  left: 50%;
+  width: 1.5px;
+  background: var(--tm-line);
+  transform: translateX(-50%);
+}
+
+/* under a committee: its lead, deputy and "members" on one spine */
+.tm-leaves {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 16px;
+}
+
+.tm-leaves::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 24px;
+  left: 50%;
+  border-left: 1.5px solid var(--tm-line);
+}
+
+/* ---------- nodes ---------- */
+
+.tm-node {
+  position: relative;
+  z-index: 1;
+  direction: rtl;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  max-width: 200px;
+  padding: 7px 10px;
+
+  border: 1px solid rgba(var(--tm-sky), 0.28);
+  border-radius: 12px;
+  background: var(--tm-card);
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+  font: inherit;
+}
+
+button.tm-node,
+a.tm-node {
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.tm-node:hover,
+a.tm-node:hover,
+button.tm-node:focus-visible,
+a.tm-node:focus-visible {
+  border-color: rgba(var(--tm-sky), 0.7);
+  outline: none;
+}
+
+.tm-node-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tm-node-name {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.tm-node-role {
+  font-family: 'Cairo', sans-serif;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.tm-person--big {
+  max-width: none;
+  padding: 11px 14px;
+  border-radius: 16px;
+  border-color: rgba(var(--tm-sky), 0.55);
+}
+
+.tm-person--big .tm-av {
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+}
+
+.tm-person--big .tm-node-name {
+  font-size: 14.5px;
+}
+
+.tm-person--big .tm-node-role {
+  font-size: 11px;
+}
+
+.tm-dept {
+  justify-content: center;
+  max-width: none;
+  padding: 10px 14px;
+  border-color: rgba(var(--tm-sky), 0.65);
+  background: #143047;
+}
+
+.tm-dept .tm-node-name {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.tm-comm {
+  justify-content: center;
+  max-width: none;
+  border: 1.5px dashed rgba(var(--tm-sky), 0.5);
+  background: #0f2536;
+}
+
+.tm-comm .tm-node-name {
+  font-size: 13px;
+  color: var(--sky);
+  white-space: nowrap;
+}
+
+.tm-members {
+  justify-content: space-between;
+  border-color: rgba(var(--tm-sky), 0.85);
+  background: #12304a;
+}
+
+.tm-members .tm-node-name {
+  color: var(--sky);
+}
+
+.tm-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: rgba(var(--tm-sky), 0.14);
+  color: var(--sky);
+}
+
+.tm-ic svg,
+.tm-go svg,
+.tm-back svg,
+.tm-card-arrow svg,
+.tm-card-close svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tm-ic svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tm-go {
+  display: grid;
+  color: var(--sky);
+}
+
+.tm-go svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* the round badge: a photo, or the first letter */
+.tm-av {
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(var(--tm-sky), 0.35);
+  border-radius: 50%;
+  background: linear-gradient(160deg, #1d3d56, #0f2231);
+  color: var(--sky);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.tm-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* advisors, under the whole chart */
+.tm-advisors {
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 110px;
+}
+
+.tm-advisors-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sky);
+}
+
+.tm-advisors-label i {
+  width: 40px;
+  height: 1px;
+  background: var(--sky);
+  opacity: 0.5;
+}
+
+.tm-advisors-row {
+  display: flex;
+  gap: 14px;
+}
+
+.tm-advisors-row .tm-node {
+  width: 220px;
+}
+
+/* =========================================================
+   a committee's members
+   ========================================================= */
+
+.tm-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.tm-back svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+.tm-back:hover {
+  color: #fff;
+}
+
+.tm-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 26px 0 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--sky);
+}
+
+.tm-label i {
+  width: 28px;
+  height: 1px;
+  background: var(--sky);
+  opacity: 0.6;
+}
+
+.tm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tm-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 8px 14px;
+  border: 1px solid var(--tm-hair);
+  border-radius: 14px;
+  background: var(--tm-card);
+  color: #fff;
+  text-align: center;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tm-tile:hover,
+.tm-tile:focus-visible {
+  border-color: rgba(var(--tm-sky), 0.5);
+  outline: none;
+}
+
+.tm-tile .tm-av {
+  width: 52px;
+  height: 52px;
+  font-size: 17px;
+}
+
+.tm-tile-name {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.tm-tile-role {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tm-missing {
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- a committee's tree ---------- */
+
+.tm-mtree {
+  margin-top: 24px;
+}
+
+.tm-mtree-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tm-mtree-top > i {
+  width: 1.5px;
+  height: 18px;
+  background: var(--tm-line);
+}
+
+.tm-mtree-top .tm-person--big {
+  width: min(100%, 250px);
+}
+
+/* two columns hanging from ONE line down the middle: the right column
+   branches off to the right, the left column to the left */
+.tm-mcols {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 28px;
+}
+
+.tm-mcols::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: var(--tm-spine-end, 28px);
+  left: 50%;
+  border-left: 1.5px solid var(--tm-line);
+  transform: translateX(-50%);
+}
+
+.tm-mcol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tm-mcol li {
+  position: relative;
+  padding: 5px 0;
+}
+
+/* a short tick from each box to the middle line */
+.tm-mcol li::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  border-top: 1.5px solid var(--tm-line);
+}
+
+/* first column = right side (RTL): its inner edge is on the left */
+.tm-mcol:first-child li::after {
+  left: -14px;
+}
+
+.tm-mcol:last-child li::after {
+  right: -14px;
+}
+
+.tm-mcol .tm-node {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+.tm-mcol .tm-node-name {
+  font-size: 12.5px;
+}
+
+/* =========================================================
+   the person's card
+   ========================================================= */
+
+.tm-card-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  direction: rtl;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 0.35s;
+}
+
+.tm-card-layer[data-open] {
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+
+.tm-card-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 8, 13, 0.72);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.tm-card-layer[data-open] .tm-card-dim {
+  opacity: 1;
+}
+
+.tm-card {
+  position: relative;
+  width: min(100%, 360px);
+  overflow: hidden;
+  padding: 0 18px 18px;
+  border: 1px solid rgba(var(--tm-sky), 0.18);
+  border-radius: 24px;
+  background: #0c1a27;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: translateY(18px) scale(0.97);
+  transition:
+    opacity 0.35s ease,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tm-card-layer[data-open] .tm-card {
+  opacity: 1;
+  transform: none;
+}
+
+/* the top band: Masar's navy-to-blue with two soft "path" lines */
+.tm-card-band {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  background:
+    radial-gradient(120% 140% at 85% 0%, rgba(var(--tm-sky), 0.28), transparent 60%),
+    linear-gradient(160deg, #1c4461 0%, #10283b 70%);
+}
+
+.tm-card-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 14px 14px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+  mask-image: linear-gradient(to bottom, #000, transparent);
+}
+
+.tm-card-band svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(var(--tm-sky), 0.35);
+  stroke-width: 1.2;
+}
+
+.tm-card-close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(7, 17, 27, 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+}
+
+.tm-card-close svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
+}
+
+.tm-card-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 58px;
+  text-align: center;
+}
+
+.tm-av--card {
+  width: 96px;
+  height: 96px;
+  font-size: 32px;
+  border: 3px solid #0c1a27;
+  box-shadow: 0 0 0 1.5px rgba(var(--tm-sky), 0.6), 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.tm-card-layer[data-open] .tm-av--card {
+  animation: tm-pop 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+@keyframes tm-pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.tm-card-role {
+  margin-top: 12px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(var(--tm-sky), 0.12);
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sky);
+}
+
+.tm-card-name {
+  margin: 8px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #fff;
+}
+
+.tm-card-info {
+  display: grid;
+  margin: 18px 0 0;
+  border: 1px solid var(--tm-hair);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tm-card-info > div {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.tm-card-info > div + div {
+  border-top: 1px solid var(--tm-hair);
+}
+
+.tm-card-ic {
+  grid-row: 1 / 3;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(var(--tm-sky), 0.1);
+  color: var(--sky);
+}
+
+.tm-card-ic svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tm-card-info dt {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tm-card-info dd {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: rgba(245, 247, 248, 0.94);
+}
+
+.tm-card-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(var(--tm-sky), 0.28);
+  border-radius: 14px;
+  background: rgba(var(--tm-sky), 0.06);
+  color: #fff;
+  text-decoration: none;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.tm-card-link:hover,
+.tm-card-link:focus-visible {
+  border-color: rgba(var(--tm-sky), 0.6);
+  background: rgba(var(--tm-sky), 0.12);
+  outline: none;
+}
+
+.tm-in {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--sky);
+}
+
+.tm-in svg {
+  width: 18px;
+  height: 18px;
+  fill: #07111b;
+}
+
+.tm-card-link-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.3;
+}
+
+.tm-card-link-text span {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.tm-card-link-text small {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tm-card-arrow {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-inline-start: auto;
+  border: 1px solid rgba(var(--tm-sky), 0.35);
+  border-radius: 50%;
+  color: var(--sky);
+  transition: transform 0.3s ease;
+}
+
+.tm-card-link:hover .tm-card-arrow {
+  transform: translateX(-3px);
+}
+
+.tm-card-arrow svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
+}
+
+/* =========================================================
+   wider screens
+   ========================================================= */
+
+@media (min-width: 720px) {
+  .tm-title {
+    font-size: 28px;
+  }
+
+  .tm-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-card,
+  .tm-card-dim {
+    transition: none;
+  }
+}
+
+/* widths are set from the code in whole committee columns */
+.tm-org li {
+  box-sizing: border-box;
+}
+
+.tm-org > ul > li > ul > li {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* people in a department's chain have room: keep their names on one line */
+.tm-chain .tm-person {
+  max-width: none;
+}
+
+.tm-chain .tm-node-name {
+  white-space: nowrap;
+}
+
+/* on wide screens the heading lines up with the chart frame */
+.tm-head {
+  width: min(calc(100% - 40px), 1400px);
+}
+
+@media (min-width: 720px) {
+  .tm-head {
+    width: min(calc(100% - 40px), 1384px);
+  }
+}
+
+/* members' boxes are narrow on a phone: a little tighter so names stay
+   on one or two lines */
+.tm-mcol .tm-node {
+  gap: 6px;
+  padding: 7px 8px;
+}
+
+.tm-mcol .tm-av {
+  width: 26px;
+  height: 26px;
+  font-size: 10.5px;
+}
+
+.tm-mcol .tm-node-name {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+@media (min-width: 720px) {
+  .tm-mcols {
+    column-gap: 40px;
+  }
+
+  .tm-mcol:first-child li::after {
+    left: -20px;
+    width: 20px;
+  }
+
+  .tm-mcol:last-child li::after {
+    right: -20px;
+    width: 20px;
+  }
+
+  .tm-mcol .tm-node-name {
+    font-size: 13px;
+  }
+}
+
+/* the "opens a card" sign: a tiny grey chevron tucked in the box's
+   corner, out of the way of the name */
+.tm-more {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  display: grid;
+  color: rgba(159, 216, 245, 0.7);
+  transition:
+    color 0.2s ease,
+    transform 0.25s ease;
+}
+
+.tm-more svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* keep the name clear of the chevron */
+.tm-person {
+  padding-left: 24px;
+}
+
+.tm-person:hover .tm-more,
+.tm-person:focus-visible .tm-more {
+  color: var(--sky);
+  transform: translateX(-2px);
+}
+
+.tm-mtree-top .tm-person--big {
+  width: min(100%, 290px);
+}
+
+.tm-mtree-top .tm-person--big .tm-node-name {
+  white-space: nowrap;
+}
+
+
+.tm-mcol .tm-person {
+  padding-left: 22px;
+}
+
+.tm-person--big .tm-more {
+  bottom: 8px;
+  left: 11px;
+}
+
+/* =========================================================
+   page header — centred, the same as الإعلانات والمستجدات
+   ========================================================= */
+
+.tmh {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14px;
+  text-align: center;
+}
+
+.tmh-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--sky, #9fd8f5);
+}
+
+.tmh-label::before,
+.tmh-label::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.5);
+}
+
+.tmh-title {
+  margin: 14px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(245, 247, 248, 0.94);
+}
+
+.tmh-tear {
+  position: relative;
+  width: 132px;
+  height: 0;
+  margin: 16px 0 14px;
+  border-top: 1.5px dashed rgba(159, 216, 245, 0.35);
+}
+
+.tmh-tear::before,
+.tmh-tear::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.tmh-tear::before {
+  right: -10px;
+}
+
+.tmh-tear::after {
+  left: -10px;
+}
+
+.tmh-sub {
+  margin: 0 0 22px;
+  max-width: 300px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #8d9aa6;
+}
+
+@media (min-width: 720px) {
+  .tmh-title {
+    font-size: 30px;
+  }
+
+  .tmh-sub {
+    max-width: none;
+    font-size: 13.5px;
+  }
+}
+
+/* hide the navbar logo on the team pages, keeping its place */
+body.tm-page header a[aria-label='مبادرة مسار'] {
+  visibility: hidden;
+  pointer-events: none;
+}

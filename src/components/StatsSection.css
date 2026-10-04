@@ -1,0 +1,289 @@
+/* =========================================================
+   IMPACT — SECTION 03
+   Rebuilt from scratch as an editorial continuation of Section 2's
+   own story ("مسار" ends with a road; this section shows what walking
+   it produced), not a Statistics/Dashboard template: no cards, no
+   grid of equal boxes, no decorative glow blob, no new palette.
+
+   Background is a single FLAT color — the exact same tone Section 2's
+   own gradient ends on (#07111b) — so there is no seam, no light
+   source, and no sense of "a new section starting" at all. Depth here
+   comes only from typography, spacing and one thin connecting line,
+   exactly like the brief asked for.
+   ========================================================= */
+
+.ms {
+  position: relative;
+
+  background: #07111b;
+  color: var(--white);
+
+  padding: clamp(96px, 12vw, 180px) 0 clamp(120px, 14vw, 200px);
+}
+
+.ms-scene {
+  position: relative;
+  z-index: 2;
+  width: min(calc(100% - 64px), 1200px);
+  margin: 0 auto;
+}
+
+/* ---------- header: right-aligned like Section 2's own asymmetric
+   type block, not centered — a small eyebrow, then a single strong
+   line. Clearly smaller than the stat numbers below: the numbers are
+   the focal point, this is just the doorway into them. ---------- */
+
+.ms-head {
+  max-width: 620px;
+  margin: 0;
+}
+
+.ms-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 0 0 18px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+
+.ms-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.ms-title {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(24px, 3.1vw, 38px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: rgba(245, 247, 248, 0.92);
+}
+
+/* ---------- the spine: one thin line running down through every
+   stat, the section's only real "visual element" besides type — a
+   quiet echo of Section 2's road, not a repeat of it. ---------- */
+
+.ms-track {
+  position: relative;
+
+  margin-top: clamp(72px, 9vw, 120px);
+}
+
+.ms-spine-line {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 50%;
+
+  width: 1px;
+  margin-left: -0.5px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(159, 216, 245, 0),
+    rgba(159, 216, 245, 0.4) 10%,
+    rgba(159, 216, 245, 0.4) 90%,
+    rgba(159, 216, 245, 0)
+  );
+}
+
+.ms-row {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr 32px 1fr;
+  align-items: start;
+
+  padding: clamp(30px, 4vw, 52px) 0;
+}
+
+.ms-row + .ms-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ms-node {
+  grid-column: 2;
+  justify-self: center;
+  margin-top: 0.5em;
+
+  width: 9px;
+  height: 9px;
+
+  border: 1px solid rgba(159, 216, 245, 0.6);
+  border-radius: 50%;
+  background: #07111b;
+}
+
+.ms-row-content {
+  grid-column: 1;
+}
+
+.ms-row-spacer {
+  grid-column: 3;
+}
+
+.ms-row--b .ms-row-content {
+  grid-column: 3;
+}
+
+.ms-row--b .ms-row-spacer {
+  grid-column: 1;
+}
+
+.ms-row--a .ms-row-content {
+  padding-left: clamp(24px, 4vw, 64px);
+  text-align: right;
+}
+
+.ms-row--b .ms-row-content {
+  padding-right: clamp(24px, 4vw, 64px);
+  text-align: left;
+}
+
+/* ---------- reading order top to bottom: label (what this counts) →
+   number (the focal point, but sized proportionately — not the whole
+   show) → note (one short line of context). ---------- */
+
+.ms-label {
+  margin: 0 0 10px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--sky);
+}
+
+.ms-value {
+  display: flex;
+  align-items: baseline;
+
+  direction: ltr; /* keep digits + suffix in numeral reading order */
+}
+
+.ms-row--a .ms-value {
+  justify-content: flex-end;
+}
+
+.ms-row--b .ms-value {
+  justify-content: flex-start;
+}
+
+.ms-num {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(32px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+}
+
+.ms-affix {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 500;
+  color: var(--white);
+  opacity: 0.75;
+  margin-inline-start: 3px;
+}
+
+/* ---------- note: the quietest layer, one short sentence of context ---------- */
+
+.ms-note {
+  margin: 10px 0 0;
+  max-width: 34ch;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.ms-row--a .ms-note {
+  margin-inline-start: auto;
+}
+
+/* =========================================================
+   MOBILE — the spine moves to one edge and every row reads the same
+   direction, the same simplification Section 2 makes for its own road
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .ms-head {
+    max-width: none;
+  }
+
+  .ms-track {
+    margin-top: 56px;
+  }
+
+  .ms-spine-line {
+    left: 4px;
+    margin-left: 0;
+  }
+
+  .ms-row {
+    grid-template-columns: 18px 1fr;
+    column-gap: 20px;
+    padding: 26px 0;
+  }
+
+  .ms-node {
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 0.45em;
+  }
+
+  .ms-row-content,
+  .ms-row--b .ms-row-content {
+    grid-column: 2;
+    padding: 0;
+    text-align: right;
+  }
+
+  .ms-row-spacer {
+    display: none;
+  }
+
+  .ms-value,
+  .ms-row--a .ms-value,
+  .ms-row--b .ms-value {
+    justify-content: flex-end;
+  }
+
+  .ms-row--a .ms-note {
+    margin-inline-start: 0;
+  }
+
+  .ms-note {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-eyebrow,
+  .ms-title,
+  .ms-row,
+  .ms-node,
+  .ms-spine-line {
+    opacity: 1;
+    transform: none;
+  }
+}

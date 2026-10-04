@@ -1,0 +1,890 @@
+
+/* =================================================================
+   /featured — متميزو الشهر
+   navy page · cream paper (#ece7dc, the guides' paper) · navy ink ·
+   one sky accent. The calendar page, the tickets and the empty ticket
+   all share the same paper and the same ink.
+   ================================================================= */
+
+.ft {
+  --paper: #ece7dc;
+  --paper-2: #f6f3ec;
+  --ink: #142436;
+  --ink-soft: #5d6f82;
+  --sky: #9fd8f5;
+  --edge: rgba(159, 216, 245, 0.14);
+
+  overflow-x: clip;
+  min-height: 100vh;
+  padding: 104px 0 100px;
+  color: #fff;
+  background:
+    radial-gradient(120% 50% at 85% 8%, rgba(40, 80, 120, 0.22), transparent 60%),
+    radial-gradient(90% 45% at 5% 85%, rgba(30, 60, 100, 0.16), transparent 60%),
+    #07111b;
+}
+
+.ft-wrap {
+  width: min(calc(100% - 32px), 980px);
+  margin: 0 auto;
+}
+
+/* pieces fade in once as they are reached */
+.ft-in,
+.ftt {
+  opacity: 0;
+  translate: 0 16px;
+  transition:
+    opacity 0.7s ease var(--d, 0s),
+    translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s);
+}
+
+.ft-in[data-in],
+.ftt[data-in] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* =================================================================
+   the calendar page (after the reference)
+   ================================================================= */
+
+.ft {
+  --serif: 'Bodoni Moda', 'Didot', 'Bodoni 72', 'Latin Modern Roman', serif;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.ftc {
+  width: min(100%, 400px);
+  margin: 28px auto 0;
+}
+
+.ftc-page {
+  padding: 26px 22px 18px;
+  border-radius: 18px;
+  background: var(--grain), #f1ebe0;
+  color: #1b2533;
+  box-shadow: 0 34px 44px -28px rgba(0, 0, 0, 0.9);
+  animation: ft-turn 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes ft-turn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+/* the number and the standing name on the right, the photo on the left */
+.ftc-top {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 14px;
+}
+
+.ftc-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ftc-no {
+  font-family: var(--serif);
+  font-size: 46px;
+  font-weight: 400;
+  line-height: 1;
+  color: #1b2533;
+}
+
+.ftc-en {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #1b2533;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.ftc-photo {
+  position: relative;
+  margin: 0;
+}
+
+.ftc-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 4.4;
+  object-fit: cover;
+}
+
+.ftc-photo figcaption {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: rgba(241, 235, 224, 0.92);
+  font-family: 'Cairo', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #1b2533;
+}
+
+/* the week's names between two thin rules */
+.ftc-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 20px;
+  padding: 7px 0;
+  border-top: 1px solid rgba(27, 37, 51, 0.6);
+  border-bottom: 1px solid rgba(27, 37, 51, 0.6);
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1b2533;
+}
+
+.ftc-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 8px;
+  text-align: center;
+}
+
+.ftc-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 34px;
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  color: #1b2533;
+}
+
+/* the last day: a heart drawn round it */
+.ftc-day--heart svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 37px;
+  translate: -50% -50%;
+  fill: #1f3a56;
+  animation: ft-beat 2.6s ease-in-out infinite;
+}
+
+.ftc-day--heart b {
+  position: relative;
+  margin-top: -3px;
+  font-weight: 500;
+  font-size: 15px;
+  color: #f1ebe0;
+}
+
+@keyframes ft-beat {
+  0%,
+  60%,
+  100% {
+    scale: 1;
+  }
+  70% {
+    scale: 1.12;
+  }
+  80% {
+    scale: 0.98;
+  }
+  90% {
+    scale: 1.06;
+  }
+}
+
+.ftc-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1b2533;
+}
+
+.ftc-foot i {
+  flex: 1;
+  height: 1px;
+  background: rgba(27, 37, 51, 0.35);
+}
+
+/* the other months */
+.ftc-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(223, 232, 238, 0.8);
+}
+
+.ftc-switch button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: none;
+  color: #f5f7f8;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.ftc-switch button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.ftc-switch svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =================================================================
+   the departments
+   ================================================================= */
+
+.ft-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 120px; /* clear room under the calendar */
+}
+
+.ft-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--edge);
+  border-radius: 99px;
+  background: rgba(159, 216, 245, 0.03);
+  color: rgba(223, 232, 238, 0.8);
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ft-chips small {
+  font-size: 11px;
+  color: rgba(159, 216, 245, 0.7);
+}
+
+.ft-chips button[aria-selected='true'] {
+  border-color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.ft-chips button[aria-selected='true'] small {
+  color: var(--ink-soft);
+}
+
+.ft-chips button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* =================================================================
+   the tickets (after the reference): two side by side on a phone
+   ================================================================= */
+
+.ft-tickets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px 18px; /* room between the tickets */
+  margin: 44px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ftt {
+  --card: #c3d3df;
+  --dot-a: #f1ebe0;
+  --dot-b: #f1ebe0;
+  --ink: #1b2533;
+}
+
+.ftt[data-tone='b'] {
+  --card: #ebe3d6;
+  --dot-a: #9bb6cb;
+  --dot-b: #9bb6cb;
+}
+
+.ftt-in {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px 8px 12px;
+  border-radius: 14px;
+  background: var(--grain), var(--card);
+  color: var(--ink);
+  box-shadow: 0 22px 26px -20px rgba(0, 0, 0, 0.85);
+}
+
+/* the picture, with a dot on two of its corners */
+.ftt-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3.7;
+  overflow: visible;
+  border-radius: 10px;
+  background:
+    radial-gradient(90% 70% at 70% 20%, rgba(159, 216, 245, 0.25), transparent 60%),
+    linear-gradient(160deg, #24435f, #0e1c2a);
+}
+
+.ftt-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.ftt-letter {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  color: #e9eef2;
+}
+
+.ftt-dot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.ftt-dot--a {
+  top: 9px;
+  right: 9px;
+  background: var(--dot-a);
+}
+
+.ftt-dot--b {
+  bottom: -11px;
+  left: 14px;
+  width: 26px;
+  height: 26px;
+  background: var(--dot-b);
+}
+
+.ftt-dot--b svg {
+  width: 13px;
+  height: 13px;
+  fill: #1f3a56;
+}
+
+/* 30 ——————— 09 / 2026 */
+.ftt-date {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 18px 4px 0;
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.ftt-date i {
+  flex: 1;
+  height: 1px;
+  margin-top: 7px;
+  background: var(--ink);
+}
+
+.ftt-date small {
+  display: block;
+  margin-top: 2px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 7.5px;
+  text-align: right;
+}
+
+.ftt-name {
+  margin: 10px 4px 0;
+  text-align: center;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.ftt-meta {
+  margin: 2px 4px 0;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  line-height: 1.6;
+  color: rgba(27, 37, 51, 0.7);
+}
+
+/* below the dotted tear: the kind, the reason, the barcode */
+.ftt-foot {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 12px 4px 0;
+  padding-top: 10px;
+  border-top: 2px dotted rgba(27, 37, 51, 0.75);
+}
+
+.ftt-foot > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.ftt-kind {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ftt-kind i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.ftt-reason {
+  margin: 4px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  line-height: 1.7;
+  color: rgba(27, 37, 51, 0.8);
+}
+
+.ftt-code {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 22px;
+  fill: var(--ink);
+}
+
+.ftt-link {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(241, 235, 224, 0.92);
+  color: #1b2533;
+}
+
+.ftt-link svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.ftt-no {
+  margin: 8px 4px 0;
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(27, 37, 51, 0.6);
+}
+
+.ft-empty {
+  margin: 26px 0 0;
+  padding: 22px;
+  border: 1px dashed var(--edge);
+  border-radius: 14px;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  color: #8d9aa6;
+}
+
+/* =================================================================
+   the empty ticket kept for next month
+   ================================================================= */
+
+.ft-next {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 520px;
+  margin: 70px auto 0;
+  padding: 34px 22px 30px;
+  border: 1.5px dashed rgba(159, 216, 245, 0.35);
+  border-radius: 18px;
+  background: rgba(159, 216, 245, 0.03);
+  text-align: center;
+}
+
+.ft-next-heart {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(159, 216, 245, 0.35);
+  border-radius: 50%;
+}
+
+.ft-next-heart svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--sky);
+  animation: ft-beat 2.4s ease-in-out infinite;
+}
+
+.ft-next-kicker {
+  margin: 14px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sky);
+}
+
+.ft-next-title {
+  margin: 6px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.ft-next-text {
+  max-width: 340px;
+  margin: 8px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #b4c1cb;
+}
+
+.ft-next-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  margin-top: 18px;
+  padding: 0 20px;
+  border: 1px solid rgba(159, 216, 245, 0.4);
+  border-radius: 99px;
+  color: var(--sky);
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =================================================================
+   wider screens
+   ================================================================= */
+
+@media (min-width: 720px) {
+  .ftc {
+    width: 440px;
+  }
+
+  .ftc-page {
+    padding: 30px 28px 22px;
+  }
+
+  .ftc-top {
+    grid-template-columns: 74px 1fr;
+  }
+
+  .ftc-no {
+    font-size: 56px;
+  }
+
+  .ftc-en {
+    font-size: 30px;
+  }
+
+  .ftc-day {
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .ft-tickets {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 28px;
+  }
+
+  .ftt-name {
+    font-size: 18px;
+  }
+
+  .ft-next-title {
+    font-size: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ft-in,
+  .ftt,
+  .ftc-page {
+    transition: none;
+    animation: none;
+  }
+
+  .ftc-day--heart svg,
+  .ft-next-heart svg {
+    animation: none;
+  }
+}
+
+/* =================================================================
+   the ticket's head, without a photo
+   ================================================================= */
+
+.ftt-head {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  border: 1px solid rgba(27, 37, 51, 0.22);
+  background:
+    repeating-linear-gradient(135deg, rgba(27, 37, 51, 0.035) 0 1px, transparent 1px 7px);
+}
+
+.ftt-head-heart {
+  position: absolute;
+  bottom: -12px;
+  left: 14px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--dot-b);
+}
+
+.ftt-head-heart svg {
+  width: 13px;
+  height: 13px;
+  fill: #1f3a56;
+}
+
+
+/* D — a corner of the calendar's photo */
+.ftt-head-art {
+  display: none;
+}
+
+.ft[data-head='d'] .ftt-head {
+  overflow: visible;
+  border: 0;
+  background: none;
+}
+
+.ft[data-head='d'] .ftt-head-art {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* the zoomed picture stays inside its rounded frame */
+.ftt-head-frame {
+  display: none;
+}
+
+.ft[data-head='d'] .ftt-head-frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.ft[data-head='d'] .ftt-head-art--zoom {
+  position: absolute;
+  inset: auto;
+  max-width: none;
+  object-fit: fill;
+  border-radius: 0;
+}
+
+/* =================================================================
+   honoured together: the departments and committees of the month
+   ================================================================= */
+
+.ft-team {
+  margin-top: 110px;
+  text-align: center;
+}
+
+.ft-team-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sky);
+}
+
+.ft-team-label::before,
+.ft-team-label::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.5);
+}
+
+.ft-team-title {
+  margin: 12px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(245, 247, 248, 0.94);
+}
+
+.ft-team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 14px;
+  margin-top: 30px;
+}
+
+.ft-honour {
+  --card: #c3d3df;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 150px;
+  padding: 16px 14px 14px;
+  border-radius: 14px;
+  background: var(--grain), var(--card);
+  color: #1b2533;
+  text-align: right;
+  box-shadow: 0 22px 26px -20px rgba(0, 0, 0, 0.85);
+}
+
+.ft-honour[data-tone='b'] {
+  --card: #ebe3d6;
+}
+
+.ft-honour-kind {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(27, 37, 51, 0.75);
+}
+
+.ft-honour-kind svg {
+  width: 12px;
+  height: 12px;
+  fill: #1f3a56;
+}
+
+.ft-honour-name {
+  flex: 1;
+  margin: 12px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #1b2533;
+}
+
+.ft-honour-sub {
+  margin: 4px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  color: rgba(27, 37, 51, 0.7);
+}
+
+.ft-honour-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 2px dotted rgba(27, 37, 51, 0.6);
+  font-family: var(--serif);
+  font-size: 12px;
+  color: #1b2533;
+}
+
+.ft-honour-foot i {
+  flex: 1;
+  height: 1px;
+  background: #1b2533;
+}
+
+/* the chips now come after this section */
+.ft-team + .ft-chips {
+  margin-top: 90px;
+}
+
+@media (min-width: 720px) {
+  .ft-team-title {
+    font-size: 30px;
+  }
+
+  .ft-team-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+
+  .ft-honour-name {
+    font-size: 19px;
+  }
+}

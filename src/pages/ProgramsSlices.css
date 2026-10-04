@@ -1,0 +1,619 @@
+/* =========================================================
+   /programs — الفعاليات والبرامج as slices side by side
+   The page is the site's navy; each programme is a slice printed on
+   a muted blue (mist → navy), with a numbered tab on top. Phone first.
+   ========================================================= */
+
+.psl {
+  /* what the programme artwork (ProgramArt) reads */
+  --prg-sky: 159, 216, 245;
+
+  min-height: 100vh;
+  padding-bottom: 110px;
+  overflow-x: clip;
+  background: #07111b;
+  color: #fff;
+}
+
+.psl section {
+  background: none;
+}
+
+.psl-wrap {
+  width: min(calc(100% - 28px), 900px);
+  margin: 0 auto;
+}
+
+/* while on this page the navbar logo steps aside — it keeps its place,
+   so the menu button stays on the left */
+body.psl-page header a[aria-label='مبادرة مسار'] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ---------- header: the same as the news and the team ---------- */
+
+.psl-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 118px;
+  text-align: center;
+}
+
+.psl-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--sky, #9fd8f5);
+}
+
+.psl-label::before,
+.psl-label::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.5);
+}
+
+.psl-title {
+  margin: 14px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.psl-tear {
+  position: relative;
+  width: 132px;
+  height: 0;
+  margin: 16px 0 14px;
+  border-top: 1.5px dashed rgba(159, 216, 245, 0.35);
+}
+
+.psl-tear::before,
+.psl-tear::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.psl-tear::before {
+  right: -10px;
+}
+
+.psl-tear::after {
+  left: -10px;
+}
+
+.psl-sub {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #8d9aa6;
+}
+
+.psl-empty {
+  margin: 40px 0 0;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  color: #8d9aa6;
+}
+
+/* ---------- the box of slices ---------- */
+
+.psl-box {
+  /* the closed slices share what is left after the cover and the open one */
+  --closed: min(46px, calc((100% - 236px) / max(var(--n, 4) - 1, 1)));
+
+  display: flex;
+  height: 520px;
+  padding-top: 30px;
+}
+
+.psl-boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  margin-top: 28px;
+}
+
+/* the cover: the page's name printed sideways */
+.psl-cover {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 48px;
+  border-radius: 8px;
+  background: #0f2131;
+  box-shadow: -8px 0 18px -8px rgba(0, 0, 0, 0.6);
+}
+
+.psl-cover b,
+.psl-cover small {
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+}
+
+.psl-cover b {
+  top: 18px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #c9d6e0;
+}
+
+.psl-cover small {
+  bottom: 14px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 8.5px;
+  color: #6f8496;
+}
+
+/* a slice */
+.psl-slice {
+  position: relative;
+  flex: 0 0 var(--closed);
+  min-width: 0;
+  margin-inline-start: -6px;
+  border-radius: 8px 8px 6px 6px;
+  background: var(--sl-paper);
+  color: var(--sl-ink);
+  box-shadow: -8px 0 18px -8px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  /* only the share of the spare room changes (0 → 1 for the slice that
+     opens, 1 → 0 for the one that closes, on the same curve), so the two
+     always add up to the same width: the row never overflows or knocks
+     into the edge — it simply passes the room from one slice to the other */
+  transition: flex-grow 0.9s cubic-bezier(0.45, 0, 0.25, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.psl-slice[data-on] {
+  flex-grow: 1;
+  cursor: default;
+}
+
+/* the numbered tab on top, with a soft curve into the slice */
+.psl-tab {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% - 4px);
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 30px;
+  border-radius: 8px 8px 0 0;
+  background: var(--sl-paper);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--sl-soft);
+}
+
+.psl-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: -10px;
+  width: 10px;
+  height: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 4px 4px 0 var(--sl-paper);
+}
+
+/* closed: the name sideways */
+.psl-side {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 18px 0;
+  border: 0;
+  direction: ltr; /* read from the top down */
+  background: none;
+  cursor: pointer;
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.3s ease 0.45s;
+}
+
+.psl-side b {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sl-ink);
+}
+
+.psl-side small {
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  color: var(--sl-soft);
+}
+
+.psl-side small::before {
+  content: '— ';
+}
+
+.psl-slice[data-on] .psl-side {
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+
+/* open: the programme */
+/* the window the open programme shows through: as the slice widens, it
+   uncovers the programme — which never moves or resizes (its width is the
+   open slice's, measured once, in --full-w) */
+.psl-clip {
+  position: absolute;
+  inset: 12px 12px 12px 18px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.psl-full {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--full-w, 100%);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.psl-slice[data-on] .psl-full {
+  opacity: 1;
+  pointer-events: auto;
+  transition: none;
+}
+
+.psl-code {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--sl-soft);
+}
+
+.psl-kind {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sl-soft);
+}
+
+.psl-kind::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sl-line);
+}
+
+.psl-name {
+  margin: 6px 0 0;
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--sl-ink);
+}
+
+.psl-full .psl-art {
+  flex: 1;
+  min-height: 0;
+  margin-top: 14px;
+  border-radius: 4px;
+  outline: 1px solid var(--sl-line);
+  outline-offset: 4px;
+}
+
+.psl-art .prg-art-img {
+  filter: saturate(0.6);
+}
+
+.psl-art .prg-badge {
+  top: 8px;
+  right: 8px;
+  padding: 2px 9px;
+  background: rgba(7, 17, 27, 0.6);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #e3e9ed;
+  backdrop-filter: blur(4px);
+}
+
+.psl-desc {
+  display: -webkit-box;
+  margin: 12px 0 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  line-height: 1.85;
+  color: var(--sl-ink);
+  opacity: 0.85;
+}
+
+.psl-facts {
+  margin-top: 12px;
+}
+
+.psl-facts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--sl-line);
+  border-bottom: 1px solid var(--sl-line);
+}
+
+/* two equal cells: the date on the right, the place on its left —
+   each with its icon on top and its text centred under it */
+.psl-fact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 6px;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--sl-soft);
+}
+
+.psl-fact + .psl-fact {
+  border-inline-start: 1px solid var(--sl-line);
+}
+
+.psl-fact svg {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--sl-soft);
+}
+
+/* the place opens Google Maps */
+.psl-map {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--sl-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.25s ease;
+}
+
+.psl-map:hover {
+  text-decoration-color: currentColor;
+}
+
+/* the buttons: details on the right, registration on the left */
+.psl-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.psl-btns .psl-btn {
+  margin-top: 0;
+  padding: 0 4px;
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* the details: always open, outlined in the slice's ink */
+.psl-btns .psl-btn--details {
+  border: 1px solid var(--sl-ink);
+  background: none;
+  color: var(--sl-ink);
+}
+
+/* the registration button: solid while open, quiet otherwise */
+.psl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  margin-top: 12px;
+  border-radius: 99px;
+  background: var(--sl-ink);
+  color: var(--sl-paper);
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: opacity 0.25s ease;
+}
+
+.psl-btn:hover {
+  opacity: 0.88;
+}
+
+.psl-btn[aria-disabled='true'] {
+  border: 1px dashed var(--sl-line);
+  background: none;
+  color: var(--sl-soft);
+  cursor: default;
+}
+
+/* a programme's title and picture open its page */
+.psl-open {
+  color: inherit;
+  text-decoration: none;
+}
+
+.psl-art-link {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.psl-art-link .psl-art {
+  flex: 1;
+}
+
+@media (min-width: 900px) {
+  .psl-full .psl-art-link {
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+
+  .psl-art-link .psl-art {
+    margin-top: 0;
+  }
+}
+
+/* an empty place: "soon" */
+.psl-slice--soon .psl-side b {
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.psl-soon-art {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  margin-top: 14px;
+  place-items: center;
+  border: 1.5px dashed var(--sl-line);
+  border-radius: 4px;
+}
+
+.psl-soon-art span {
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--sl-soft);
+  opacity: 0.8;
+}
+
+/* ---------- wider screens ---------- */
+
+@media (min-width: 900px) {
+  .psl-head {
+    padding-top: 156px;
+  }
+
+  .psl-title {
+    font-size: 30px;
+  }
+
+  .psl-box {
+    --closed: min(72px, calc((100% - 480px) / max(var(--n, 4) - 1, 1)));
+
+    height: 580px;
+  }
+
+  .psl-boxes {
+    gap: 64px;
+    margin-top: 40px;
+  }
+
+  .psl-cover {
+    flex-basis: 76px;
+  }
+
+  .psl-cover b {
+    font-size: 28px;
+  }
+
+  .psl-side b {
+    font-size: 15px;
+  }
+
+  .psl-tab {
+    width: 46px;
+  }
+
+  .psl-full {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    grid-template-rows: auto auto auto 1fr auto;
+    column-gap: 28px;
+  }
+
+  .psl-clip {
+    inset: 22px 24px 22px 28px;
+  }
+
+  .psl-full > :not(.psl-art):not(.psl-soon-art):not(.psl-art-link) {
+    grid-column: 1;
+  }
+
+  .psl-full .psl-art,
+  .psl-full .psl-soon-art {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    margin-top: 0;
+  }
+
+  .psl-name {
+    font-size: 30px;
+  }
+
+  .psl-desc {
+    align-self: start;
+    font-size: 13px;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+  }
+
+  .psl-fact {
+    font-size: 12px;
+  }
+
+  .psl-facts {
+    align-self: end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .psl-slice,
+  .psl-side,
+  .psl-full {
+    transition: none !important;
+  }
+}

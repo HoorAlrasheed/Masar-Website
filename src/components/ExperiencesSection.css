@@ -1,0 +1,521 @@
+/* =========================================================
+   EXPERIENCES — SECTION 04
+   A 3D orbit "cinema showcase" for مسار's 7 past experiences.
+   Same continuation rule as Section 3: a single FLAT color, the exact
+   tone Section 2/3 already end on (#07111b) — no new background, no
+   gradient of its own, no glow at the seam. Depth here comes from the
+   3D perspective itself and from typography, not from lighting.
+   ========================================================= */
+
+.exp {
+  position: relative;
+  overflow-x: hidden; /* the orbit's near/far cards can bleed slightly
+    past the stage box under perspective — clip only here, at the
+    section edge, so it never causes page-level horizontal scroll */
+
+  background: #07111b;
+  color: var(--white);
+
+  padding: clamp(96px, 12vw, 180px) 0 clamp(110px, 13vw, 190px);
+}
+
+.exp-scene {
+  position: relative;
+  z-index: 2;
+  width: min(calc(100% - 64px), 1200px);
+  margin: 0 auto;
+}
+
+/* ---------- header: same asymmetric, right-aligned type block as
+   Section 3's own header ---------- */
+
+.exp-head {
+  max-width: 620px;
+  margin: 0 0 clamp(56px, 7vw, 96px);
+}
+
+.exp-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 0 0 18px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+
+.exp-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.exp-title {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(24px, 3.1vw, 38px);
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(245, 247, 248, 0.92);
+}
+
+/* ---------- the 3D stage ---------- */
+
+.exp-stage {
+  position: relative;
+  z-index: 1;
+
+  /* full-bleed on purpose: the fan needs the whole section's width to
+     spread its cards with real spacing, independent of the narrower
+     centered column the eyebrow/title/nav sit in (.exp-scene) */
+  width: 100%;
+
+  height: clamp(340px, 44vw, 520px);
+
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+}
+
+.exp-orbit {
+  position: absolute;
+  inset: 0;
+
+  transform-style: preserve-3d;
+}
+
+.exp-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  /* Required for the inner .exp-card-face's counter-rotation to
+     actually register as a real 3D rotation relative to this
+     already-rotated card — without it, the browser flattens the child
+     into this element's own plane and the counter-rotation has no
+     visible effect at all (the bug behind "nothing changed"). */
+  transform-style: preserve-3d;
+
+  /* sized responsively by ExperiencesSection.tsx's fit(), which sets
+     this custom property on :root; the fallback here only covers the
+     very first paint before that effect runs */
+  width: var(--exp-card-w, 280px);
+  aspect-ratio: 3 / 4;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+  will-change: transform, opacity;
+}
+
+.exp-card:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 3px;
+}
+
+/* The picture+text layer, counter-rotated in render() so it reads as a
+   flat, mostly-rectangular panel even though the outer .exp-card is
+   turned by its full orbital angle (see the comment in render()). */
+.exp-card-face {
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+
+  will-change: transform;
+}
+
+.exp-card-shade {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to top,
+    rgba(3, 7, 12, 0.88),
+    rgba(3, 7, 12, 0.15) 55%,
+    rgba(3, 7, 12, 0.05)
+  );
+
+  pointer-events: none;
+}
+
+.exp-card-body {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+}
+
+/* A clear typographic hierarchy, most-to-least prominent: the kind
+   badge (small, tracked, a label) → the title (the biggest, boldest
+   line — the one thing a card is "about") → the guest name (clearly
+   the smallest and dimmest, a caption to the title, not competing
+   with it). Each level gets its own tight, deliberate spacing instead
+   of one even gap, so the block reads as one composed unit. */
+.exp-card-kind {
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sky);
+  margin-bottom: 6px;
+}
+
+.exp-card-title {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(16px, 1.7vw, 20px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.exp-card-guest {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: rgba(245, 247, 248, 0.55);
+}
+
+.exp-card-arrow {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.exp-card-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+.exp-card.is-active {
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- nav bar ---------- */
+
+.exp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+
+  margin-top: clamp(36px, 5vw, 56px);
+}
+
+.exp-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--white);
+
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+}
+
+.exp-nav-btn:hover {
+  border-color: rgba(159, 216, 245, 0.6);
+  background: rgba(159, 216, 245, 0.08);
+}
+
+.exp-nav-btn:active {
+  transform: scale(0.94);
+}
+
+.exp-nav-count {
+  min-width: 80px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+
+  direction: ltr;
+  text-align: center;
+}
+
+.exp-nav-count-current {
+  color: var(--white);
+}
+
+/* ---------- details "page": a full-screen overlay that covers the
+   whole viewport when a card is opened — it reads like a separate page
+   the way the user asked, but it's still just this component toggling
+   a fixed layer on top of itself; no route change, no reload, and
+   closing it returns to the exact same orbit position. ---------- */
+
+.exp-details {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: flex;
+  justify-content: center;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* same flat tone as the section itself, so the "page" it reveals
+     still feels like مسار's own space, not a foreign popup */
+  background: #07111b;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.exp-details.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease;
+}
+
+.exp-details-panel {
+  position: relative;
+  align-self: flex-start;
+
+  width: min(calc(100% - 48px), 1100px);
+  margin: clamp(64px, 9vw, 120px) auto;
+
+  display: grid;
+  grid-template-columns: minmax(220px, 34%) 1fr;
+  gap: clamp(28px, 4vw, 56px);
+
+  padding: clamp(28px, 4vw, 44px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+
+  opacity: 0;
+  transform: translateY(28px) scale(0.98);
+  animation: exp-details-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes exp-details-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.exp-details-close {
+  position: fixed;
+  top: clamp(18px, 3vw, 32px);
+  left: clamp(18px, 3vw, 32px);
+  z-index: 101;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(7, 17, 27, 0.7);
+  backdrop-filter: blur(6px);
+  color: var(--white);
+
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.exp-details-image {
+  border-radius: 14px;
+  overflow: hidden;
+
+  aspect-ratio: 4 / 5;
+
+  background-size: cover;
+  background-position: center;
+}
+
+.exp-details-content {
+  min-width: 0;
+}
+
+.exp-details-kind {
+  display: block;
+  margin-bottom: 10px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sky);
+}
+
+.exp-details-title {
+  margin: 0 0 22px;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.exp-details-guests {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.exp-details-guest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.exp-details-guest-role-tag {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sky);
+  border: 1px solid rgba(159, 216, 245, 0.4);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.exp-details-guest-name {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.exp-details-guest-bio {
+  flex-basis: 100%;
+  margin: 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.exp-details-about {
+  margin: 0 0 16px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: rgba(245, 247, 248, 0.85);
+}
+
+.exp-details-location {
+  margin: 18px 0 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.exp-details-location span {
+  color: var(--sky);
+  font-weight: 600;
+}
+
+/* =========================================================
+   MOBILE — smaller stage/cards, fewer cards read as "clearly present"
+   at once, details panel stacks — same orbit concept throughout
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .exp-stage {
+    height: clamp(300px, 78vw, 420px);
+    perspective: 900px;
+  }
+
+  .exp-card-body {
+    padding: 14px;
+  }
+
+  .exp-card-kind {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  .exp-card-title {
+    font-size: 15px;
+    margin-bottom: 3px;
+  }
+
+  .exp-card-guest {
+    font-size: 10px;
+  }
+
+  .exp-details-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .exp-details-image {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp-eyebrow,
+  .exp-title,
+  .exp-orbit,
+  .exp-nav {
+    opacity: 1;
+    transform: none;
+  }
+}

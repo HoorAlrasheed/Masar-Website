@@ -1,0 +1,531 @@
+
+/* =========================================================
+   the share sheet on /team — over the person's card
+   ========================================================= */
+
+.tsh-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 140; /* above the card */
+  display: grid;
+  place-items: end center;
+}
+
+.tsh-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 10, 17, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: tsh-fade 0.3s ease both;
+}
+
+.tsh {
+  position: relative;
+  width: min(100%, 440px);
+  max-height: 94vh;
+  overflow-y: auto;
+  padding: 22px 20px 26px;
+  border: 1px solid rgba(159, 216, 245, 0.14);
+  border-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  background: #0d1b28;
+  color: #fff;
+  animation: tsh-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes tsh-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes tsh-up {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+
+.tsh-close {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: none;
+  color: #dfe8ee;
+  cursor: pointer;
+}
+
+.tsh-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tsh-label {
+  margin: 6px 0 0;
+  text-align: center;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.tsh-hint {
+  margin: 4px 0 0;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  color: #8d9aa6;
+}
+
+/* the three designs, each with a small sign of its shape */
+.tsh-designs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tsh-design {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #9aa8b3;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+.tsh-design[aria-checked='true'] {
+  border-color: rgba(159, 216, 245, 0.5);
+  background: rgba(159, 216, 245, 0.08);
+  color: #fff;
+}
+
+.tsh-glyph {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 40px;
+}
+
+.tsh-glyph i {
+  position: absolute;
+  inset: 0;
+}
+
+/* the badge: a card with its strap */
+.tsh-glyph--badge::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 6px;
+  height: 12px;
+  transform: translateX(-50%);
+  background: #62798f;
+}
+
+.tsh-glyph--badge i {
+  top: 8px;
+  right: 4px;
+  left: 4px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #62798f 0 38%, #b7c5d1 38%);
+}
+
+/* the letter: a sheet with a seal */
+.tsh-glyph--letter i {
+  right: 5px;
+  left: 5px;
+  top: 4px;
+  border-radius: 2px;
+  background: #e7eaed;
+  transform: rotate(-4deg);
+}
+
+.tsh-glyph--letter::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #6f8fae;
+}
+
+/* the ticket: a stub with bitten corners */
+.tsh-glyph--ticket i {
+  right: 3px;
+  left: 3px;
+  top: 6px;
+  bottom: 6px;
+  background:
+    radial-gradient(circle 4px at 0 70%, #0d1b28 98%, transparent) ,
+    radial-gradient(circle 4px at 100% 70%, #0d1b28 98%, transparent),
+    linear-gradient(180deg, #3d5468 0 45%, #8ea3b7 45%);
+  border-radius: 3px;
+}
+
+/* story · post */
+.tsh-switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 190px;
+  margin: 14px auto 0;
+  padding: 3px;
+  border: 1px solid rgba(159, 216, 245, 0.14);
+  border-radius: 12px;
+}
+
+.tsh-pill {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  bottom: 3px;
+  width: calc((100% - 6px) / 2);
+  border-radius: 9px;
+  background: rgba(159, 216, 245, 0.12);
+  border: 1px solid rgba(159, 216, 245, 0.35);
+  transition: transform 0.4s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.tsh-switch[data-i='1'] .tsh-pill {
+  transform: translateX(-100%);
+}
+
+.tsh-switch button {
+  position: relative;
+  z-index: 1;
+  height: 32px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #9aa8b3;
+}
+
+.tsh-switch button[aria-selected='true'] {
+  color: #fff;
+}
+
+/* the image itself */
+.tsh-preview {
+  display: grid;
+  place-items: center;
+  height: 340px;
+  margin-top: 16px;
+}
+
+.tsh-preview img {
+  display: block;
+  width: auto;
+  height: 340px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 18px 30px -14px rgba(0, 0, 0, 0.8);
+}
+
+.tsh-wait {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(159, 216, 245, 0.2);
+  border-top-color: #9fd8f5;
+  border-radius: 50%;
+  animation: tsh-spin 0.8s linear infinite;
+}
+
+@keyframes tsh-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* download + share */
+.tsh-main {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.tsh-btn {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(180deg, #c4e9fb 0%, #9fd8f5 55%, #86c8ec 100%);
+  color: #07111b;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.tsh-btn[aria-disabled='true'],
+.tsh-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tsh-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.tsh-btn--ghost {
+  flex: 0 0 auto;
+  padding: 0 18px;
+  border: 1px solid rgba(159, 216, 245, 0.3);
+  background: none;
+  color: #dfe8ee;
+}
+
+/* LinkedIn, X, WhatsApp, copy link */
+.tsh-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.tsh-row a,
+.tsh-row button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  color: #dfe8ee;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.tsh-row a:hover,
+.tsh-row button:hover,
+.tsh-row button[data-done] {
+  border-color: rgba(159, 216, 245, 0.5);
+  color: #9fd8f5;
+}
+
+.tsh-row svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* LinkedIn's two steps */
+.tsh-li {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid rgba(159, 216, 245, 0.2);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.tsh-li li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+}
+
+.tsh-li li + li {
+  border-top: 1px dashed rgba(159, 216, 245, 0.16);
+}
+
+.tsh-li span {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(159, 216, 245, 0.12);
+  color: #9fd8f5;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tsh-li p {
+  flex: 1;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #e3eaf0;
+}
+
+.tsh-li small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: #8d9aa6;
+}
+
+.tsh-li button,
+.tsh-li a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 99px;
+  background: #9fd8f5;
+  color: #07111b;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tsh-li svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* the ready caption */
+.tsh-caption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(159, 216, 245, 0.2);
+  border-radius: 12px;
+}
+
+.tsh-caption p span {
+  display: block;
+}
+
+.tsh-caption p {
+  flex: 1;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  line-height: 1.8;
+  color: #c9d6e0;
+}
+
+.tsh-caption button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(159, 216, 245, 0.3);
+  border-radius: 99px;
+  background: none;
+  color: #9fd8f5;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tsh-caption svg {
+  width: 13px;
+  height: 13px;
+}
+
+.tsh-note {
+  margin: 10px 0 0;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  color: #6f8496;
+}
+
+@media (min-width: 700px) {
+  .tsh-layer {
+    place-items: center;
+  }
+
+  .tsh {
+    border-bottom: 1px solid rgba(159, 216, 245, 0.14);
+    border-radius: 24px;
+  }
+
+  .tsh-preview,
+  .tsh-preview img {
+    height: 400px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tsh,
+  .tsh-dim,
+  .tsh-pill {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ---------- the button on the person's card ---------- */
+
+.tm-card-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 44px;
+  margin-top: 10px;
+  border: 1px solid rgba(159, 216, 245, 0.3);
+  border-radius: 13px;
+  background: rgba(159, 216, 245, 0.06);
+  color: #9fd8f5;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.25s ease;
+}
+
+.tm-card-share:hover {
+  background: rgba(159, 216, 245, 0.12);
+}
+
+.tm-card-share svg {
+  width: 17px;
+  height: 17px;
+}

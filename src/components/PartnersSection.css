@@ -1,0 +1,235 @@
+/* =========================================================
+   PARTNERS — SECTION 05
+   Same continuation rule as Section 4: a single FLAT color, the exact
+   tone Sections 2/3/4 already end on (#07111b) — no new background,
+   no gradient, no glow at the seam.
+   ========================================================= */
+
+.prt {
+  position: relative;
+  overflow-x: hidden; /* the marquee rows are intentionally wider than
+    the viewport (that's how the loop works) — clip only here, at the
+    section edge, so it can never cause page-level horizontal scroll */
+
+  background: #07111b;
+  color: var(--white);
+
+  padding: clamp(96px, 12vw, 170px) 0 clamp(110px, 13vw, 190px);
+}
+
+.prt-scene {
+  position: relative;
+  z-index: 2;
+  width: min(calc(100% - 64px), 1200px);
+  margin: 0 auto;
+}
+
+/* ---------- header: the EXACT same pattern as every other section's
+   own head (see .exp-head/.exp-eyebrow/.exp-title) — a small sky-blue
+   eyebrow with a short leading dash, then a big headline underneath,
+   both right-aligned in the same asymmetric column. Reproduced here
+   rather than shared so this file stays self-contained, but every
+   value below is copied 1:1 from ExperiencesSection.css. ---------- */
+
+.prt-head {
+  max-width: 620px;
+  margin: 0 0 clamp(56px, 7vw, 96px);
+}
+
+.prt-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 0 0 18px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+
+.prt-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.prt-title {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(24px, 3.1vw, 38px);
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(245, 247, 248, 0.92);
+}
+
+/* ---------- the moving logo wall ---------- */
+
+.prt-wall {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Logos are now much bigger (up to ~220px tall) than when this gap
+     was first tuned — the old, small gap made the second row read as
+     "stuck" right under the logos instead of a clearly separate row. */
+  gap: clamp(72px, 10vw, 150px);
+
+  /* Soft fade at both edges instead of a hard clip — logos ease into
+     and out of view rather than being cut off mid-shape. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+.prt-row {
+  overflow: hidden;
+  width: 100%;
+
+  /* THE ACTUAL BUG: the whole site is RTL (Arabic). A translateX()
+     marquee's flex layout and its transform both get computed against
+     that RTL coordinate system, and different browsers resolve "where
+     is 0% / where is -50%" differently for an RTL flex container whose
+     content is wider than its box. In practice that showed up as one
+     row rendering with nothing visible on screen for several seconds
+     at a time, as if it had "run out" — not a spacing problem at all.
+     Forcing this one wrapper back to a plain LTR coordinate system
+     makes translateX(0) / translateX(-50%) mean the exact same
+     physical thing in every browser, so the loop is reliably
+     seamless. The Arabic text itself still reads correctly — see
+     `direction: rtl` on `.prt-soon` below — only the row's own
+     layout direction is pinned. */
+  direction: ltr;
+}
+
+.prt-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+
+  animation-name: prt-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.prt-track--reverse {
+  animation-direction: reverse;
+}
+
+@keyframes prt-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* The track holds the row's items twice, so 50% is exactly one
+       full copy's width — wrapping here is invisible. */
+    transform: translateX(-50%);
+  }
+}
+
+/* One continuous, TIGHT ring — every slot (a real logo or a "قريبًا"
+   placeholder) sits close enough to its neighbor that the row reads as
+   a single linked chain, not a series of separate islands with air
+   between them. Only a small dot marks where one slot ends and the
+   next begins; there is no extra breathing room beyond that. */
+.prt-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 clamp(10px, 1.3vw, 18px);
+}
+
+.prt-item + .prt-item::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(245, 247, 248, 0.18);
+  margin-inline-end: clamp(10px, 1.3vw, 18px);
+}
+
+/* A single, calm visual treatment for every logo regardless of its
+   original colors — desaturated and dimmed to sit quietly on the dark
+   surface, instead of turning the row into a colorful, busy strip. */
+.prt-logo {
+  /* ~3x bigger again — the previous size still read as small/unclear.
+     A "premium logo wall" reads the marks clearly at a glance, not as
+     tiny shapes you have to squint at. */
+  height: clamp(120px, 17vw, 220px);
+  width: auto;
+  max-width: clamp(280px, 34vw, 480px);
+  object-fit: contain;
+
+  filter: grayscale(1) brightness(1.8) contrast(0.85) opacity(0.6);
+  transition: filter 0.4s ease;
+  user-select: none;
+}
+
+.prt-logo:hover {
+  filter: grayscale(1) brightness(1.8) contrast(0.85) opacity(0.95);
+}
+
+.prt-soon {
+  /* The row's own layout was pinned to `direction: ltr` above (that's
+     the actual fix) — this puts the Arabic text itself back to
+     reading right-to-left within its own box, so "شريك قادم قريبًا"
+     still reads correctly letter-by-letter, only the row's overall
+     flex direction stays standardized. */
+  direction: rtl;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: clamp(15px, 1.6vw, 19px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.55;
+  white-space: nowrap;
+
+  transition: opacity 0.4s ease;
+}
+
+.prt-soon:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  .prt-item {
+    padding: 0 clamp(12px, 4vw, 20px);
+  }
+
+  .prt-item + .prt-item::before {
+    margin-inline-end: clamp(12px, 4vw, 20px);
+  }
+}
+
+/* Respect reduced-motion: the rows stop drifting and just sit as a
+   single static line — still legible, no motion at all. */
+@media (prefers-reduced-motion: reduce) {
+  .prt-track {
+    animation: none;
+  }
+}

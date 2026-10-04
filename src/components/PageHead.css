@@ -1,0 +1,120 @@
+/* the page heading shared by عن مسار, مميز الشهر, الشركاء والرعاة —
+   the same sizes and colours as the heading of فريق مسار */
+
+.phd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-inline: 20px;
+  padding-top: 14px; /* under the page's own 104px, as on فريق مسار */
+  text-align: center;
+}
+
+.phd > * {
+  animation: phd-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.phd > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.phd > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.phd > :nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+@keyframes phd-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.phd-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--sky, #9fd8f5);
+}
+
+.phd-label::before,
+.phd-label::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.5);
+}
+
+.phd-title {
+  margin: 14px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(245, 247, 248, 0.94);
+}
+
+.phd-tear {
+  position: relative;
+  width: 132px;
+  height: 0;
+  margin: 16px 0 14px;
+  border-top: 1.5px dashed rgba(159, 216, 245, 0.35);
+}
+
+.phd-tear::before,
+.phd-tear::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.phd-tear::before {
+  right: -10px;
+}
+
+.phd-tear::after {
+  left: -10px;
+}
+
+.phd-sub {
+  margin: 0 0 22px;
+  max-width: 300px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #8d9aa6;
+}
+
+@media (min-width: 720px) {
+  .phd-title {
+    font-size: 30px;
+  }
+
+  .phd-sub {
+    max-width: 520px;
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phd > * {
+    animation: none;
+  }
+}

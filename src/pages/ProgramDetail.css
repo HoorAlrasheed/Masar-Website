@@ -1,0 +1,513 @@
+
+/* =========================================================
+   /programs/:id — the programme typed on a sheet coming out of a
+   typewriter (the photo, recoloured to the site's blues and set on
+   the site's navy). Phone first.
+   ========================================================= */
+
+.pgt {
+  min-height: 100vh;
+  padding-bottom: 96px;
+  overflow-x: clip;
+  background: #07111b;
+  color: #fff;
+}
+
+.pgt section {
+  background: none;
+}
+
+.pgt-wrap {
+  width: min(100%, 460px);
+  margin: 0 auto;
+  padding-top: 104px;
+}
+
+/* the navbar logo steps aside — it keeps its place, so the menu stays left */
+body.pgt-page header a[aria-label='مبادرة مسار'] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.pgt-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 20px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #9aa8b3;
+  text-decoration: none;
+}
+
+.pgt-back svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* ---------- the scene ---------- */
+
+.pgt-scene {
+  position: relative;
+  margin-top: 18px;
+  direction: ltr; /* the sheet is placed by the photo's own measurements */
+}
+
+.pgt-brand {
+  margin: 0 0 20px;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: #6f8496;
+}
+
+/* the sheet sits where the paper is in the photo (a hair wider, so its
+   edges cover the photo's), runs down into it, and fades into it */
+.pgt-sheet {
+  position: relative;
+  z-index: 1;
+  width: 61.3%;
+  margin: 0 0 -26% 17.8%;
+  padding: 30px 18px 52px;
+  direction: rtl;
+  color: #1b2430;
+  background: linear-gradient(180deg, #e9e9e5, #ecede8 55%, #f0f2ec);
+  -webkit-mask: linear-gradient(180deg, #000 calc(100% - 46px), transparent);
+  mask: linear-gradient(180deg, #000 calc(100% - 46px), transparent);
+}
+
+/* a faint paper grain */
+.pgt-sheet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(27, 36, 48, 0.07) 0.5px, transparent 0.6px);
+  background-size: 3px 3px;
+}
+
+.pgt-sheet > * {
+  position: relative;
+}
+
+/* typed ink: a touch soft, like a ribbon on paper */
+.pgt-sheet h1,
+.pgt-sheet h2,
+.pgt-sheet p,
+.pgt-sheet dt,
+.pgt-sheet dd,
+.pgt-sheet li,
+.pgt-sheet span {
+  text-shadow: 0 0 0.35px rgba(27, 36, 48, 0.65);
+}
+
+.pgt-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #1b2430;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: #3d4a57;
+}
+
+.pgt-head em {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 500;
+  direction: ltr;
+}
+
+.pgt-title {
+  margin: 22px 0 0;
+  text-align: center;
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #121a24;
+}
+
+/* the status, between two short rules */
+.pgt-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #4b5866;
+}
+
+.pgt-state::before,
+.pgt-state::after {
+  content: '';
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.pgt-block {
+  margin-top: 22px;
+}
+
+/* a small section label with a rule after it */
+.pgt-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #3d4a57;
+}
+
+.pgt-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(27, 36, 48, 0.35);
+}
+
+.pgt-about {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 10.5px;
+  line-height: 2;
+  color: #1b2430;
+  text-align: right;
+}
+
+/* the details: label on the right, value on the left, dotted lines */
+.pgt-about + .pgt-about {
+  margin-top: 8px;
+}
+
+.pgt-rows {
+  margin: 20px 0 0;
+  border-top: 1px solid #1b2430;
+}
+
+.pgt-rows > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px dotted rgba(27, 36, 48, 0.4);
+}
+
+.pgt-rows dt {
+  flex: 0 0 auto;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: #5b6875;
+}
+
+.pgt-rows dd {
+  margin: 0;
+  text-align: left;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #121a24;
+}
+
+.pgt-rows a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* the topics, each with its number in words */
+.pgt-topics {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pgt-topics li {
+  padding: 7px 0;
+  border-bottom: 1px dotted rgba(27, 36, 48, 0.4);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #121a24;
+}
+
+.pgt-topics li:last-child {
+  border-bottom: 0;
+}
+
+.pgt-topics span {
+  display: block;
+  font-family: 'Cairo', sans-serif;
+  font-size: 8.5px;
+  font-weight: 500;
+  color: #6a7683;
+}
+
+/* the sign-off, with the cursor still blinking after it */
+.pgt-sign {
+  margin: 22px 0 0;
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #2a3542;
+}
+
+.pgt-sign i {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  background: #1b2430;
+  animation: pgt-blink 1s steps(1) infinite;
+}
+
+@keyframes pgt-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.pgt-machine {
+  position: relative;
+  display: block;
+  width: 100%;
+  -webkit-mask: linear-gradient(180deg, #000 80%, transparent);
+  mask: linear-gradient(180deg, #000 80%, transparent);
+  user-select: none;
+}
+
+/* ---------- under the machine: register + share ---------- */
+
+.pgt-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 6px;
+  padding: 0 20px;
+}
+
+.pgt-register {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 52px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #c4e9fb 0%, #9fd8f5 55%, #86c8ec 100%);
+  box-shadow:
+    0 12px 28px -12px rgba(159, 216, 245, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  color: #07111b;
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* a soft light passes across it now and then */
+.pgt-register::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg);
+  animation: pgt-shine 4.5s ease-in-out 1.8s infinite;
+}
+
+@keyframes pgt-shine {
+  0%,
+  70% {
+    left: -40%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+.pgt-register:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 32px -12px rgba(159, 216, 245, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.pgt-register svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.25s ease;
+}
+
+.pgt-register:hover svg {
+  transform: translateX(-3px);
+}
+
+.pgt-register[aria-disabled='true'] {
+  border: 1px dashed rgba(159, 216, 245, 0.35);
+  background: none;
+  box-shadow: none;
+  color: #9aa8b3;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: default;
+}
+
+.pgt-register[aria-disabled='true']::after {
+  display: none;
+}
+
+.pgt-register[aria-disabled='true']:hover {
+  transform: none;
+}
+
+.pgt-share {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pgt-share-label {
+  margin-left: 4px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8d9aa6;
+}
+
+.pgt-share a,
+.pgt-share button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  color: #dfe8ee;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+.pgt-share a:hover,
+.pgt-share button:hover,
+.pgt-share button[data-done] {
+  border-color: rgba(159, 216, 245, 0.5);
+  background: rgba(159, 216, 245, 0.08);
+  color: var(--sky, #9fd8f5);
+}
+
+.pgt-share svg {
+  width: 17px;
+  height: 17px;
+}
+
+.pgt-copied {
+  min-height: 18px;
+  margin: -8px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  color: var(--sky, #9fd8f5);
+}
+
+.pgt-missing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 160px 20px 0;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  color: #9aa8b3;
+}
+
+.pgt-missing .pgt-register {
+  width: auto;
+  padding: 0 24px;
+}
+
+/* ---------- wider screens ---------- */
+
+@media (min-width: 900px) {
+  .pgt-wrap {
+    width: 560px;
+    padding-top: 140px;
+  }
+
+  .pgt-sheet {
+    padding: 40px 28px 64px;
+  }
+
+  .pgt-title {
+    font-size: 28px;
+  }
+
+  .pgt-about,
+  .pgt-rows dd,
+  .pgt-topics li {
+    font-size: 12.5px;
+  }
+
+  .pgt-head,
+  .pgt-label,
+  .pgt-rows dt,
+  .pgt-state {
+    font-size: 10.5px;
+  }
+
+  .pgt-foot {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .pgt-register {
+    width: 260px;
+  }
+
+  .pgt-copied {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pgt-register::after,
+  .pgt-sign i {
+    animation: none;
+  }
+}

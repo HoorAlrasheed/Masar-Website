@@ -1,0 +1,378 @@
+/* =========================================================
+   /contact — mobile-first, one calm centered column.
+   Same system as the home page and footer: #07111b page,
+   Cairo / IBM Plex Sans Arabic, sky #9fd8f5, muted #9aa8b3,
+   12px corners, hairlines, deep-navy glass button.
+   ========================================================= */
+
+.cnt {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+
+  background: #07111b;
+  color: var(--white);
+
+  /* clears the fixed 82px header */
+  padding: 128px 0 96px;
+}
+
+.cnt-glow {
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  width: 640px;
+  height: 480px;
+  margin-left: -320px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(159, 216, 245, 0.08), rgba(159, 216, 245, 0));
+}
+
+.cnt-inner {
+  position: relative;
+  width: min(calc(100% - 48px), 520px);
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---------- 1) head ---------- */
+
+.cnt-title {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgba(245, 247, 248, 0.95);
+}
+
+.cnt-intro {
+  margin: 12px 0 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+/* ---------- 2) accounts — logos only ---------- */
+
+.cnt-socials {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cnt-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 52px;
+  height: 52px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(245, 247, 248, 0.8);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cnt-social svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cnt-social:hover,
+.cnt-social:focus-visible {
+  border-color: rgba(159, 216, 245, 0.55);
+  background: rgba(159, 216, 245, 0.08);
+  color: #fff;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.cnt-social:active {
+  transform: scale(0.94);
+}
+
+/* ---------- 3) official email ---------- */
+
+.cnt-mail {
+  margin-top: 24px;
+}
+
+.cnt-mail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+
+  border: 1px solid rgba(159, 216, 245, 0.22);
+  border-radius: 999px;
+  background: rgba(159, 216, 245, 0.04);
+  color: rgba(245, 247, 248, 0.92);
+  text-decoration: none;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cnt-mail-link svg {
+  width: 18px;
+  height: 18px;
+  color: var(--sky);
+}
+
+.cnt-mail-link:hover,
+.cnt-mail-link:focus-visible {
+  border-color: rgba(159, 216, 245, 0.5);
+  background: rgba(159, 216, 245, 0.08);
+  outline: none;
+}
+
+.cnt-note {
+  max-width: 380px;
+  margin: 12px auto 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.85;
+  color: rgba(154, 168, 179, 0.85);
+}
+
+/* ---------- 4) form ---------- */
+
+.cnt-card {
+  width: 100%;
+  margin-top: 40px;
+  padding: 24px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  text-align: right;
+}
+
+.cnt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cnt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cnt-field span {
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(245, 247, 248, 0.7);
+}
+
+.cnt-field input,
+.cnt-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--white);
+  outline: none;
+
+  font-family: 'Cairo', sans-serif;
+  /* 16px so iPhone doesn't zoom into the field */
+  font-size: 16px;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.cnt-field textarea {
+  resize: none;
+  line-height: 1.8;
+}
+
+.cnt-field input:focus,
+.cnt-field textarea:focus {
+  border-color: rgba(159, 216, 245, 0.55);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.cnt-submit {
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 54px;
+  margin-top: 4px;
+
+  border: 1px solid rgba(159, 216, 245, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #16293d 0%, #0e1c2b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 10px 28px rgba(2, 8, 14, 0.35);
+  color: #eef7fc;
+  cursor: pointer;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    color 0.4s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cnt-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(159, 216, 245, 0) 30%,
+    rgba(159, 216, 245, 0.16) 50%,
+    rgba(159, 216, 245, 0) 70%
+  );
+  transform: translateX(110%);
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cnt-submit:hover,
+.cnt-submit:focus-visible {
+  border-color: rgba(159, 216, 245, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 0 0 4px rgba(159, 216, 245, 0.06),
+    0 12px 32px rgba(159, 216, 245, 0.1);
+  color: #fff;
+  outline: none;
+}
+
+.cnt-submit:hover::before,
+.cnt-submit:focus-visible::before {
+  transform: translateX(-110%);
+}
+
+.cnt-submit:active {
+  transform: scale(0.985);
+}
+
+/* sent state */
+.cnt-sent {
+  padding: 16px 0 8px;
+  text-align: center;
+}
+
+.cnt-sent-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 14px;
+
+  border: 1px solid rgba(159, 216, 245, 0.35);
+  border-radius: 50%;
+  color: var(--sky);
+}
+
+.cnt-sent-mark svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cnt-sent-title {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.cnt-sent-text {
+  margin: 6px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- 5) dedicated pages, one quiet line ---------- */
+
+.cnt-routes {
+  margin: 24px 0 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 2;
+  color: rgba(154, 168, 179, 0.85);
+}
+
+.cnt-routes a {
+  color: var(--sky);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(159, 216, 245, 0.3);
+  transition: border-color 0.3s ease;
+}
+
+.cnt-routes a:hover,
+.cnt-routes a:focus-visible {
+  border-color: var(--sky);
+  outline: none;
+}
+
+/* ---------- wider screens ---------- */
+
+@media (min-width: 600px) {
+  .cnt {
+    padding: 160px 0 120px;
+  }
+
+  .cnt-title {
+    font-size: 44px;
+  }
+
+  .cnt-card {
+    padding: 32px 30px;
+  }
+}
+
+/* the three links on their own line, under the sentence */
+.cnt-routes-links {
+  display: block;
+  margin-top: 4px;
+}

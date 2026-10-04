@@ -1,0 +1,326 @@
+/* =========================================================
+   NAVBAR — mobile menu only (the desktop bar keeps its own styles).
+   A full-screen, fully opaque layer in the site's own tone, so the page
+   never shows through; large calm links; the site's deep-navy glass
+   "انضم إلى مسار" button at the bottom. Mobile-first.
+   ========================================================= */
+
+/* ---------- the toggle (☰ ⇄ ✕) ---------- */
+
+.nvm-toggle {
+  position: relative;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nvm-toggle:focus-visible {
+  outline: 1px solid rgba(159, 216, 245, 0.7);
+  outline-offset: 3px;
+}
+
+.nvm-toggle.is-open {
+  border-color: rgba(159, 216, 245, 0.4);
+  background: rgba(159, 216, 245, 0.06);
+}
+
+.nvm-toggle-lines {
+  position: relative;
+  width: 18px;
+  height: 12px;
+}
+
+.nvm-toggle-lines i {
+  position: absolute;
+  right: 0;
+  height: 1.5px;
+  border-radius: 2px;
+  background: #f5f7f8;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.25s ease,
+    width 0.35s ease,
+    top 0.35s ease;
+}
+
+.nvm-toggle-lines i:nth-child(1) {
+  top: 0;
+  width: 18px;
+}
+
+.nvm-toggle-lines i:nth-child(2) {
+  top: 5.25px;
+  width: 12px;
+}
+
+.nvm-toggle-lines i:nth-child(3) {
+  top: 10.5px;
+  width: 18px;
+}
+
+/* both bars meet in the exact middle, then cross — a clean ✕ */
+.nvm-toggle.is-open .nvm-toggle-lines i:nth-child(1) {
+  top: 5.25px;
+  transform: rotate(45deg);
+}
+
+.nvm-toggle.is-open .nvm-toggle-lines i:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.nvm-toggle.is-open .nvm-toggle-lines i:nth-child(3) {
+  top: 5.25px;
+  transform: rotate(-45deg);
+}
+
+/* ---------- the full-screen menu ---------- */
+
+.nvm {
+  position: fixed;
+  inset: 0;
+  z-index: 49; /* right under the header bar (z-50) */
+
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 82px; /* the header bar stays visible on top */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  background: #07111b; /* fully opaque — nothing behind shows through */
+  color: var(--white);
+  direction: rtl;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    visibility 0s linear 0.35s;
+}
+
+.nvm.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.35s ease;
+}
+
+.nvm-glow {
+  position: absolute;
+  top: 40px;
+  right: -140px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(159, 216, 245, 0.07), rgba(159, 216, 245, 0));
+}
+
+.nvm-inner {
+  position: relative;
+  flex: 1 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  width: min(calc(100% - 48px), 560px);
+  margin: 0 auto;
+  padding: 20px 0 32px;
+}
+
+/* ---------- links ---------- */
+
+.nvm-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nvm-list li,
+.nvm-foot {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* the rows arrive one after another */
+.nvm.is-open .nvm-list li,
+.nvm.is-open .nvm-foot {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(0.05s + var(--i) * 0.035s);
+}
+
+.nvm-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-height: 54px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(245, 247, 248, 0.78);
+  text-decoration: none;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+
+  transition: color 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nvm-link:hover,
+.nvm-link:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
+.nvm-link:active {
+  color: var(--sky);
+}
+
+/* current page: sky text + a small point of light */
+.nvm-link.is-active {
+  color: var(--sky);
+}
+
+.nvm-link.is-active::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ddf3ff;
+  box-shadow: 0 0 10px 2px rgba(159, 216, 245, 0.55);
+}
+
+/* ---------- bottom: join ---------- */
+
+.nvm-foot {
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.nvm-join {
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 54px;
+
+  border: 1px solid rgba(159, 216, 245, 0.26);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #16293d 0%, #0e1c2b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 10px 28px rgba(2, 8, 14, 0.35);
+  color: #eef7fc;
+  text-decoration: none;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+
+  transition:
+    border-color 0.3s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nvm-join:hover,
+.nvm-join:focus-visible {
+  border-color: rgba(159, 216, 245, 0.55);
+  outline: none;
+}
+
+.nvm-join:active {
+  transform: scale(0.985);
+}
+
+/* the menu is phone/tablet only */
+@media (min-width: 1024px) {
+  .nvm {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nvm-list li,
+  .nvm-foot {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- back to the page the visitor came from (on /join) ---------- */
+
+.nv-back {
+  position: relative;
+  z-index: 10;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 6px 0;
+  direction: rtl;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #9aa8b3;
+  text-decoration: none;
+
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nv-back svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s ease;
+}
+
+.nv-back:focus-visible {
+  outline: 1px solid rgba(159, 216, 245, 0.7);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .nv-back:hover {
+    color: #f5f7f8;
+  }
+
+  .nv-back:hover svg {
+    transform: translateX(3px);
+  }
+}

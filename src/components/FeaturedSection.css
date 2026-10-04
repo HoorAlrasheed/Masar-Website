@@ -1,0 +1,824 @@
+/* =========================================================
+   FEATURED — SECTION 06 (مميز الشهر / Spotlight)
+   Same continuation rule as Sections 2–5: the flat #07111b tone,
+   no new background color. Everything that makes this part feel
+   "different" is LIGHT: a thread of sky light, a slit that opens,
+   a vignette that gathers focus on the person.
+   --ftr-x (the person's position in the photo) is set from focusX in
+   src/data/featured.ts — the thread, the slit and the crops share it.
+   ========================================================= */
+
+.ftr {
+  --ftr-x: 73%;
+  --ftr-sky: 159, 216, 245;
+
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+
+  background: #07111b;
+  color: var(--white);
+
+  /* breathing room after the partners wall, so the two sections read as
+     clearly separate — the thread of light starts after this space */
+  padding: clamp(96px, 12vw, 180px) 0 clamp(120px, 14vw, 200px);
+}
+
+/* lights down: edges sink a little darker, a faint glow gathers where
+   the thread lands. Masked at top & bottom so neither seam (partners
+   above, footer below) ever shows an edge. */
+.ftr-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+
+  background:
+    radial-gradient(
+      ellipse 38% 28% at var(--ftr-x) 30%,
+      rgba(var(--ftr-sky), 0.07),
+      rgba(var(--ftr-sky), 0) 70%
+    ),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(3, 8, 13, 0) 40%, rgba(3, 8, 13, 0.6) 100%);
+
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+}
+
+.ftr-frame {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1560px);
+  margin: 0 auto;
+}
+
+/* ---------- the bridge: thread of light ---------- */
+
+.ftr-bridge {
+  position: relative;
+  height: clamp(220px, 36vh, 400px);
+}
+
+.ftr-thread {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ftr-x);
+  width: 1px;
+}
+
+.ftr-thread-line {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0%;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--ftr-sky), 0) 0%,
+    rgba(var(--ftr-sky), 0.35) 45%,
+    rgba(var(--ftr-sky), 0.85) 100%
+  );
+}
+
+.ftr-thread-head {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 0;
+  height: 0;
+}
+
+.ftr-thread-head i {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddf3ff;
+  box-shadow:
+    0 0 0 4px rgba(var(--ftr-sky), 0.12),
+    0 0 18px 4px rgba(var(--ftr-sky), 0.45),
+    0 0 60px 12px rgba(var(--ftr-sky), 0.15);
+}
+
+/* the section's own eyebrow hangs off the thread */
+.ftr-label {
+  position: absolute;
+  right: calc(100% - var(--ftr-x) + 26px);
+  bottom: 26%;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  text-align: left;
+}
+
+.ftr-label span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  color: var(--sky);
+}
+
+.ftr-label span::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(var(--ftr-sky), 0.55);
+}
+
+.ftr-label small {
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  color: rgba(245, 247, 248, 0.32);
+  direction: ltr;
+}
+
+/* ---------- the stage ---------- */
+
+.ftr-stage {
+  position: relative;
+  aspect-ratio: 1320 / 722;
+  max-height: 92vh;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ftr-reveal {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(0% 0% 0% 0%);
+
+  /* edges dissolve into the page — no frame, no card */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 76%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 76%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.ftr-parallax {
+  position: absolute;
+  inset: -22px;
+  transform-origin: var(--ftr-x) 35%;
+  will-change: transform;
+}
+
+.ftr-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--ftr-x) 40%;
+  user-select: none;
+}
+
+/* the "before light" copy: filtered once, only its opacity animates */
+.ftr-img-mono {
+  position: absolute;
+  inset: 0;
+  filter: grayscale(1) brightness(0.55);
+  will-change: opacity;
+}
+
+/* legibility + depth: the dark left side of the photo carries the quote */
+.ftr-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to left, rgba(7, 17, 27, 0) 45%, rgba(7, 17, 27, 0.72) 100%),
+    linear-gradient(to top, rgba(7, 17, 27, 0.55) 0%, rgba(7, 17, 27, 0) 45%);
+  transition: background 0.6s ease;
+}
+
+/* soft light that follows the cursor a little */
+.ftr-follow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--ftr-x) 38%,
+    rgba(var(--ftr-sky), 0.1),
+    rgba(var(--ftr-sky), 0) 34%
+  );
+  mix-blend-mode: screen;
+}
+
+/* the moment the thread touches the photo: a vertical slit of light */
+.ftr-slit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ftr-x);
+  width: 2px;
+  margin-left: -1px;
+  pointer-events: none;
+  opacity: 0;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(221, 243, 255, 0.95),
+    rgba(var(--ftr-sky), 0.5) 60%,
+    rgba(var(--ftr-sky), 0) 100%
+  );
+  box-shadow: 0 0 24px 2px rgba(var(--ftr-sky), 0.4);
+}
+
+/* ---------- the quote (same place as before, now two lines) ---------- */
+
+.ftr-quote {
+  position: absolute;
+  left: 8%;
+  bottom: 16%;
+  z-index: 2;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(20px, 2.3vw, 34px);
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(245, 247, 248, 0.94);
+  text-shadow: 0 2px 30px rgba(3, 8, 13, 0.5);
+}
+
+.ftr-line {
+  display: flex;
+  column-gap: 0.28em;
+  white-space: nowrap;
+}
+
+.ftr-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-block: 0.08em;
+  perspective: 700px;
+}
+
+.ftr-word {
+  display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+/* the word that carries the idea gets the light */
+.ftr-word.is-lit {
+  color: #bfe6fa;
+}
+
+.ftr-corner {
+  position: absolute;
+  top: 14%;
+  left: 8%;
+  z-index: 2;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: rgba(245, 247, 248, 0.38);
+  direction: ltr;
+}
+
+/* ---------- the featured name — centered under the scene ----------
+   Reads like a credit at the end of a film: a small eyebrow framed by
+   two light rules, the name large, a soft light sweeping across it, and
+   one quiet round "+" as the only hint that there is more behind it. */
+
+.ftr-name-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(-70px, -4vw, -28px);
+  padding: 0 24px;
+}
+
+.ftr-name {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+
+  padding: 8px 12px 16px;
+  background: none;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.ftr-name:focus-visible {
+  outline: 1px solid rgba(var(--ftr-sky), 0.7);
+  outline-offset: 8px;
+}
+
+.ftr-name-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--sky);
+}
+
+.ftr-name-rule {
+  display: block;
+  width: clamp(28px, 4vw, 56px);
+  height: 1px;
+  background: rgba(var(--ftr-sky), 0.55);
+}
+
+.ftr-name-rule:first-child {
+  transform-origin: 0% 50%;
+  background: linear-gradient(to left, rgba(var(--ftr-sky), 0.7), rgba(var(--ftr-sky), 0));
+}
+
+.ftr-name-rule:last-child {
+  transform-origin: 100% 50%;
+  background: linear-gradient(to right, rgba(var(--ftr-sky), 0.7), rgba(var(--ftr-sky), 0));
+}
+
+.ftr-name-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ftr-name-text {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+
+  /* light sweep across the letters */
+  color: #f5f7f8;
+  background-image: linear-gradient(
+    100deg,
+    #f5f7f8 0%,
+    #f5f7f8 42%,
+    #bfe6fa 50%,
+    #f5f7f8 58%,
+    #f5f7f8 100%
+  );
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ftr-sweep 5.5s ease-in-out infinite;
+}
+
+@keyframes ftr-sweep {
+  0%,
+  55% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* the one quiet hint: a small round "+" with a slow halo */
+.ftr-name-cta {
+  position: relative;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--ftr-sky), 0.4);
+  background: rgba(var(--ftr-sky), 0.05);
+  transition:
+    background 0.4s ease,
+    border-color 0.4s ease,
+    transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.ftr-name-cta::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--ftr-sky), 0.45);
+  animation: ftr-ring 3.2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+@keyframes ftr-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.ftr-name-plus {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.ftr-name-plus::before,
+.ftr-name-plus::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #ddf3ff;
+}
+
+.ftr-name-plus::after {
+  transform: rotate(90deg);
+}
+
+/* hover: the underline of light draws across, the + turns a quarter */
+.ftr-name-underline {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(var(--ftr-sky), 0),
+    rgba(var(--ftr-sky), 0.8),
+    rgba(var(--ftr-sky), 0)
+  );
+  transform: translateX(-50%) scaleX(0);
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.ftr-name:hover .ftr-name-underline,
+.ftr-name:focus-visible .ftr-name-underline {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.ftr-name:hover .ftr-name-cta {
+  background: rgba(var(--ftr-sky), 0.16);
+  border-color: rgba(var(--ftr-sky), 0.8);
+}
+
+.ftr-name:hover .ftr-name-plus {
+  transform: rotate(90deg);
+}
+
+/* ---------- details "page" — same pattern as تجارب مسار ----------
+   A full-screen layer that reads like its own page; still just this
+   component toggling a fixed layer (rendered into <body>), no route
+   change, and closing returns to the exact same scroll position. */
+
+.ftr-details {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: flex;
+  justify-content: center;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* the site's own background tone, same as every section */
+  background: #07111b;
+  color: var(--white);
+  direction: rtl;
+  text-align: right;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.5s ease,
+    visibility 0s linear 0.5s;
+}
+
+.ftr-details.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease;
+}
+
+.ftr-details-panel {
+  position: relative;
+  align-self: flex-start;
+
+  width: min(calc(100% - 48px), 1100px);
+  margin: clamp(64px, 9vw, 120px) auto;
+
+  display: grid;
+  grid-template-columns: minmax(220px, 38%) 1fr;
+  gap: clamp(28px, 4vw, 56px);
+
+  padding: clamp(28px, 4vw, 44px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+
+  opacity: 0;
+  transform: translateY(28px) scale(0.98);
+}
+
+.ftr-details.is-open .ftr-details-panel {
+  animation: ftr-details-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ftr-details-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ftr-details-close {
+  position: fixed;
+  top: clamp(18px, 3vw, 32px);
+  left: clamp(18px, 3vw, 32px);
+  z-index: 101;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(7, 17, 27, 0.7);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--white);
+
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ftr-details-image {
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+
+.ftr-details-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--ftr-x, 73%) 40%;
+}
+
+.ftr-details-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ftr-details-kind {
+  display: block;
+  margin-bottom: 10px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sky);
+}
+
+.ftr-details-title {
+  margin: 0 0 26px;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.ftr-details-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ftr-details-tag {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sky);
+  border: 1px solid rgba(159, 216, 245, 0.4);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.ftr-details-value {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(245, 247, 248, 0.9);
+}
+
+.ftr-details-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 12px;
+  margin-top: 26px;
+  padding: 12px 16px;
+  min-width: 220px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(245, 247, 248, 0.88);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.ftr-details-link:hover,
+.ftr-details-link:focus-visible {
+  border-color: rgba(var(--ftr-sky), 0.5);
+  background: rgba(var(--ftr-sky), 0.06);
+  color: #fff;
+  outline: none;
+}
+
+.ftr-in {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(var(--ftr-sky), 0.4);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sky);
+}
+
+/* same round arrow as the experiences cards (.exp-card-arrow) */
+.ftr-arrow {
+  margin-inline-start: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  width: 26px;
+  height: 26px;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.85);
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.3s ease;
+}
+
+.ftr-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ftr-details-link:hover .ftr-arrow {
+  transform: translateX(-3px);
+  border-color: rgba(var(--ftr-sky), 0.6);
+}
+
+/* ---------- mobile ---------- */
+
+@media (max-width: 767px) {
+  .ftr-bridge {
+    height: clamp(180px, 30vh, 260px);
+  }
+
+  .ftr-stage {
+    aspect-ratio: 4 / 5;
+    max-height: none;
+  }
+
+  .ftr-reveal {
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, #000 10%, #000 72%, transparent 100%),
+      linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, #000 10%, #000 72%, transparent 100%),
+      linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+  }
+
+  .ftr-shade {
+    background: linear-gradient(to top, rgba(7, 17, 27, 0.9) 0%, rgba(7, 17, 27, 0) 50%);
+  }
+
+  .ftr-quote {
+    left: 24px;
+    right: 24px;
+    bottom: 4%;
+    font-size: clamp(18px, 5vw, 22px);
+  }
+
+  .ftr-corner {
+    top: 12%;
+    left: 24px;
+  }
+
+  .ftr-name-wrap {
+    margin-top: 28px;
+  }
+
+  .ftr-name-text {
+    font-size: clamp(24px, 7vw, 30px);
+  }
+
+  .ftr-name-cta {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ftr-details-panel {
+    grid-template-columns: 1fr;
+    margin-top: 76px;
+  }
+
+  .ftr-details-image {
+    aspect-ratio: 16 / 10;
+  }
+
+  .ftr-details-link {
+    align-self: stretch;
+  }
+}
+
+/* ---------- reduced motion: everything simply present ---------- */
+
+.ftr--static .ftr-ambient {
+  opacity: 1;
+}
+
+.ftr--static .ftr-thread-line {
+  transform: none;
+}
+
+.ftr--static .ftr-thread-head {
+  top: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ftr-name-cta::after,
+  .ftr-name-text {
+    animation: none;
+  }
+
+  .ftr-details.is-open .ftr-details-panel {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ftr--static .ftr-img-mono {
+  opacity: 0;
+}

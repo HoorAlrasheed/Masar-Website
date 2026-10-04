@@ -1,0 +1,162 @@
+/* =========================================================
+   /join — انضم إلى مسار
+   The form itself uses components/RequestForm.css; this file only
+   adds the two-tab switch and the short line above each form.
+   ========================================================= */
+
+.jn-tabs {
+  --jn-sky: 159, 216, 245;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(100%, 280px); /* the same size as the switch of الشركاء والرعاة */
+  margin: 6px auto 0;
+  padding: 4px;
+  border: 1px solid rgba(var(--jn-sky), 0.14);
+  border-radius: 14px;
+  background: rgba(var(--jn-sky), 0.03);
+}
+
+.jn-tabs-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  right: 4px;
+  width: calc(50% - 4px);
+  border: 1px solid rgba(var(--jn-sky), 0.35);
+  border-radius: 10px;
+  background: rgba(var(--jn-sky), 0.1);
+  transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.jn-tabs[data-tab='session'] .jn-tabs-pill {
+  transform: translateX(-100%);
+}
+
+.jn-tabs button {
+  position: relative;
+  z-index: 1;
+  height: 38px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #9aa8b3;
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.jn-tabs button[aria-selected='true'] {
+  color: #fff;
+}
+
+.jn-lead {
+  max-width: 300px; /* two even lines, never one line and a word or two */
+  margin: 0 auto 24px;
+  text-align: center;
+  text-wrap: balance;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.85;
+  color: #9aa8b3;
+}
+
+@media (min-width: 720px) {
+  .jn-tabs {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jn-tabs-pill {
+    transition: none;
+  }
+}
+
+/* registering for one programme: the header of /programs — the label
+   between two lines, the programme's name, the torn dashed line, a word */
+.jn-ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 118px 0 28px;
+  text-align: center;
+}
+
+.jn-ph-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--sky, #9fd8f5);
+}
+
+.jn-ph-label::before,
+.jn-ph-label::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.5);
+}
+
+.jn-ph-title {
+  margin: 14px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.jn-ph-tear {
+  position: relative;
+  width: 132px;
+  height: 0;
+  margin: 16px 0 14px;
+  border-top: 1.5px dashed rgba(159, 216, 245, 0.35);
+}
+
+.jn-ph-tear::before,
+.jn-ph-tear::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.jn-ph-tear::before {
+  right: -10px;
+}
+
+.jn-ph-tear::after {
+  left: -10px;
+}
+
+.jn-ph-sub {
+  max-width: 420px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #8d9aa6;
+}
+
+@media (min-width: 900px) {
+  .jn-ph {
+    padding-top: 156px;
+  }
+
+  .jn-ph-title {
+    font-size: 30px;
+  }
+}

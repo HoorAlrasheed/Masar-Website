@@ -1,0 +1,1004 @@
+/* =========================================================
+   /programs and /programs/:id — الفعاليات والبرامج (phone first)
+   The site's navy, one light (sky #9fd8f5). IBM Plex Sans Arabic for
+   titles, Cairo for everything else. Sizes are set for a 390px phone
+   first; the wider screens only get a little more room.
+   ========================================================= */
+
+.prg {
+  --prg-sky: 159, 216, 245;
+  --prg-card: #0d1b28;
+  --prg-line: rgba(255, 255, 255, 0.08);
+  --prg-text: rgba(245, 247, 248, 0.94);
+  --prg-soft: rgba(245, 247, 248, 0.72);
+
+  --st-open: #7fd6a8;
+  --st-soon: #f0c77a;
+
+  min-height: 100vh;
+  padding-bottom: 96px;
+  background: #07111b;
+  color: var(--white);
+}
+
+.prg-wrap {
+  width: min(calc(100% - 40px), 720px);
+  margin: 0 auto;
+}
+
+/* ---------- header ---------- */
+
+.prg-head {
+  padding: 104px 0 0;
+}
+
+.prg-title {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.prg-sub {
+  margin: 4px 0 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- search + filter ---------- */
+
+.prg-tools {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.prg-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: var(--prg-card);
+  transition: border-color 0.25s ease;
+}
+
+.prg-search:focus-within {
+  border-color: rgba(var(--prg-sky), 0.55);
+}
+
+.prg-search svg,
+.prg-filter-btn svg,
+.prg-clear svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.prg-search > svg {
+  color: var(--muted);
+}
+
+.prg-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: none;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  color: #fff;
+}
+
+.prg-search input::placeholder {
+  color: rgba(154, 168, 179, 0.8);
+}
+
+.prg-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.prg-clear {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.prg-clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.prg-filter-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: var(--prg-card);
+  color: #eef7fc;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* a small dot when a status filter is on */
+.prg-filter-btn[data-on]::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sky);
+}
+
+/* ---------- chips ---------- */
+
+.prg-chips {
+  display: flex;
+  gap: 8px;
+  margin: 14px -20px 0;
+  padding: 0 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.prg-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.prg-chip {
+  flex: 0 0 auto;
+  height: 34px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--prg-soft);
+  white-space: nowrap;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prg-chip[data-on] {
+  border-color: var(--sky);
+  background: var(--sky);
+  color: #07111b;
+}
+
+/* ---------- sections ---------- */
+
+.prg-section {
+  margin-top: 28px;
+}
+
+.prg-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.prg-section-title i {
+  flex: 1;
+  height: 1px;
+  background: var(--prg-line);
+}
+
+.prg-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- a card: words on the right, the artwork on the left ---------- */
+
+.prg-card-link {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  min-height: 180px;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--prg-line);
+  border-radius: 16px;
+  background: var(--prg-card);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 0.25s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prg-card-link:hover {
+  border-color: rgba(var(--prg-sky), 0.3);
+}
+
+.prg-card-link:active {
+  transform: scale(0.99);
+}
+
+.prg-card-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 4px 4px 2px 0;
+}
+
+.prg-kicker {
+  display: block;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sky);
+}
+
+.prg-name {
+  margin: 2px 0 12px;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #fff;
+}
+
+.prg-line {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 6px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--prg-soft);
+}
+
+.prg-line svg,
+.pgd-facts svg,
+.prg-details svg,
+.pgd-back svg,
+.prg-btn svg,
+.prg-empty-icon svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.prg-map {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--sky) 45%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* in a card the place stays on one line */
+.prg-card .prg-map {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.prg-map:hover {
+  color: var(--sky);
+}
+
+.prg-line svg {
+  flex: 0 0 15px;
+  width: 15px;
+  height: 15px;
+  color: var(--sky);
+}
+
+.prg-details {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 10px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--sky);
+}
+
+.prg-details svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.prg-card-link:hover .prg-details svg {
+  transform: translateX(-3px);
+}
+
+/* =========================================================
+   THE ARTWORK — one abstract composition per type
+   ========================================================= */
+
+.prg-art {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(160deg, #15344d 0%, #0b1a28 100%);
+  isolation: isolate;
+}
+
+.prg-card-art {
+  min-height: 128px;
+}
+
+.prg-art-shape {
+  position: absolute;
+  z-index: -1;
+}
+
+.prg-art-mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(221, 243, 255, 0.9);
+}
+
+.prg-art-mark svg {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 0 10px rgba(var(--prg-sky), 0.45));
+}
+
+/* a photo: fills the frame, leans a little toward the top (faces), and a
+   soft navy tint so every photo sits in Masar's colours */
+.prg-art-img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.prg-art-tint {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(7, 17, 27, 0.35) 0%, rgba(7, 17, 27, 0) 35%),
+    linear-gradient(0deg, rgba(7, 17, 27, 0.45) 0%, rgba(7, 17, 27, 0) 45%),
+    rgba(21, 52, 77, 0.18);
+}
+
+/* talks: a soft moon and an arch */
+.prg-art[data-art='talk'] .prg-art-shape--a {
+  left: -30%;
+  bottom: -40%;
+  width: 110%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--prg-sky), 0.35), rgba(var(--prg-sky), 0) 70%);
+}
+
+.prg-art[data-art='talk'] .prg-art-shape--b {
+  right: 18%;
+  bottom: 0;
+  width: 46%;
+  height: 62%;
+  border: 1px solid rgba(var(--prg-sky), 0.3);
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+
+/* workshops: calm diagonal lines */
+.prg-art[data-art='work'] {
+  background: linear-gradient(160deg, #173a4c 0%, #0b1a28 100%);
+}
+
+.prg-art[data-art='work'] .prg-art-shape--a {
+  inset: 0;
+  background: repeating-linear-gradient(135deg, rgba(var(--prg-sky), 0.12) 0 1px, transparent 1px 14px);
+}
+
+.prg-art[data-art='work'] .prg-art-shape--b {
+  right: -20%;
+  top: -30%;
+  width: 90%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--prg-sky), 0.3), rgba(var(--prg-sky), 0) 70%);
+}
+
+/* hackathons: a fine grid and a glow */
+.prg-art[data-art='hack'] {
+  background: linear-gradient(160deg, #1b2a55 0%, #0b1a28 100%);
+}
+
+.prg-art[data-art='hack'] .prg-art-shape--a {
+  inset: 0;
+  background:
+    linear-gradient(rgba(var(--prg-sky), 0.1) 1px, transparent 1px) 0 0 / 14px 14px,
+    linear-gradient(90deg, rgba(var(--prg-sky), 0.1) 1px, transparent 1px) 0 0 / 14px 14px;
+}
+
+.prg-art[data-art='hack'] .prg-art-shape--b {
+  left: 20%;
+  top: 20%;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(170, 160, 255, 0.35), rgba(170, 160, 255, 0) 70%);
+}
+
+/* visits: a skyline at dusk */
+.prg-art[data-art='visit'] {
+  background: linear-gradient(180deg, #243650 0%, #0b1a28 100%);
+}
+
+.prg-art[data-art='visit'] .prg-art-shape--a {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  background: linear-gradient(
+    90deg,
+    transparent 8%,
+    rgba(7, 17, 27, 0.7) 8% 24%,
+    transparent 24% 30%,
+    rgba(7, 17, 27, 0.7) 30% 44%,
+    transparent 44% 52%,
+    rgba(7, 17, 27, 0.7) 52% 70%,
+    transparent 70% 76%,
+    rgba(7, 17, 27, 0.7) 76% 92%,
+    transparent 92%
+  );
+}
+
+.prg-art[data-art='visit'] .prg-art-shape--b {
+  left: 10%;
+  right: 10%;
+  bottom: 30%;
+  height: 50%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at bottom, rgba(240, 199, 122, 0.3), rgba(240, 199, 122, 0) 70%);
+}
+
+/* camps: a peak and a horizon */
+.prg-art[data-art='camp'] {
+  background: linear-gradient(170deg, #173e45 0%, #0b1a28 100%);
+}
+
+.prg-art[data-art='camp'] .prg-art-shape--a {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 55%;
+  background: rgba(7, 17, 27, 0.55);
+  clip-path: polygon(0 100%, 35% 30%, 55% 60%, 75% 20%, 100% 70%, 100% 100%);
+}
+
+.prg-art[data-art='camp'] .prg-art-shape--b {
+  right: 10%;
+  top: 12%;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(221, 243, 255, 0.5);
+  box-shadow: 0 0 18px rgba(221, 243, 255, 0.4);
+}
+
+/* the status badge in the corner */
+.prg-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--st-open);
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #07111b;
+  white-space: nowrap;
+}
+
+.prg-badge[data-status='soon'] {
+  background: var(--st-soon);
+}
+
+.prg-badge[data-status='closed'] {
+  background: rgba(7, 17, 27, 0.75);
+  color: rgba(245, 247, 248, 0.8);
+}
+
+/* =========================================================
+   BUTTONS & EMPTY STATE
+   ========================================================= */
+
+.prg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prg-btn:active {
+  transform: scale(0.98);
+}
+
+.prg-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.prg-btn--solid {
+  background: var(--sky);
+  color: #07111b;
+}
+
+.prg-btn--solid:hover {
+  background: #b9e3f8;
+}
+
+.prg-btn--solid[aria-disabled='true'] {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  cursor: default;
+}
+
+.prg-btn--outline {
+  border-color: rgba(var(--prg-sky), 0.4);
+  background: transparent;
+  color: #eef7fc;
+}
+
+.prg-btn--outline:hover {
+  border-color: var(--sky);
+}
+
+.prg-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  padding: 32px 8px;
+  text-align: center;
+}
+
+.prg-empty--small {
+  margin-top: 0;
+  padding: 28px 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.prg-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(var(--prg-sky), 0.1);
+  color: var(--sky);
+}
+
+.prg-empty-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.prg-empty-title {
+  margin: 16px 0 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.prg-empty-text {
+  margin: 6px 0 18px;
+  max-width: 26em;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+/* =========================================================
+   THE FILTER SHEET — slides up from the bottom
+   ========================================================= */
+
+.prg-sheet-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 0.35s;
+}
+
+.prg-sheet-layer[data-open] {
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+
+.prg-sheet-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 14, 0.6);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.prg-sheet-layer[data-open] .prg-sheet-dim {
+  opacity: 1;
+}
+
+.prg-sheet {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 10px 20px max(20px, env(safe-area-inset-bottom));
+  border-radius: 24px 24px 0 0;
+  background: #0d1b28;
+  box-shadow: 0 -20px 50px rgba(2, 8, 14, 0.5);
+  direction: rtl;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.prg-sheet-layer[data-open] .prg-sheet {
+  transform: none;
+}
+
+.prg-sheet-grip {
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: 0 auto 12px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.prg-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--prg-line);
+}
+
+.prg-sheet-head h2 {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.prg-sheet-close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+}
+
+.prg-sheet-close svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.prg-sheet-group {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--prg-line);
+}
+
+.prg-sheet-group h3 {
+  margin: 0 0 12px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.prg-sheet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.prg-sheet-actions {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+}
+
+/* =========================================================
+   A PROGRAMME'S PAGE
+   ========================================================= */
+
+.pgd {
+  padding-top: 100px;
+}
+
+.pgd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.pgd-back svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+.pgd-back:hover {
+  color: #fff;
+}
+
+.pgd-art {
+  aspect-ratio: 16 / 9;
+  margin: 14px 0 18px;
+  border-radius: 16px;
+}
+
+.pgd-art .prg-art-mark svg {
+  width: 44px;
+  height: 44px;
+}
+
+.pgd-art .prg-badge {
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+}
+
+.pgd-title {
+  margin: 2px 0 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.pgd-desc {
+  margin: 10px 0 0;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.9;
+  color: var(--prg-soft);
+}
+
+.pgd-facts {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--prg-line);
+  list-style: none;
+}
+
+.pgd-facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--prg-text);
+}
+
+.pgd-facts svg {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--sky);
+}
+
+.pgd-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.pgd-sec {
+  margin-top: 28px;
+}
+
+.pgd-topics {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pgd-topics li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--prg-text);
+}
+
+.pgd-topics span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(var(--prg-sky), 0.12);
+
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sky);
+}
+
+.pgd-missing {
+  padding-top: 140px;
+}
+
+/* =========================================================
+   Wider screens — a little more room, same sizes
+   ========================================================= */
+
+@media (min-width: 720px) {
+  .prg-head {
+    padding-top: 140px;
+  }
+
+  .prg-title {
+    font-size: 28px;
+  }
+
+  .prg-sub {
+    font-size: 14px;
+  }
+
+  .prg-chips {
+    margin-inline: 0;
+    padding: 0;
+  }
+
+  .prg-card-link {
+    grid-template-columns: 1fr 140px;
+    padding: 14px;
+  }
+
+  .prg-name {
+    font-size: 16px;
+  }
+
+  .prg-sheet {
+    right: 50%;
+    left: auto;
+    width: 480px;
+    transform: translate(50%, 100%);
+  }
+
+  .prg-sheet-layer[data-open] .prg-sheet {
+    transform: translate(50%, 0);
+  }
+
+  .pgd {
+    padding-top: 130px;
+  }
+
+  .pgd-title {
+    font-size: 26px;
+  }
+
+  .pgd-actions {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prg-sheet,
+  .prg-sheet-dim {
+    transition: none;
+  }
+}

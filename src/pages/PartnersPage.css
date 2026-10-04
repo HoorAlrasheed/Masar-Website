@@ -1,0 +1,476 @@
+/* =========================================================
+   /partners — الشركاء والرعاة (phone first)
+   Navy, one light (sky #9fd8f5), white and one grey.
+   IBM Plex Sans Arabic for titles, Cairo for the rest,
+   Cormorant for the thin numbers.
+   Sizes: 24 title · 16 group · 13.5 body · 12 small.
+   ========================================================= */
+
+.prp {
+  --prp-sky: 159, 216, 245;
+  --prp-card: #0d1b28;
+  --prp-line: rgba(255, 255, 255, 0.08);
+  --prp-muted: #9aa8b3;
+
+  min-height: 100vh;
+  padding-bottom: 88px;
+  overflow-x: hidden; /* الصفحة ما تنسحب يمين ويسار على الآيفون */
+  overflow-x: clip;
+  color: #fff;
+  background:
+    radial-gradient(120% 34% at 85% 0%, rgba(40, 80, 120, 0.24), transparent 60%),
+    #07111b;
+}
+
+/* the site paints every <section> navy; these sit on the page */
+.prp section {
+  background: none;
+}
+
+.prp-wrap {
+  width: min(calc(100% - 40px), 960px);
+  margin: 0 auto;
+}
+
+/* ---------- header ---------- */
+
+.prp-head {
+  padding: 104px 0 0;
+}
+
+.prp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sky, #9fd8f5);
+}
+
+.prp-eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.prp-title {
+  margin: 6px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.prp-sub {
+  margin: 6px 0 0;
+  max-width: 520px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--prp-muted);
+}
+
+/* ---------- tab bar ---------- */
+
+.prp-bar {
+  padding: 6px 0 0; /* with the heading's 22px: 28px, as on الأدلة والنشرات */
+}
+
+.prp-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(100%, 280px); /* the same size as the switch of الأدلة والنشرات */
+  margin: 0 auto;
+  padding: 4px;
+  border: 1px solid rgba(var(--prp-sky), 0.14);
+  border-radius: 14px;
+  background: rgba(var(--prp-sky), 0.03);
+}
+
+.prp-tabs-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  right: 4px;
+  width: calc(50% - 4px);
+  border: 1px solid rgba(var(--prp-sky), 0.35);
+  border-radius: 10px;
+  background: rgba(var(--prp-sky), 0.1);
+  transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.prp-tabs[data-tab='sponsors'] .prp-tabs-pill {
+  transform: translateX(-100%);
+}
+
+.prp-tabs button {
+  position: relative;
+  z-index: 1;
+  height: 38px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--prp-muted);
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prp-tabs button[aria-selected='true'] {
+  color: #fff;
+}
+
+/* ---------- partners: one group per kind ---------- */
+
+.prp-body {
+  padding-top: 32px;
+}
+
+.prp-cats {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.prp-cat-head {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  align-items: baseline;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--prp-line);
+}
+
+.prp-cat-num {
+  font-family: 'Cormorant Garamond', 'IBM Plex Sans Arabic', serif;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(var(--prp-sky), 0.65);
+}
+
+.prp-cat-title {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.prp-cat-desc {
+  margin: 3px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--prp-muted);
+}
+
+.prp-cat-empty {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed rgba(var(--prp-sky), 0.18);
+  border-radius: 14px;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  color: var(--prp-muted);
+}
+
+/* ---------- the logo grid (partners and sponsors) ---------- */
+
+.prp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.prp-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 8px 10px;
+  border: 1px solid var(--prp-line);
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgba(var(--prp-sky), 0.05), transparent 50%),
+    var(--prp-card);
+  text-align: center;
+  transition:
+    border-color 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.prp-logo:hover {
+  border-color: rgba(var(--prp-sky), 0.32);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -18px rgba(var(--prp-sky), 0.35);
+}
+
+.prp-plate {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.prp-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.prp-logo:hover .prp-plate img {
+  transform: scale(1.04);
+}
+
+.prp-logo-name {
+  margin-top: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgba(245, 247, 248, 0.94);
+}
+
+/* ---------- sponsors ---------- */
+
+.prp-intro {
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--prp-line);
+}
+
+.prp-intro-title {
+  margin: 4px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.prp-intro-text {
+  margin: 3px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--prp-muted);
+}
+
+.prp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 44px 20px;
+  border: 1px dashed rgba(var(--prp-sky), 0.2);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.prp-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(var(--prp-sky), 0.3);
+  border-radius: 50%;
+  color: var(--sky, #9fd8f5);
+}
+
+.prp-empty-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.prp-empty-title {
+  margin: 14px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.prp-empty-text {
+  margin: 4px 0 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  color: var(--prp-muted);
+}
+
+/* ---------- closing call ---------- */
+
+.prp-cta {
+  margin-top: 48px;
+  padding: 26px 20px 22px;
+  border: 1px solid rgba(var(--prp-sky), 0.16);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(var(--prp-sky), 0.1), transparent 60%),
+    var(--prp-card);
+  text-align: center;
+}
+
+.prp-cta-title {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.prp-cta-text {
+  margin: 6px auto 0;
+  max-width: 460px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--prp-muted);
+}
+
+.prp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  margin-top: 18px;
+  padding: 0 24px;
+  border-radius: 12px;
+  background: var(--sky, #9fd8f5);
+  color: #07111b;
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prp-btn:hover {
+  background: #b9e3f8;
+}
+
+.prp-btn:active {
+  transform: scale(0.98);
+}
+
+.prp-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---------- wider screens ---------- */
+
+@media (min-width: 720px) {
+  .prp-head {
+    padding: 104px 0 0;
+  }
+
+  .prp-title {
+    font-size: 32px;
+  }
+
+  .prp-sub {
+    font-size: 14px;
+  }
+
+  .prp-body {
+    padding-top: 48px;
+  }
+
+  .prp-cats {
+    gap: 56px;
+  }
+
+  .prp-cat-title {
+    font-size: 18px;
+  }
+
+  .prp-cat-desc {
+    font-size: 13px;
+  }
+
+  .prp-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .prp-cat-empty {
+    max-width: 360px;
+  }
+
+  .prp-logo-name {
+    font-size: 12px;
+  }
+
+  .prp-cta {
+    margin-top: 72px;
+    padding: 40px 32px;
+  }
+
+  .prp-cta-title {
+    font-size: 22px;
+  }
+
+  .prp-cta-text {
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prp-tabs-pill,
+  .prp-logo,
+  .prp-plate img {
+    transition: none;
+  }
+}
+
+/* ---------- share: each logo can be shared by its partner ---------- */
+
+.prp-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 5px 11px;
+  border: 1px solid rgba(var(--prp-sky), 0.28);
+  border-radius: 999px;
+  background: rgba(var(--prp-sky), 0.06);
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cfeafa;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prp-share svg {
+  width: 13px;
+  height: 13px;
+}
+
+@media (hover: hover) {
+  .prp-share:hover {
+    border-color: rgba(var(--prp-sky), 0.55);
+    background: rgba(var(--prp-sky), 0.14);
+  }
+}
+
+/* opened from a shared link: the logo glows softly */
+.prp-logo[data-hl] {
+  border-color: rgba(var(--prp-sky), 0.6);
+  box-shadow:
+    0 0 0 4px rgba(var(--prp-sky), 0.1),
+    0 18px 40px -20px rgba(var(--prp-sky), 0.5);
+}

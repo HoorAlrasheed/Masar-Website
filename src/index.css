@@ -1,0 +1,1275 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'IBM Plex Sans Arabic', sans-serif;
+  --font-body: 'Cairo', sans-serif;
+
+  --color-navy: #05080c;
+  --color-navy-light: #0a111a;
+  --color-navy-soft: #101923;
+
+  --color-sky: #9fd8f5;
+  --color-sky-light: #ddf3ff;
+  --color-sky-subtle: #eaf7fc;
+
+  --color-cream: #f4f7f9;
+  --color-surface: #0a1118;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-muted: #98a6b2;
+  --color-text: #f4f7f9;
+}
+
+:root {
+  --navy-950: #05080c;
+  --navy-900: #071018;
+  --navy-800: #0a151f;
+  --navy-700: #101e2a;
+
+  --sky: #9fd8f5;
+  --sky-light: #ddf3ff;
+
+  --white: #f5f7f8;
+  --muted: #9aa8b3;
+
+  --line: rgba(255, 255, 255, 0.12);
+  --container: 1280px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* IMPORTANT: no `scroll-behavior: smooth` here. That CSS property makes
+     the browser run its OWN smoothing animation on every scroll change,
+     which directly fights any JS that reads/drives scroll position
+     (GSAP ScrollTrigger's scrub timelines, ScrollTrigger.normalizeScroll —
+     used by the "عن مسار" section's scroll-linked entrance and road).
+     With both engines fighting over the same scroll value, JS-driven
+     animations can end up reading stale/frozen positions and never
+     visibly update — exactly the "nothing moves between sections" symptom.
+     This is a documented GSAP/ScrollTrigger compatibility requirement,
+     not a style preference. */
+  direction: rtl;
+  background: var(--navy-950);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+
+  font-family: 'Cairo', sans-serif;
+
+  background: var(--navy-950);
+  color: var(--white);
+
+  direction: rtl;
+  text-align: right;
+
+  overflow-x: hidden;
+  overflow-x: clip;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(159, 216, 245, 0.28);
+  color: #fff;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #05080c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(159, 216, 245, 0.4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sky);
+}
+
+.font-display {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* Layout */
+
+.site-container {
+  width: min(calc(100% - 48px), var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  position: relative;
+  padding-block: clamp(80px, 9vw, 140px);
+}
+
+.section-dark {
+  background: #05080c;
+  color: var(--white);
+}
+
+.section-light {
+  background: #05080c;
+  color: var(--white);
+}
+
+.section-heading {
+  max-width: 720px;
+  margin-bottom: 56px;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 16px;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+
+  color: var(--sky);
+}
+
+.section-label::before {
+  content: '';
+
+  width: 28px;
+  height: 1px;
+
+  background: currentColor;
+}
+
+.section-title {
+  margin: 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: clamp(32px, 4vw, 58px);
+  line-height: 1.2;
+  font-weight: 700;
+
+  letter-spacing: -0.035em;
+}
+
+.section-description {
+  margin: 18px 0 0;
+
+  max-width: 650px;
+
+  color: var(--muted);
+
+  font-size: clamp(14px, 1.3vw, 17px);
+  line-height: 2;
+}
+
+/* Premium */
+
+.glass {
+  background: rgba(7, 16, 24, 0.7);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glow {
+  position: relative;
+}
+
+.glow::after {
+  content: '';
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  border-radius: 50%;
+
+  background: rgba(159, 216, 245, 0.07);
+
+  filter: blur(100px);
+
+  pointer-events: none;
+}
+
+.glow-sky {
+  text-shadow: 0 0 35px rgba(159, 216, 245, 0.18);
+}
+
+.premium-line {
+  width: 100%;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+}
+
+/* Buttons */
+
+.btn-primary {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-height: 48px;
+
+  padding-inline: 26px;
+
+  background: #f4f7f8;
+  color: #071018;
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  border: 1px solid transparent;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.btn-primary::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  transform: translateX(-110%);
+
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(159, 216, 245, 0.3),
+    transparent
+  );
+
+  transition: transform 0.55s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+
+  background: #fff;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary:hover::before {
+  transform: translateX(110%);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-height: 48px;
+
+  padding-inline: 26px;
+
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--white);
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.btn-outline:hover {
+  transform: translateY(-2px);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-outline-dark {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-outline-dark:hover {
+  color: #071018;
+  background: var(--white);
+  border-color: var(--white);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 4px 0;
+
+  background: transparent;
+  color: var(--sky);
+
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition: gap 0.3s ease;
+}
+
+.btn-ghost:hover {
+  gap: 14px;
+}
+
+/* Cards */
+
+.card {
+  position: relative;
+
+  background: #0a1118;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 4px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+
+  background: #0d1720;
+
+  border-color: rgba(159, 216, 245, 0.35);
+}
+
+/* Forms */
+
+.input-field {
+  width: 100%;
+
+  padding: 13px 16px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: var(--white);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 3px;
+
+  outline: none;
+
+  direction: rtl;
+
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.input-field:focus {
+  border-color: rgba(159, 216, 245, 0.65);
+
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.input-field::placeholder {
+  color: #71808d;
+}
+
+/* Tags */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 11px;
+
+  background: rgba(159, 216, 245, 0.07);
+
+  color: var(--sky);
+
+  border: 1px solid rgba(159, 216, 245, 0.15);
+
+  border-radius: 2px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Animation helpers */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-35px);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(35px);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+}
+
+.parallax {
+  will-change: transform;
+}
+
+.clip-reveal {
+  clip-path: inset(0 0 100% 0);
+}
+
+.stagger-item {
+  will-change: transform, opacity;
+}
+
+.sky-divider {
+  display: block;
+
+  width: 48px;
+  height: 2px;
+
+  background: var(--sky);
+
+  margin-inline-start: 0;
+}
+
+.mob-stack,
+.mob-2col,
+.mob-sidebar,
+.mob-stat {
+  min-width: 0;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .site-container {
+    width: min(calc(100% - 40px), var(--container));
+  }
+}
+
+@media (max-width: 900px) {
+  .mob-stack {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+
+  .mob-2col {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .mob-sidebar {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .site-container {
+    width: min(calc(100% - 32px), var(--container));
+  }
+
+  .section {
+    padding-block: 72px;
+  }
+
+  .section-heading {
+    margin-bottom: 38px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mob-2col {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mob-stat {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mob-stat > div {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mob-stat > div:last-child {
+    border-bottom: none;
+  }
+
+  .mob-section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+
+  .btn-primary,
+  .btn-outline {
+    min-height: 46px;
+    padding-inline: 20px;
+  }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale,
+  .clip-reveal {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}
+
+/* =========================================================
+   MASAR HERO
+   ========================================================= */
+
+.masar-home {
+  background: #05080c;
+  color: #f5f7f8;
+}
+
+.masar-hero {
+  position: relative;
+
+  min-height: 100svh;
+  height: 100svh;
+
+  overflow: hidden;
+
+  background: #05080c;
+}
+
+.masar-hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  overflow: hidden;
+}
+
+.masar-hero-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  display: block;
+
+  will-change: transform, opacity;
+}
+
+.masar-hero-bottom {
+  position: absolute;
+
+  inset: auto 0 0;
+
+  height: 20%;
+
+  background: linear-gradient(
+    to top,
+    rgba(5, 8, 12, 0.18),
+    transparent
+  );
+
+  pointer-events: none;
+}
+
+/* Hero frame */
+
+.masar-hero-frame {
+  position: relative;
+  z-index: 2;
+
+  min-height: 100svh;
+  height: 100%;
+
+  width: min(calc(100% - 64px), 1440px);
+
+  margin: auto;
+
+  padding: 118px 0 44px;
+}
+
+/* Hero content */
+
+.masar-hero-content {
+  position: absolute;
+
+  top: 48%;
+
+  z-index: 3;
+
+  width: min(650px, 55%);
+
+  transform: translateY(-50%);
+}
+
+.masar-hero-content.right {
+  right: 7%;
+  text-align: right;
+}
+
+.masar-hero-content.left {
+  left: 7%;
+  text-align: left;
+}
+
+.masar-eyebrow {
+  margin-bottom: 12px;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: 0.2em;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  direction: ltr;
+
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+}
+
+.masar-small {
+  margin-bottom: 8px;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+}
+
+.masar-title {
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: clamp(58px, 8vw, 128px);
+
+  font-weight: 600;
+
+  line-height: 0.92;
+
+  letter-spacing: -0.065em;
+
+  color: #fff;
+
+  text-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.22),
+    0 10px 45px rgba(0, 0, 0, 0.25);
+}
+
+.masar-title span {
+  font-weight: 300;
+}
+
+.masar-title strong {
+  margin-top: 8px;
+
+  font-weight: 700;
+
+  font-size: 1.08em;
+
+  letter-spacing: -0.075em;
+}
+
+.masar-description {
+  max-width: 410px;
+
+  margin: 25px 0 0;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 14px;
+
+  line-height: 2;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
+}
+
+.masar-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 26px;
+
+  margin-top: 30px;
+}
+
+.masar-main-btn {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 48px;
+
+  padding: 0 26px;
+
+  /* a thin white frame over the photo — light, formal, never louder than the title */
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(7, 17, 27, 0.15);
+  color: #fff;
+
+  text-decoration: none;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.masar-main-btn:hover {
+  transform: translateY(-3px);
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.masar-text-btn {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 10px;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 15px;
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+
+  transition: gap 0.3s ease;
+}
+
+.masar-text-btn:hover {
+  gap: 17px;
+}
+
+/* Counter */
+
+.masar-counter {
+  position: absolute;
+
+  left: 0;
+  bottom: 48px;
+
+  z-index: 4;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  direction: ltr;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+.masar-counter i {
+  display: block;
+
+  width: 35px;
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* Hero image controls */
+
+.masar-tiles {
+  position: absolute;
+
+  right: 0;
+  bottom: 42px;
+
+  z-index: 5;
+
+  display: grid;
+
+  grid-template-columns: repeat(6, 110px);
+
+  gap: 10px;
+}
+
+.masar-tile {
+  position: relative;
+
+  width: 110px;
+  height: 110px;
+
+  padding: 0 12px 12px;
+
+  display: flex;
+  align-items: flex-end;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  background-size: cover;
+  background-position: center;
+
+  color: #fff;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2);
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.masar-tile::after {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72),
+    rgba(0, 0, 0, 0.08) 65%,
+    transparent
+  );
+
+  pointer-events: none;
+}
+
+.masar-tile:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.masar-tile.active {
+  border-color: rgba(255, 255, 255, 0.9);
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.28);
+}
+
+.masar-tile:disabled {
+  cursor: default;
+}
+
+.masar-tile-number {
+  position: absolute;
+
+  top: 9px;
+  left: 10px;
+
+  z-index: 2;
+
+  font-family: 'Cairo', sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 0.08em;
+
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.masar-tile-label {
+  position: relative;
+
+  z-index: 2;
+
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+/* Scroll */
+
+.masar-scroll {
+  position: absolute;
+
+  left: 50%;
+  bottom: 43px;
+
+  z-index: 4;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
+
+  font-family: 'Cairo', sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 0.22em;
+
+  color: rgba(255, 255, 255, 0.75);
+
+  direction: ltr;
+
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.masar-scroll i {
+  display: block;
+
+  width: 1px;
+  height: 30px;
+
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* =========================================================
+   HERO — TABLET
+   ========================================================= */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+  .masar-hero-content {
+    width: 60%;
+  }
+
+  .masar-tile {
+    width: 82px;
+    height: 82px;
+
+    padding: 0 9px 9px;
+  }
+
+  .masar-tile-label {
+    font-size: 10px;
+  }
+}
+
+/* =========================================================
+   HERO — MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .masar-hero {
+    min-height: 100svh;
+
+    height: 100svh;
+  }
+
+  .masar-hero-frame {
+    width: calc(100% - 32px);
+
+    min-height: 100svh;
+
+    height: 100%;
+
+    padding: 92px 0 30px;
+  }
+
+  .masar-hero-content,
+  .masar-hero-content.right,
+  .masar-hero-content.left {
+    top: 36%;
+
+    left: 0;
+    right: 0;
+
+    width: 100%;
+
+    text-align: right;
+
+    transform: translateY(-50%);
+  }
+
+  .masar-eyebrow {
+    font-size: 9px;
+
+    margin-bottom: 9px;
+  }
+
+  .masar-small {
+    font-size: 11px;
+  }
+
+  .masar-title {
+    font-size: clamp(52px, 17vw, 78px);
+
+    line-height: 0.94;
+  }
+
+  .masar-title strong {
+    font-size: 1.05em;
+  }
+
+  .masar-description {
+    max-width: 285px;
+
+    margin-top: 20px;
+
+    font-size: 11px;
+
+    line-height: 2;
+  }
+
+  .masar-actions {
+    margin-top: 22px;
+
+    gap: 18px;
+  }
+
+  .masar-main-btn {
+    min-height: 44px;
+
+    padding-inline: 17px;
+
+    font-size: 11px;
+  }
+
+  .masar-text-btn {
+    font-size: 13px;
+  }
+
+  .masar-tiles {
+    position: absolute;
+
+    right: 50%;
+    left: auto;
+
+    bottom: 20px;
+
+    z-index: 5;
+
+    width: auto;
+
+    transform: translateX(50%);
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 100px);
+
+    gap: 8px;
+  }
+
+  .masar-tile {
+    width: 100px;
+
+    height: 66px;
+
+    padding: 0 10px 8px;
+
+    border-radius: 11px;
+
+    background-size: cover;
+
+    background-position: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    box-shadow:
+      0 7px 20px rgba(0, 0, 0, 0.18);
+  }
+
+  .masar-tile::after {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.08) 70%,
+      transparent
+    );
+  }
+
+  .masar-tile:hover {
+    transform: none;
+
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .masar-tile.active {
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .masar-tile-number {
+    top: 6px;
+
+    left: 7px;
+
+    font-size: 6px;
+  }
+
+  .masar-tile-label {
+    font-size: 9px;
+  }
+
+  .masar-counter,
+  .masar-scroll {
+    display: none;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .masar-hero-image img,
+  .masar-tile,
+  .masar-main-btn {
+    transition: none;
+  }
+}
+/* =================================================================
+   خط ثمانية — الحروف العربية متصلة، وأي تباعد أو تضاغط بين الحروف
+   (letter-spacing) يخربها على الآيفون (Safari). فنخليه صفر للنصوص العربية.
+   ================================================================= */
+.masar-title,
+.masar-title span,
+.masar-title strong,
+.ab-label,
+.ms-eyebrow,
+.ms-label,
+.exp-eyebrow,
+.exp-card-kind,
+.exp-card-guest,
+.prt-eyebrow,
+.prt-soon,
+.ftr-label,
+.ftr-label span,
+.tk-day b,
+.ftr-name-eyebrow,
+.ftx-title,
+.ftr-details-kind,
+.abp-cue,
+.abt-snav-count,
+.rsx-lbl,
+.ftc-week {
+  letter-spacing: 0 !important;
+}
+
+/* =================================================================
+   الصفحة ما تتحرك يمين ويسار على الجوال (Safari بالآيفون يسمح بسحب
+   الصفحة جانبيًا لو أي عنصر طلع شوي عن عرض الشاشة) — نقصّ أي زيادة
+   على مستوى الصفحة كلها. clip ما يأثر على التمرير العادي ولا على الحركات.
+   ================================================================= */
+html {
+  overflow-x: clip;
+}

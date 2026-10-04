@@ -1,0 +1,513 @@
+
+/* =========================================================
+   /resources — الأدلة والنشرات as sealed envelopes (phone first)
+   The envelopes are made of the printed toile paper with a blue wax
+   seal; the opened sheet is the hand-torn paper with the same seal.
+   ========================================================= */
+
+.rsx {
+  min-height: 100vh;
+  padding-bottom: 110px;
+  overflow-x: clip;
+  background: #07111b;
+  color: #fff;
+}
+
+.rsx section {
+  background: none;
+}
+
+.rsx-wrap {
+  width: min(calc(100% - 32px), 760px);
+  margin: 0 auto;
+}
+
+/* the navbar logo steps aside — it keeps its place, so the menu stays left */
+body.rsx-page header a[aria-label='مبادرة مسار'] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ---------- header: the same as the news, team and programmes ---------- */
+
+.rsx-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 118px;
+  text-align: center;
+}
+
+.rsx-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--sky, #9fd8f5);
+}
+
+.rsx-label::before,
+.rsx-label::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(159, 216, 245, 0.5);
+}
+
+.rsx-h1 {
+  margin: 14px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.rsx-tear {
+  position: relative;
+  width: 132px;
+  height: 0;
+  margin: 16px 0 14px;
+  border-top: 1.5px dashed rgba(159, 216, 245, 0.35);
+}
+
+.rsx-tear::before,
+.rsx-tear::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(159, 216, 245, 0.55);
+}
+
+.rsx-tear::before {
+  right: -10px;
+}
+
+.rsx-tear::after {
+  left: -10px;
+}
+
+.rsx-hsub {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #8d9aa6;
+}
+
+/* ---------- the switch: الأدلة · النشرات ---------- */
+
+.rsx-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(100%, 280px);
+  margin: 28px auto 0;
+  padding: 4px;
+  border: 1px solid rgba(159, 216, 245, 0.14);
+  border-radius: 14px;
+  background: rgba(159, 216, 245, 0.03);
+}
+
+.rsx-tabs-pill {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  width: calc((100% - 8px) / 2);
+  border: 1px solid rgba(159, 216, 245, 0.35);
+  border-radius: 10px;
+  background: rgba(159, 216, 245, 0.1);
+  transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.rsx-tabs[data-i='1'] .rsx-tabs-pill {
+  transform: translateX(-100%);
+}
+
+.rsx-tabs button {
+  position: relative;
+  z-index: 1;
+  height: 38px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #9aa8b3;
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rsx-tabs button[aria-selected='true'] {
+  color: #fff;
+}
+
+.rsx-intro {
+  margin: 12px 0 0;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #8d9aa6;
+}
+
+/* ---------- the envelopes, two side by side ---------- */
+
+.rsx-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 26px 14px;
+  margin-top: 26px;
+}
+
+.rsx-item {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rsx-env {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.36;
+  border-radius: 3px;
+  background: #e9ebec var(--toile) center / cover;
+  box-shadow: 0 18px 26px -14px rgba(0, 0, 0, 0.85);
+  transition: transform 0.35s ease;
+}
+
+/* the little lift only with a mouse — on a phone the tap opens straight away */
+@media (hover: hover) {
+  .rsx-item:hover .rsx-env {
+    transform: translateY(-3px);
+  }
+}
+
+/* the two bottom folds, as soft creases */
+.rsx-folds {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.4) 50%, rgba(0, 0, 0, 0.07) calc(50% + 1px), transparent calc(50% + 2px)) left bottom / 50% 62% no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.4) 50%, rgba(0, 0, 0, 0.07) calc(50% + 1px), transparent calc(50% + 2px)) right bottom / 50% 62% no-repeat;
+}
+
+/* the flap, folded down to the seal, casting a soft shadow */
+.rsx-flap {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 60%;
+  filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.28));
+}
+
+.rsx-flap i {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: #eceeef var(--toile) center top / 100% auto;
+}
+
+.rsx-seal {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 27%;
+  height: auto;
+  transform: translate(-50%, -54%) rotate(var(--r));
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
+  user-select: none;
+}
+
+.rsx-lbl {
+  position: absolute;
+  right: 9px;
+  bottom: 6px;
+  left: 9px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 7.5px;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: rgba(20, 34, 49, 0.5);
+}
+
+.rsx-cap {
+  display: block;
+  margin-top: 12px;
+}
+
+.rsx-cap small {
+  display: block;
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #8d9aa6;
+}
+
+.rsx-cap b {
+  display: block;
+  margin-top: 2px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.55;
+  color: #e3eaf0;
+}
+
+.rsx-empty {
+  margin: 36px 0 0;
+  padding: 18px;
+  border: 1px dashed rgba(159, 216, 245, 0.18);
+  border-radius: 14px;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  color: #8d9aa6;
+}
+
+/* ---------- the opened sheet, over the page ---------- */
+
+.rsx-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 120; /* above the navbar */
+  display: grid;
+  place-items: center;
+  padding: 70px 14px 30px;
+  overflow-y: auto;
+  /* a plain dim, no blur: blurring the page behind made phones stall on open */
+  background: rgba(4, 10, 17, 0.88);
+}
+
+.rsx-x {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(7, 17, 27, 0.6);
+  color: #e3e9ed;
+  cursor: pointer;
+}
+
+.rsx-x svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* the photo is 580×810 — the writing sits on its paper, under the seal */
+.rsx-paper {
+  position: relative;
+  width: min(100%, 380px);
+  aspect-ratio: 580 / 810;
+}
+
+/* the shadow under the paper is a soft painted oval, not a filter: a
+   filtered shadow on a big picture is what made phones pause on open */
+.rsx-paper::before {
+  content: '';
+  position: absolute;
+  inset: 8% -6% -7%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.25) 60%, transparent);
+  pointer-events: none;
+}
+
+.rsx-paper-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+.rsx-paper-seal {
+  position: absolute;
+  top: 12.4%;
+  left: 49.5%;
+  width: 41%;
+  height: auto;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.35));
+  user-select: none;
+}
+
+.rsx-paper-text {
+  position: absolute;
+  inset: 27% 12% 9%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: #1b2733;
+}
+
+.rsx-sub {
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #5a6b7b;
+}
+
+.rsx-title {
+  margin: 4px 0 0;
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #142231;
+}
+
+.rsx-script {
+  margin: 0;
+  font-family: 'Amiri', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: #4d6075;
+}
+
+.rsx-desc {
+  margin: 10px 0 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 10.5px;
+  line-height: 1.95;
+  color: #2b3a48;
+}
+
+.rsx-rows {
+  margin: 12px 0 0;
+  border-top: 1px solid rgba(20, 34, 49, 0.55);
+}
+
+.rsx-rows div {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 2px;
+  border-bottom: 1px dotted rgba(20, 34, 49, 0.35);
+}
+
+.rsx-rows dt {
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #5a6b7b;
+}
+
+.rsx-rows dd {
+  margin: 0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #142231;
+}
+
+.rsx-acts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.rsx-acts a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  border-radius: 99px;
+  background: #142231;
+  color: #e7eaed;
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.rsx-acts a + a {
+  border: 1px solid rgba(20, 34, 49, 0.35);
+  background: none;
+  color: #142231;
+}
+
+.rsx-acts svg {
+  width: 14px;
+  height: 14px;
+}
+
+.rsx-soon {
+  margin: auto 0 0;
+  padding: 9px;
+  border: 1px dashed rgba(20, 34, 49, 0.35);
+  border-radius: 99px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #5a6b7b;
+}
+
+/* ---------- wider screens ---------- */
+
+@media (min-width: 900px) {
+  .rsx-head {
+    padding-top: 156px;
+  }
+
+  .rsx-h1 {
+    font-size: 30px;
+  }
+
+  .rsx-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 28px;
+    margin-top: 40px;
+  }
+
+  .rsx-lbl {
+    font-size: 9px;
+  }
+
+  .rsx-cap b {
+    font-size: 14px;
+  }
+
+  .rsx-paper {
+    width: 440px;
+  }
+
+  .rsx-title {
+    font-size: 21px;
+  }
+
+  .rsx-desc {
+    font-size: 11.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsx-tabs-pill,
+  .rsx-env {
+    transition: none;
+  }
+}
