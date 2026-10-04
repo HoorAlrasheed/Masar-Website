@@ -1,7 +1,9 @@
 {
-  "description": "Offers a streamlined platform to create, manage, and showcase professional websites, enhancing online presence for individuals and businesses.",
+  "title": "مبادرة مسار",
+  "description": "مبادرة مسار — نصنع للطلاب طريقًا نحو مستقبلهم المهني، عبر جلساتٍ حوارية وزياراتٍ وبرامج تصلهم بسوق العمل.",
+  "language": "ar",
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,
