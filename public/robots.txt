@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://masar-initiative.com/sitemap.xml
