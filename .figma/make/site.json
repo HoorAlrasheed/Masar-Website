@@ -1,5 +1,5 @@
 {
-  "title": "مبادرة مسار",
+  "title": "مسار | Masar",
   "description": "مبادرة مسار — نصنع للطلاب طريقًا نحو مستقبلهم المهني، عبر جلساتٍ حوارية وزياراتٍ وبرامج تصلهم بسوق العمل.",
   "language": "ar",
   "robots": {
@@ -8,5 +8,14 @@
   "accessibility": {
     "addBypassLinks": false,
     "ignoreReducedMotion": false
+  },
+  "customScripts": {
+    "headEnd": "<meta property=\"og:site_name\" content=\"Masar\" />\n<meta property=\"og:url\" content=\"https://masar-initiative.com/\" />\n<meta property=\"og:type\" content=\"website\" />\n<link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\" />\n<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Masar\",\"alternateName\":[\"مسار\",\"مبادرة مسار\"],\"url\":\"https://masar-initiative.com/\"}</script>"
+  },
+  "icons": {
+    "icon": "/favicon.png"
+  },
+  "openGraph": {
+    "image": "https://masar-initiative.com/og-image.jpg"
   }
 }
