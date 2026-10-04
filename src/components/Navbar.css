@@ -263,7 +263,8 @@
 
 /* the menu is phone/tablet only */
 @media (min-width: 1024px) {
-  .nvm {
+  .nvm,
+  .nvm-toggle {
     display: none;
   }
 }
