@@ -221,6 +221,59 @@
 }
 
 /* =========================================================
+   DESKTOP — الأرقام الأربعة جنب بعض بصف واحد مرتب، بدل التوزيع
+   يمين ويسار (كان يطلع متشتت على اللابتوب)
+   ========================================================= */
+
+@media (min-width: 768px) {
+  .ms-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid rgba(159, 216, 245, 0.22);
+  }
+
+  .ms-spine-line,
+  .ms-row-spacer {
+    display: none;
+  }
+
+  .ms-row,
+  .ms-row + .ms-row {
+    display: block;
+    padding: clamp(30px, 3.4vw, 44px) clamp(18px, 2.4vw, 32px) 0;
+    border-top: 0;
+  }
+
+  .ms-row + .ms-row {
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .ms-node {
+    position: absolute;
+    top: -5px;
+    right: clamp(18px, 2.4vw, 32px);
+    margin: 0;
+  }
+
+  .ms-row--a .ms-row-content,
+  .ms-row--b .ms-row-content {
+    padding: 0;
+    text-align: right;
+  }
+
+  .ms-row--a .ms-value,
+  .ms-row--b .ms-value {
+    justify-content: flex-end;
+  }
+
+  .ms-row--a .ms-note,
+  .ms-row--b .ms-note {
+    margin-inline-start: 0;
+    max-width: none;
+  }
+}
+
+/* =========================================================
    MOBILE — the spine moves to one edge and every row reads the same
    direction, the same simplification Section 2 makes for its own road
    ========================================================= */
