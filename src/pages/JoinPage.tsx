@@ -3,6 +3,7 @@ import { useLocation, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 import { SHEETS, sendToSheet } from '../data/sheet'
+import { DEPARTMENTS } from '../data/team'
 
 import PageHead from '../components/PageHead'
 
@@ -20,6 +21,14 @@ import './JoinPage.css'
 type Tab = 'apply' | 'session'
 
 const SESSION_TYPES = ['توجيه مهني', 'توجيه أكاديمي', 'مراجعة السيرة الذاتية', 'تطوير المهارات']
+
+const STATUSES = ['طالب', 'غير ذلك']
+
+const Chevron = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+)
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -59,28 +68,103 @@ function Field({ label, required, children }: { label: string; required?: boolea
   )
 }
 
-/* the five details both forms ask for */
+/* the details every form asks for; a student is asked for the university,
+   anyone else for what they do instead */
 function AboutYou() {
+  const [status, setStatus] = useState('')
   return (
     <Section num="01" title="بياناتك">
       <div className="rqf-fields">
         <Field label="الاسم" required>
           <input required name="الاسم" type="text" placeholder="الاسم الكامل" autoComplete="name" />
         </Field>
+        <Field label="رقم الهوية الوطنية" required>
+          <input required name="الهوية الوطنية" type="text" placeholder="10 أرقام" dir="ltr" inputMode="numeric" pattern="[0-9]{10}" maxLength={10} title="رقم الهوية 10 أرقام" />
+        </Field>
         <Field label="البريد الإلكتروني" required>
-          <input required name="البريد الإلكتروني" type="email" placeholder="بريدك الجامعي" dir="ltr" autoComplete="email" inputMode="email" />
+          <input required name="البريد الإلكتروني" type="email" placeholder="بريدك الإلكتروني" dir="ltr" autoComplete="email" inputMode="email" />
         </Field>
         <Field label="رقم الجوال" required>
           <input required name="رقم الجوال" type="tel" placeholder="05XXXXXXXX" dir="ltr" autoComplete="tel" inputMode="tel" />
         </Field>
-        <Field label="الرقم الجامعي" required>
-          <input required name="الرقم الجامعي" type="text" placeholder="رقمك الجامعي" dir="ltr" inputMode="numeric" />
-        </Field>
-        <Field label="التخصص" required>
-          <input required name="التخصص" type="text" placeholder="تخصصك الدراسي" />
-        </Field>
+        <div className="rqf-field">
+          <span>
+            هل أنت طالب؟ <b>*</b>
+          </span>
+          <div className="rqf-chips" role="radiogroup">
+            {STATUSES.map((t) => (
+              <label key={t} className="rqf-chip" data-on={status === t || undefined}>
+                <input type="radio" name="الصفة" value={t} required checked={status === t} onChange={() => setStatus(t)} />
+                <span className="rqf-chip-mark">{Icon.check}</span>
+                {t}
+              </label>
+            ))}
+          </div>
+        </div>
+        {status === 'طالب' ? (
+          <>
+            <Field label="اسم الجامعة" required>
+              <input required name="الجامعة" type="text" placeholder="الجامعة التي تدرس فيها" />
+            </Field>
+            <Field label="الرقم الجامعي" required>
+              <input required name="الرقم الجامعي" type="text" placeholder="رقمك الجامعي" dir="ltr" inputMode="numeric" />
+            </Field>
+            <Field label="التخصص" required>
+              <input required name="التخصص" type="text" placeholder="تخصصك الدراسي" />
+            </Field>
+          </>
+        ) : status ? (
+          <Field label="حدّد صفتك" required>
+            <input required name="الصفة الأخرى" type="text" placeholder="مثال: خريج، موظف..." />
+          </Field>
+        ) : null}
       </div>
     </Section>
+  )
+}
+
+/* which department and committee the applicant wants to join */
+function Placement() {
+  const [deptId, setDeptId] = useState('')
+  const dept = DEPARTMENTS.find((d) => d.id === deptId)
+  return (
+    <>
+      <Field label="الإدارة التي ترغب بالانضمام إليها" required>
+        <span className="rqf-select">
+          <select
+            required
+            value={deptId}
+            onChange={(e) => setDeptId(e.target.value)}
+          >
+            <option value="" disabled>
+              اختر الإدارة
+            </option>
+            {DEPARTMENTS.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+          {Chevron}
+        </span>
+        <input type="hidden" name="الإدارة" value={dept ? dept.name : ''} />
+      </Field>
+      <Field label="اللجنة" required>
+        <span className="rqf-select">
+          <select required name="اللجنة" defaultValue="" key={deptId} disabled={!dept}>
+            <option value="" disabled>
+              {dept ? 'اختر اللجنة' : 'اختر الإدارة أولًا'}
+            </option>
+            {dept?.committees.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          {Chevron}
+        </span>
+      </Field>
+    </>
   )
 }
 
@@ -210,6 +294,7 @@ export default function JoinPage() {
               {program ? null : isApply ? (
                 <Section num="02" title="عن انضمامك">
                   <div className="rqf-fields">
+                    <Placement />
                     <Field label="لماذا تريد الانضمام إلى مسار؟" required>
                       <textarea required name="لماذا تريد الانضمام" rows={4} placeholder="أخبرنا عن دوافعك وما تأمل تحقيقه..." />
                     </Field>
