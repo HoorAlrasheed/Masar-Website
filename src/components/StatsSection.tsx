@@ -2,6 +2,8 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+import { TEAM_COUNT } from '../data/team'
+
 import './StatsSection.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -20,7 +22,7 @@ type Stat = {
    ----------------------------------------------------------------- */
 const STATS: Stat[] = [
   {
-    value: 124,
+    value: TEAM_COUNT, // يُحسب تلقائيًا من src/data/team.ts
     suffix: '+',
     label: 'أعضاء مسار',
     note: 'عضوًا في مسار.',

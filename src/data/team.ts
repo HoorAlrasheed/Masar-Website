@@ -64,6 +64,8 @@ export const DEPARTMENTS: Department[] = [
           { name: 'رولا فهد البقمي', linkedin: '', image: '' },
           { name: 'لين خالد الشهري', linkedin: 'https://www.linkedin.com/in/leen-alshehri-05427438a', image: '' },
           { name: 'رغد فهد بن سدره', linkedin: 'https://www.linkedin.com/in/%D8%B1%D8%BA%D8%AF-%D8%A8%D9%86-%D8%B3%D8%AF%D8%B1%D9%87-2a5a98266', image: '' },
+          { name: 'الجوري ثامر بن طلحه', linkedin: '', image: '' },
+          { name: 'ربى بندر الدعجاني', linkedin: '', image: '' },
         ],
       },
       {
@@ -75,7 +77,6 @@ export const DEPARTMENTS: Department[] = [
           { name: 'فرح مسفر العتيبي', linkedin: 'https://www.linkedin.com/in/%D9%81%D8%B1%D8%AD-%D8%A7%D9%84%D8%B9%D8%AA%D9%8A%D8%A8%D9%8A-2a8364384', image: '' },
           { name: 'نوف مسفر ال رشيد', linkedin: '', image: '' },
           { name: 'فيصل محمد أباحسين', linkedin: 'https://www.linkedin.com/in/faisal-abahussain-784a74382', image: '' },
-          { name: 'أسامة عبدالعزيز الزومان', linkedin: '', image: '' },
           { name: 'رؤى عادل الغامدي', linkedin: 'https://www.linkedin.com/in/%D8%B1%D8%A4%D9%89-%D8%A7%D9%84%D8%BA%D8%A7%D9%85%D8%AF%D9%8A-77a423440', image: '' },
         ],
       },
@@ -108,6 +109,7 @@ export const DEPARTMENTS: Department[] = [
           { name: 'دانية حزام الدوسري', linkedin: '', image: '' },
           { name: 'لطيفة عبدالعزيز العروان', linkedin: 'https://www.linkedin.com/in/latifa-alarwan', image: '' },
           { name: 'ليان عبدالعزيز بن عنيّق', linkedin: '', image: '' },
+          { name: 'عبدالعزيز خالد العتيبي', linkedin: '', image: '' },
         ],
       },
       {
@@ -122,11 +124,10 @@ export const DEPARTMENTS: Department[] = [
           { name: 'جنى عبدالإله التونسي', linkedin: '', image: '' },
           { name: 'فيصل عبدالعزيز بن معمر', linkedin: '', image: '' },
           { name: 'عبدالله بدر العتيبي', linkedin: 'https://www.linkedin.com/in/abdullah-alotaibi-a68b69379', image: '' },
-          { name: 'ندى خالد الكريداء', linkedin: 'https://www.linkedin.com/in/%D9%86%D8%AF%D9%89-%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D8%AF%D8%A7%D8%A1-037028387', image: '' },
+          { name: 'ندى خالد الكريدى', linkedin: 'https://www.linkedin.com/in/%D9%86%D8%AF%D9%89-%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D8%AF%D8%A7%D8%A1-037028387', image: '' },
           { name: 'سديم وليد الشقاري', linkedin: '', image: '' },
           { name: 'فواز فرحان العنزي', linkedin: '', image: '' },
           { name: 'بدرى سعود العتيبي', linkedin: 'https://www.linkedin.com/in/badra-al-atabi-2339b6387', image: '' },
-          { name: 'عبدالعزيز خالد العتيبي', linkedin: '', image: '' },
         ],
       },
     ],
@@ -140,15 +141,19 @@ export const DEPARTMENTS: Department[] = [
       {
         id: 'coverage',
         name: 'لجنة التغطيات والمونتاج',
-        lead: { name: 'لمى سليمان الساير', role: 'قائدة اللجنة', linkedin: '', image: '' },
-        deputy: { name: 'لجين عبدالله العريفي', role: 'نائبة اللجنة', linkedin: 'https://www.linkedin.com/in/lujain-alarifi-8983a531b', image: '' },
+        lead: { name: 'لجين عبدالله العريفي', role: 'قائدة اللجنة', linkedin: 'https://www.linkedin.com/in/lujain-alarifi-8983a531b', image: '' },
+        deputy: null,
         members: [
           { name: 'ليان مصلح العتيبي', linkedin: 'https://www.linkedin.com/in/layan-al-otaibi-b7522734a', image: '' },
           { name: 'العنود محمد الماضي', linkedin: 'https://www.linkedin.com/in/alanoud-almadhi-34643527b', image: '' },
           { name: 'رنيم ممدوح الزعاقي', linkedin: '', image: '' },
-          { name: 'عصام حسن الحمدان', linkedin: 'https://www.linkedin.com/in/essam-al-hamdan-228568333', image: '' },
           { name: 'لمى محمد الماضي', linkedin: 'https://www.linkedin.com/in/lama-a-3b5802324', image: '' },
           { name: 'عبدالله نايف العنزي', linkedin: 'https://www.linkedin.com/in/abdullah-n-alenizi-207083363', image: '' },
+          { name: 'علي حسين الحرز', linkedin: '', image: '' },
+          { name: 'نوره عبدالله العيبان', linkedin: '', image: '' },
+          { name: 'سارا فهد المطيري', linkedin: '', image: '' },
+          { name: 'رغد نايف السبيعي', linkedin: '', image: '' },
+          { name: 'مشعل بن محمد الحميضي', linkedin: '', image: '' },
         ],
       },
       {
@@ -160,9 +165,9 @@ export const DEPARTMENTS: Department[] = [
           { name: 'جليان عايد العنزي', linkedin: 'https://www.linkedin.com/in/%D8%AC%D9%88%D9%84%D9%8A%D8%A7%D9%86-%D8%A7%D9%84%D8%B9%D9%86%D8%B2%D9%8A-7a5a91422', image: '' },
           { name: 'سمر مسعد الحربي', linkedin: 'https://www.linkedin.com/in/samar-alharbi-606278394', image: '' },
           { name: 'رند سعد الحوشان', linkedin: 'https://www.linkedin.com/in/r-h-358b042a3', image: '' },
-          { name: 'صبا فهد الدوسري', linkedin: 'https://www.linkedin.com/in/seba-aldawsari-675a6a331', image: '' },
           { name: 'ليان خالد الشمري', linkedin: 'https://www.linkedin.com/in/layan-alshammari-%D9%84%D9%8A%D9%80%D8%A7%D9%86-%D8%A7%D9%84%D8%B4%D9%80%D9%85%D8%B1%D9%8A-834241260', image: '' },
           { name: 'ياسر ابراهيم اللاحم', linkedin: 'https://www.linkedin.com/in/yaser-allahim', image: '' },
+          { name: 'ساره خالد العصيمي', linkedin: '', image: '' },
         ],
       },
       {
@@ -171,8 +176,6 @@ export const DEPARTMENTS: Department[] = [
         lead: { name: 'رغد سامي الخالدي', role: 'قائدة اللجنة', linkedin: 'https://www.linkedin.com/in/raghad-alkhaldi-8525ab2b4', image: '' },
         deputy: { name: 'عبدالله عبدالمجيد العتيق', role: 'نائب اللجنة', linkedin: 'https://www.linkedin.com/in/abdullahalateeq72', image: '' },
         members: [
-          { name: 'جمانه عبدالرحمن الخريجي', linkedin: '', image: '' },
-          { name: 'انسام محمد الرشود', linkedin: 'https://www.linkedin.com/in/ansam-alrshoud-32199936a', image: '' },
           { name: 'جود فهد الحميد', linkedin: '', image: '' },
           { name: 'رهام منصور الدوسري', linkedin: '', image: '' },
           { name: 'غنام عبدالكريم الغنام', linkedin: '', image: '' },
@@ -181,11 +184,21 @@ export const DEPARTMENTS: Department[] = [
           { name: 'ريم سعدون العنزي', linkedin: '', image: '' },
           { name: 'ليان قيس المنقور', linkedin: 'https://www.linkedin.com/in/layan-almangour-6a560737b', image: '' },
           { name: 'دانة ماجد بن سلمه', linkedin: 'https://www.linkedin.com/in/danah-m-b05975340', image: '' },
-          { name: 'عاليه سعد الرويس', linkedin: 'https://www.linkedin.com/in/aliyah-saad-50017a367', image: '' },
           { name: 'شوق عبدالله الحناكي', linkedin: 'https://www.linkedin.com/in/shoug-abdullah-843151383', image: '' },
           { name: 'خالد محمد الزعبي', linkedin: 'https://www.linkedin.com/in/%D8%AE%D8%A7%D9%84%D8%AF-%D8%A7%D9%84%D8%B2%D8%B9%D8%A8%D9%8A-9617503a9', image: '' },
           { name: 'جود بنت مرزوق المطيري', linkedin: '', image: '' },
           { name: 'شهد عبدالعزيز السلطان', linkedin: '', image: '' },
+          { name: 'الارجوان منصور المرداس', linkedin: '', image: '' },
+          { name: 'نوال حنس المطيري', linkedin: '', image: '' },
+          { name: 'عبدالحكيم فرج العتيبي', linkedin: '', image: '' },
+          { name: 'ناصر فهد السليمان', linkedin: '', image: '' },
+          { name: 'نادية فهد العتيبي', linkedin: '', image: '' },
+          { name: 'لمى عبدالرحمن اليمني', linkedin: '', image: '' },
+          { name: 'افراح فهد السهلي', linkedin: '', image: '' },
+          { name: 'غلا خالد العتيبي', linkedin: '', image: '' },
+          { name: 'ميلاف نواف القحطاني', linkedin: '', image: '' },
+          { name: 'دينا منصور العنزي', linkedin: '', image: '' },
+          { name: 'شهد بنت عبدالرحمن العليوي', linkedin: '', image: '' },
         ],
       },
     ],
@@ -246,6 +259,7 @@ export const DEPARTMENTS: Department[] = [
           { name: 'محمد سلطان القحطاني', linkedin: 'https://www.linkedin.com/in/mohammed-al-qahtani-a9822b3a9', image: '' },
           { name: 'لينا محمد التويجري', linkedin: 'https://www.linkedin.com/in/leena-mohammed-1aa585432', image: '' },
           { name: 'إبراهيم محمد اللحيدان', linkedin: '', image: '' },
+          { name: 'سعود سلطان العتيبي', linkedin: '', image: '' },
         ],
       },
     ],
@@ -266,3 +280,15 @@ export const DIRECT_COMMITTEES: Committee[] = [
     ],
   },
 ]
+
+/* ---------- عدد الفريق ----------
+   يُحسب تلقائيًا من القوائم أعلاه (الرئيس ونائبته، والمستشارون، وقادة
+   الإدارات ونوابهم، وقادة اللجان ونوابهم، والأعضاء). يظهر في الصفحة
+   الرئيسية عند «أعضاء مسار»؛ أي إضافة أو حذف هنا يغيّر الرقم تلقائيًا. */
+const countCommittee = (c: Committee) => (c.lead ? 1 : 0) + (c.deputy ? 1 : 0) + c.members.length
+
+export const TEAM_COUNT =
+  Object.values(LEADERSHIP).length +
+  ADVISORS.length +
+  DEPARTMENTS.reduce((n, d) => n + 2 + d.committees.reduce((m, c) => m + countCommittee(c), 0), 0) +
+  DIRECT_COMMITTEES.reduce((n, c) => n + countCommittee(c), 0)
