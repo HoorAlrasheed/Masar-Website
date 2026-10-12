@@ -160,3 +160,28 @@
     font-size: 30px;
   }
 }
+
+/* ---------- ID / email / phone checks ---------- */
+.rqf-field input.is-bad {
+  border-color: rgba(242, 167, 167, 0.55);
+}
+.rqf-note {
+  margin-top: -2px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #f2a7a7;
+}
+.rqf-note-tip {
+  color: rgba(245, 247, 248, 0.7);
+}
+.rqf-note-tip button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--sky, #9fd8f5);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

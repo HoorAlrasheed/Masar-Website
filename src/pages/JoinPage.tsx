@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type InputHTMLAttributes, type ReactNode } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
@@ -68,6 +68,117 @@ function Field({ label, required, children }: { label: string; required?: boolea
   )
 }
 
+/* ---------- checks for the ID, email and phone ---------- */
+
+/* Arabic-Indic digits (٠١٢ / ۰۱۲) → 0-9, then keep digits only */
+const onlyDigits = (s: string) =>
+  s
+    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+    .replace(/\D/g, '')
+
+const checkId = (v: string) => {
+  if (!v) return 'رقم الهوية مطلوب'
+  if (v.length !== 10) return `رقم الهوية 10 أرقام، كتبت ${v.length}`
+  if (v[0] !== '1' && v[0] !== '2') return 'رقم الهوية يبدأ بـ 1 أو 2'
+  return ''
+}
+
+const checkPhone = (v: string) => {
+  if (!v) return 'رقم الجوال مطلوب'
+  if (!v.startsWith('05')) return 'رقم الجوال يبدأ بـ 05'
+  if (v.length !== 10) return `رقم الجوال 10 أرقام، كتبت ${v.length}`
+  return ''
+}
+
+const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/
+const checkEmail = (v: string) => {
+  if (!v) return 'البريد الإلكتروني مطلوب'
+  if (/[؀-ۿ]/.test(v)) return 'البريد الإلكتروني يُكتب بالأحرف الإنجليزية'
+  if (!v.includes('@')) return 'البريد الإلكتروني ناقص علامة @'
+  if (!EMAIL_RE.test(v)) return 'تأكد من كتابة البريد كاملًا، مثل: name@gmail.com'
+  return ''
+}
+
+/* common providers — a domain one or two letters off gets a «did you mean» */
+const DOMAINS = ['gmail.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'yahoo.com', 'live.com', 'outlook.sa', 'hotmail.sa']
+const distance = (a: string, b: string) => {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i)
+  for (let i = 1; i <= a.length; i++) {
+    let prev = row[0]
+    row[0] = i
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = row[j]
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1))
+      prev = tmp
+    }
+  }
+  return row[b.length]
+}
+const suggestEmail = (v: string) => {
+  const at = v.lastIndexOf('@')
+  if (at < 1) return ''
+  const domain = v.slice(at + 1).toLowerCase()
+  if (!domain || DOMAINS.includes(domain) || domain.endsWith('.edu.sa')) return ''
+  let best = ''
+  let bestD = 3
+  for (const d of DOMAINS) {
+    const dist = distance(domain, d)
+    if (dist < bestD) {
+      bestD = dist
+      best = d
+    }
+  }
+  return best ? v.slice(0, at + 1) + best : ''
+}
+
+/* one input that cleans what is typed, explains mistakes in Arabic under the
+   field once the person leaves it, and blocks sending until it's right */
+function CheckedInput({
+  clean,
+  check,
+  suggest,
+  ...props
+}: {
+  clean: (s: string) => string
+  check: (s: string) => string
+  suggest?: (s: string) => string
+} & InputHTMLAttributes<HTMLInputElement>) {
+  const ref = useRef<HTMLInputElement>(null)
+  const [value, setValue] = useState('')
+  const [touched, setTouched] = useState(false)
+  const msg = check(value)
+  const hint = suggest && !msg ? suggest(value) : ''
+
+  useEffect(() => {
+    ref.current?.setCustomValidity(msg)
+  }, [msg])
+
+  return (
+    <>
+      <input
+        {...props}
+        ref={ref}
+        value={value}
+        className={touched && msg ? 'is-bad' : undefined}
+        onChange={(e) => setValue(clean(e.target.value))}
+        onBlur={() => setTouched(true)}
+        onInvalid={() => setTouched(true)}
+      />
+      {touched && msg ? <small className="rqf-note">{msg}</small> : null}
+      {hint ? (
+        <small className="rqf-note rqf-note-tip">
+          هل تقصد{' '}
+          <button type="button" dir="ltr" onClick={() => setValue(hint)}>
+            {hint}
+          </button>
+          ؟
+        </small>
+      ) : null}
+    </>
+  )
+}
+
 /* the details every form asks for; a student is asked for the university,
    anyone else for what they do instead */
 function AboutYou() {
@@ -79,13 +190,50 @@ function AboutYou() {
           <input required name="الاسم" type="text" placeholder="الاسم الكامل" autoComplete="name" />
         </Field>
         <Field label="رقم الهوية الوطنية" required>
-          <input required name="الهوية الوطنية" type="text" placeholder="10 أرقام" dir="ltr" inputMode="numeric" pattern="[0-9]{10}" maxLength={10} title="رقم الهوية 10 أرقام" />
+          <CheckedInput
+            required
+            name="الهوية الوطنية"
+            type="text"
+            placeholder="10 أرقام"
+            dir="ltr"
+            inputMode="numeric"
+            clean={(s) => onlyDigits(s).slice(0, 10)}
+            check={checkId}
+          />
         </Field>
         <Field label="البريد الإلكتروني" required>
-          <input required name="البريد الإلكتروني" type="email" placeholder="بريدك الإلكتروني" dir="ltr" autoComplete="email" inputMode="email" />
+          <CheckedInput
+            required
+            name="البريد الإلكتروني"
+            type="text"
+            placeholder="name@gmail.com"
+            dir="ltr"
+            autoComplete="email"
+            inputMode="email"
+            autoCapitalize="none"
+            spellCheck={false}
+            clean={(s) => s.replace(/\s/g, '')}
+            check={checkEmail}
+            suggest={suggestEmail}
+          />
         </Field>
         <Field label="رقم الجوال" required>
-          <input required name="رقم الجوال" type="tel" placeholder="05XXXXXXXX" dir="ltr" autoComplete="tel" inputMode="tel" />
+          <CheckedInput
+            required
+            name="رقم الجوال"
+            type="tel"
+            placeholder="05XXXXXXXX"
+            dir="ltr"
+            autoComplete="tel"
+            inputMode="numeric"
+            clean={(s) => {
+              let d = onlyDigits(s)
+              if (d.startsWith('9665')) d = '0' + d.slice(3)
+              else if (d.startsWith('5')) d = '0' + d
+              return d.slice(0, 10)
+            }}
+            check={checkPhone}
+          />
         </Field>
         <div className="rqf-field">
           <span>
