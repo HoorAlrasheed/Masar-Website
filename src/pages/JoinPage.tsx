@@ -3,7 +3,7 @@ import { useLocation, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 import { SHEETS, sendToSheet } from '../data/sheet'
-import { DEPARTMENTS } from '../data/team'
+import { DEPARTMENTS, DIRECT_COMMITTEES } from '../data/team'
 
 import PageHead from '../components/PageHead'
 
@@ -124,9 +124,16 @@ function AboutYou() {
 }
 
 /* which department and committee the applicant wants to join */
+/* departments, plus «إدارة التقنية» which holds the tech committee */
+const PLACEMENTS = [
+  ...DEPARTMENTS.map((d) => ({ id: d.id, name: d.name, sheetName: d.name, committees: d.committees })),
+  { id: 'tech-dept', name: 'إدارة التقنية', sheetName: 'إدارة التقنية', committees: DIRECT_COMMITTEES },
+]
+
 function Placement() {
   const [deptId, setDeptId] = useState('')
-  const dept = DEPARTMENTS.find((d) => d.id === deptId)
+  const dept = PLACEMENTS.find((d) => d.id === deptId)
+  const single = dept && dept.committees.length === 1 ? dept.committees[0].name : ''
   return (
     <>
       <Field label="الإدارة التي ترغب بالانضمام إليها" required>
@@ -139,7 +146,7 @@ function Placement() {
             <option value="" disabled>
               اختر الإدارة
             </option>
-            {DEPARTMENTS.map((d) => (
+            {PLACEMENTS.map((d) => (
               <option key={d.id} value={d.id}>
                 {d.name}
               </option>
@@ -147,11 +154,11 @@ function Placement() {
           </select>
           {Chevron}
         </span>
-        <input type="hidden" name="الإدارة" value={dept ? dept.name : ''} />
+        <input type="hidden" name="الإدارة" value={dept ? dept.sheetName : ''} />
       </Field>
       <Field label="اللجنة" required>
         <span className="rqf-select">
-          <select required name="اللجنة" defaultValue="" key={deptId} disabled={!dept}>
+          <select required name="اللجنة" defaultValue={single} key={deptId} disabled={!dept}>
             <option value="" disabled>
               {dept ? 'اختر اللجنة' : 'اختر الإدارة أولًا'}
             </option>
