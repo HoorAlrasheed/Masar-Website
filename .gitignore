@@ -28,3 +28,7 @@ src/fonts/thmanyahData.ts
 
 # إعدادات Netlify المحلية (فيها ربط حسابك)
 .netlify/
+
+# إعدادات Vercel المحلية (فيها ربط حسابك)
+.vercel/
+.vercel

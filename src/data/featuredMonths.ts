@@ -95,7 +95,7 @@ export const MONTHS: FeaturedMonth[] = [
       media: [
         { name: 'عبدالله عبدالمجيد العتيق', committee: 'نائب قائد لجنة التسويق وكتابة المحتوى', leader: true, linkedin: 'https://www.linkedin.com/in/abdullahalateeq72', image: '' },
         { name: 'ليان مصلح العتيبي', committee: 'لجنة التغطيات والمونتاج', linkedin: 'https://www.linkedin.com/in/layan-al-otaibi-b7522734a', image: '' },
-        { name: 'جليان عايد العنزي', committee: 'لجنة التصاميم والهوية البصرية', linkedin: 'https://www.linkedin.com/in/%D8%AC%D9%88%D9%84%D9%8A%D8%A7%D9%86-%D8%A7%D9%84%D8%B9%D9%86%D8%B2%D9%8A-7a5a91422', image: '' },
+        { name: 'جوليان عايد العنزي', committee: 'لجنة التصاميم والهوية البصرية', linkedin: 'https://www.linkedin.com/in/%D8%AC%D9%88%D9%84%D9%8A%D8%A7%D9%86-%D8%A7%D9%84%D8%B9%D9%86%D8%B2%D9%8A-7a5a91422', image: '' },
       ],
       planning: [
         { name: 'سالم حسن آل صغير', committee: 'نائب رئيسة إدارة التخطيط والتنظيم', leader: true, linkedin: 'https://www.linkedin.com/in/salim-alsaghir', image: '' },
