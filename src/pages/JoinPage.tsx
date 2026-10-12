@@ -132,17 +132,34 @@ const suggestEmail = (v: string) => {
   return best ? v.slice(0, at + 1) + best : ''
 }
 
+/* LinkedIn: must be a personal profile link (linkedin.com/in/…) */
+const LI_RE = /^(?:https?:\/\/)?(?:[a-z]{2,3}\.)?(?:www\.)?linkedin\.com\/in\/([^/?#\s]+)\/?(?:[?#].*)?$/i
+const checkLinkedIn = (v: string) => {
+  if (!v) return 'رابط حساب لينكدإن مطلوب'
+  if (!/linkedin\.com/i.test(v)) return 'الصق رابط حسابك من لينكدإن، مثل: linkedin.com/in/name'
+  if (!/linkedin\.com\/in\//i.test(v)) return 'هذا ليس رابط حساب شخصي، رابط الحساب يحتوي على \u2066/in/\u2069'
+  if (!LI_RE.test(v)) return 'الرابط ناقص، تأكد من نسخه كاملًا من صفحة حسابك'
+  return ''
+}
+/* tidy a valid link into one shape: https://www.linkedin.com/in/name */
+const tidyLinkedIn = (v: string) => {
+  const m = v.match(LI_RE)
+  return m ? `https://www.linkedin.com/in/${m[1]}` : v
+}
+
 /* one input that cleans what is typed, explains mistakes in Arabic under the
    field once the person leaves it, and blocks sending until it's right */
 function CheckedInput({
   clean,
   check,
   suggest,
+  finish,
   ...props
 }: {
   clean: (s: string) => string
   check: (s: string) => string
   suggest?: (s: string) => string
+  finish?: (s: string) => string
 } & InputHTMLAttributes<HTMLInputElement>) {
   const ref = useRef<HTMLInputElement>(null)
   const [value, setValue] = useState('')
@@ -162,7 +179,10 @@ function CheckedInput({
         value={value}
         className={touched && msg ? 'is-bad' : undefined}
         onChange={(e) => setValue(clean(e.target.value))}
-        onBlur={() => setTouched(true)}
+        onBlur={() => {
+          setTouched(true)
+          if (finish) setValue(finish(value))
+        }}
         onInvalid={() => setTouched(true)}
       />
       {touched && msg ? <small className="rqf-note">{msg}</small> : null}
@@ -181,7 +201,7 @@ function CheckedInput({
 
 /* the details every form asks for; a student is asked for the university,
    anyone else for what they do instead */
-function AboutYou() {
+function AboutYou({ linkedin = false }: { linkedin?: boolean }) {
   const [status, setStatus] = useState('')
   return (
     <Section num="01" title="بياناتك">
@@ -235,6 +255,23 @@ function AboutYou() {
             check={checkPhone}
           />
         </Field>
+        {linkedin ? (
+          <Field label="رابط حسابك في لينكدإن" required>
+            <CheckedInput
+              required
+              name="لينكدإن"
+              type="text"
+              placeholder="linkedin.com/in/name"
+              dir="ltr"
+              inputMode="url"
+              autoCapitalize="none"
+              spellCheck={false}
+              clean={(s) => s.replace(/\s/g, '')}
+              check={checkLinkedIn}
+              finish={tidyLinkedIn}
+            />
+          </Field>
+        ) : null}
         <div className="rqf-field">
           <span>
             هل أنت طالب؟ <b>*</b>
@@ -444,7 +481,7 @@ export default function JoinPage() {
               </p>
               )}
 
-              <AboutYou />
+              <AboutYou linkedin={isApply && !program} />
 
               {program ? null : isApply ? (
                 <Section num="02" title="عن انضمامك">
