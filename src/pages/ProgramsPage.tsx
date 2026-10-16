@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 import { programs, type Program } from '../data'
@@ -26,6 +26,19 @@ import './ProgramsSlices.css'
 /* the boxes, in this order — add a kind here to give it its own box
    (a kind with no programmes yet shows a box of "قريبًا") */
 const GROUPS = ['جلسات حوارية', 'زيارات', 'هاكاثونات', 'ورش العمل']
+
+/* each box's short English name, used in the share link of its places:
+   masar-initiative.com/programs#workshops-4 opens the 4th place of ورش العمل,
+   whatever is in it — useful for a poster printed before its programme
+   is added. A new kind gets its own line here. */
+const BOX_IDS: Record<string, string> = {
+  'جلسات حوارية': 'sessions',
+  زيارات: 'visits',
+  هاكاثونات: 'hackathons',
+  'ورش العمل': 'workshops',
+  معسكرات: 'camps',
+}
+const boxId = (kind: string, i: number) => BOX_IDS[kind] ?? `box-${i + 1}`
 
 /* how many slices a box shows (besides its cover). It always keeps the
    newest: when a new event is added it takes the last slice (on the
@@ -110,7 +123,7 @@ function Share({ slug, title, on }: { slug: string; title: string; on: boolean }
   const [copied, setCopied] = useState(false)
   const share = async (e: MouseEvent) => {
     e.stopPropagation()
-    const url = `${window.location.origin}/programs?p=${slug}`
+    const url = `${window.location.origin}/programs#${slug}`
     try {
       if (navigator.share && window.matchMedia('(pointer: coarse)').matches) {
         await navigator.share({ title, url })
@@ -203,9 +216,11 @@ type Slice = { program: Program } | { past: NewsItem } | null
 
 /* the key a shared link uses for a slice: the programme's number, or e + the
    event's number for an event that already happened (same as their pages) */
-const sliceSlug = (s: Slice) => (!s ? '' : 'past' in s ? `e${s.past.id}` : String(s.program.id))
+const sliceSlug = (s: Slice) => (!s ? '' : 'past' in s ? s.past.slug || `e${s.past.id}` : (s.program as Program & { slug?: string }).slug || String(s.program.id))
+/* old links used the number (?p=e7); they still open the same slice */
+const sliceKeys = (s: Slice) => (!s ? [] : 'past' in s ? [sliceSlug(s), `e${s.past.id}`] : [sliceSlug(s), String(s.program.id)])
 
-function Box({ name, items, family, target }: { name: string; items: Program[]; family: number; target: string }) {
+function Box({ id, name, items, family, target }: { id: string; name: string; items: Program[]; family: number; target: string }) {
   const [search] = useSearchParams()
   const ref = partnerRef(search)
   const sorted = [...items].sort((a, b) => ORDER[a.status] - ORDER[b.status])
@@ -218,7 +233,9 @@ function Box({ name, items, family, target }: { name: string; items: Program[]; 
   const empty = Math.max(0, SLICES - filled.length)
   const slices: Slice[] = [...Array<null>(empty).fill(null), ...filled]
   /* a shared link (/programs?p=…) opens its own slice, otherwise the newest */
-  const shared = target ? slices.findIndex((s) => sliceSlug(s) === target) : -1
+  /* the place's own link (#workshops-4) or what is in it (#sab) */
+  const place = (i: number) => `${id}-${i + 1}`
+  const shared = target ? slices.findIndex((s, i) => place(i) === target || sliceKeys(s).includes(target)) : -1
   const [open, setOpen] = useState(shared >= 0 ? shared : slices.length - 1)
 
   /* the open programme keeps one fixed width while its slice glides open,
@@ -269,7 +286,10 @@ function Box({ name, items, family, target }: { name: string; items: Program[]; 
               </button>
               <div className="psl-clip">
               <div className="psl-full psl-full--soon" aria-hidden={!on}>
-                <span className="psl-code">PROGRAM_{no} //</span>
+                <div className="psl-codeline">
+                  <span className="psl-code">PROGRAM_{no} //</span>
+                  <Share slug={place(i)} title={name} on={on} />
+                </div>
                 <span className="psl-kind">{name}</span>
                 <div className="psl-soon-art">
                   <span>قريبًا</span>
@@ -301,7 +321,7 @@ function Box({ name, items, family, target }: { name: string; items: Program[]; 
               <div className="psl-full" aria-hidden={!on}>
                 <div className="psl-codeline">
                   <span className="psl-code">{last ? 'LAST_EVENT' : `EVENT_${no}`} //</span>
-                  <Share slug={`e${n.id}`} title={title} on={on} />
+                  <Share slug={sliceSlug(p)} title={title} on={on} />
                 </div>
                 <span className="psl-kind">{last ? `آخر حدث · ${n.category}` : n.category}</span>
                 <h3 className="psl-name">
@@ -345,7 +365,7 @@ function Box({ name, items, family, target }: { name: string; items: Program[]; 
             <div className="psl-full" aria-hidden={!on}>
               <div className="psl-codeline">
                 <span className="psl-code">PROGRAM_{no} //</span>
-                <Share slug={String(pr.id)} title={t.name} on={on} />
+                <Share slug={sliceSlug(p)} title={t.name} on={on} />
               </div>
               <span className="psl-kind">{t.kind}</span>
               {/* the title and the picture open the programme's page */}
@@ -372,12 +392,13 @@ function Box({ name, items, family, target }: { name: string; items: Program[]; 
 export default function ProgramsPage() {
   const root = useRef<HTMLElement>(null)
 
-  /* a shared programme (/programs?p=1 or ?p=e8): its box opens on it (see
+  /* a shared programme (/programs#sab): its box opens on it (see
      Box), and the page glides down to that box once it is drawn. On a slow
      phone it keeps looking for a few seconds, and lands once more after the
      fonts and pictures load — unless the visitor has started scrolling. */
   const [search] = useSearchParams()
-  const target = (search.get('p') || '').trim()
+  const { hash } = useLocation()
+  const target = (decodeURIComponent(hash.slice(1)) || search.get('p') || '').trim()
   useEffect(() => {
     if (!target) return
     let stop = false
@@ -466,7 +487,7 @@ export default function ProgramsPage() {
 
         <div className="psl-boxes">
           {kinds.map((k, i) => (
-            <Box key={k} name={k} family={i} target={target} items={programs.filter((p) => p.category === k)} />
+            <Box key={k} id={boxId(k, i)} name={k} family={i} target={target} items={programs.filter((p) => p.category === k)} />
           ))}
         </div>
       </div>

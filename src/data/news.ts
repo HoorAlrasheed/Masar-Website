@@ -50,6 +50,8 @@ export type NewsItem = {
   mapUrl?: string
   /* what it covered or achieved — listed on its sheet in the programmes page */
   highlights?: string[]
+  /* the short English name in its share link: masar-initiative.com/programs#sab */
+  slug?: string
 }
 
 /* الأحدث أول */
@@ -65,6 +67,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 8,
+    slug: 'saqr-museum',
     title: 'زيارة متحف صقر الجزيرة للطيران',
     category: 'زيارة',
     date: '١٧ سبتمبر ٢٠٢٦',
@@ -78,6 +81,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 6,
+    slug: 'sab',
     title: 'زيارة البنك السعودي الأول (SAB)',
     category: 'زيارة',
     date: '٤ يونيو ٢٠٢٦',
@@ -93,6 +97,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 1,
+    slug: 'digital-media',
     title: 'جلسة «الإعلام الرقمي» في مساحة T2',
     category: 'جلسة حوارية',
     date: '١٨ مايو ٢٠٢٦',
@@ -108,6 +113,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 3,
+    slug: 'risk-management',
     title: 'جلسة «إدارة المخاطر» في مساحة كوريتش',
     category: 'جلسة حوارية',
     date: '١٣ مايو ٢٠٢٦',
@@ -123,6 +129,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 7,
+    slug: 'financial-academy',
     title: 'زيارة الأكاديمية المالية',
     category: 'زيارة',
     date: '٥ مايو ٢٠٢٦',
@@ -138,6 +145,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 2,
+    slug: 'family-business',
     title: 'جلسة «المنشآت العائلية» في مساحة كوريتش',
     category: 'جلسة حوارية',
     date: '٣ مايو ٢٠٢٦',
@@ -153,6 +161,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 4,
+    slug: 'data-analysis',
     title: 'جلسة «تحليل البيانات» في مساحة لمبة',
     category: 'جلسة حوارية',
     date: '٢٥ أبريل ٢٠٢٦',
@@ -168,6 +177,7 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: 5,
+    slug: 'investment-products',
     title: 'جلسة «الريادة والمنتجات الاستثمارية» في مساحة هب',
     category: 'جلسة حوارية',
     date: '٢٠ أبريل ٢٠٢٦',
