@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 import { programs, type Program } from '../data'
@@ -26,6 +26,19 @@ import './ProgramsSlices.css'
 /* the boxes, in this order — add a kind here to give it its own box
    (a kind with no programmes yet shows a box of "قريبًا") */
 const GROUPS = ['جلسات حوارية', 'زيارات', 'هاكاثونات', 'ورش العمل']
+
+/* each box's id in the link, so a QR code can open the page right on it:
+   masar-initiative.com/programs#workshops
+   (small English letters only). A new kind gets its own line here —
+   a kind with no line here gets section-1, section-2… by its place. */
+const SECTION_IDS: Record<string, string> = {
+  'جلسات حوارية': 'sessions',
+  زيارات: 'visits',
+  هاكاثونات: 'hackathons',
+  'ورش العمل': 'workshops',
+  معسكرات: 'camps',
+}
+const sectionId = (kind: string, i: number) => SECTION_IDS[kind] ?? `section-${i + 1}`
 
 /* how many slices a box shows (besides its cover). It always keeps the
    newest: when a new event is added it takes the last slice (on the
@@ -143,7 +156,7 @@ function Facts({ date, place, mapUrl, status, on, details, join = '/join' }: { d
 
 type Slice = { program: Program } | { past: NewsItem } | null
 
-function Box({ name, items, family }: { name: string; items: Program[]; family: number }) {
+function Box({ id, name, items, family }: { id: string; name: string; items: Program[]; family: number }) {
   const [search] = useSearchParams()
   const ref = partnerRef(search)
   const sorted = [...items].sort((a, b) => ORDER[a.status] - ORDER[b.status])
@@ -181,7 +194,7 @@ function Box({ name, items, family }: { name: string; items: Program[]; family: 
   }, [])
 
   return (
-    <section className="psl-box" ref={box} style={{ '--n': slices.length } as CSSProperties} aria-label={name}>
+    <section id={id} className="psl-box" ref={box} style={{ '--n': slices.length } as CSSProperties} aria-label={name}>
       <div className="psl-cover">
         <b>{name}</b>
         <small>{sorted.length ? count(sorted.length) : past.length ? 'آخر الأحداث' : 'قريبًا'}</small>
@@ -302,6 +315,17 @@ function Box({ name, items, family }: { name: string; items: Program[]; family: 
 export default function ProgramsPage() {
   const root = useRef<HTMLElement>(null)
 
+  /* /programs#workshops → glide down to that box once the page is drawn
+     (React doesn't do it by itself when the page opens from such a link) */
+  const { hash } = useLocation()
+  useEffect(() => {
+    if (!hash) return
+    const t = setTimeout(() => {
+      document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 300)
+    return () => clearTimeout(t)
+  }, [hash])
+
   /* every kind in GROUPS, then any other kind found in the data */
   const kinds = [...GROUPS, ...Array.from(new Set(programs.map((p) => p.category))).filter((c) => !GROUPS.includes(c))]
 
@@ -352,7 +376,7 @@ export default function ProgramsPage() {
 
         <div className="psl-boxes">
           {kinds.map((k, i) => (
-            <Box key={k} name={k} family={i} items={programs.filter((p) => p.category === k)} />
+            <Box key={k} id={sectionId(k, i)} name={k} family={i} items={programs.filter((p) => p.category === k)} />
           ))}
         </div>
       </div>

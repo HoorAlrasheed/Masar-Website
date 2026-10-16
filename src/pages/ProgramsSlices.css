@@ -116,6 +116,9 @@ body.psl-page header a[aria-label='مبادرة مسار'] {
 /* ---------- the box of slices ---------- */
 
 .psl-box {
+  /* opened from /programs#workshops: stop just under the fixed navbar */
+  scroll-margin-top: 110px;
+
   /* the closed slices share what is left after the cover and the open one */
   --closed: min(46px, calc((100% - 236px) / max(var(--n, 4) - 1, 1)));
 
