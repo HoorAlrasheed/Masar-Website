@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 import { programs, type Program } from '../data'
@@ -26,19 +26,6 @@ import './ProgramsSlices.css'
 /* the boxes, in this order — add a kind here to give it its own box
    (a kind with no programmes yet shows a box of "قريبًا") */
 const GROUPS = ['جلسات حوارية', 'زيارات', 'هاكاثونات', 'ورش العمل']
-
-/* each box's id in the link, so a QR code can open the page right on it:
-   masar-initiative.com/programs#workshops
-   (small English letters only). A new kind gets its own line here —
-   a kind with no line here gets section-1, section-2… by its place. */
-const SECTION_IDS: Record<string, string> = {
-  'جلسات حوارية': 'sessions',
-  زيارات: 'visits',
-  هاكاثونات: 'hackathons',
-  'ورش العمل': 'workshops',
-  معسكرات: 'camps',
-}
-const sectionId = (kind: string, i: number) => SECTION_IDS[kind] ?? `section-${i + 1}`
 
 /* how many slices a box shows (besides its cover). It always keeps the
    newest: when a new event is added it takes the last slice (on the
@@ -110,7 +97,65 @@ function splitTitle(title: string, category: string) {
    registration button — "سجّل الآن" while open, otherwise what it is */
 const ACTION: Record<ProgramStatus, string> = { open: 'سجّل الآن', soon: 'قريبًا', closed: 'أُغلق التسجيل' }
 
-function Facts({ date, place, mapUrl, status, on, details, join = '/join' }: { date: string; place?: string; mapUrl?: string; status: ProgramStatus; on: boolean; details: string; join?: string }) {
+/* the share button: a link that opens this page on this very programme.
+   On a phone it opens the phone's own share sheet (WhatsApp…); elsewhere
+   it copies the link and says so for a moment. */
+const CHECK = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 12.5l4.5 4.5L19 7.5" />
+  </svg>
+)
+
+function Share({ slug, title, on }: { slug: string; title: string; on: boolean }) {
+  const [copied, setCopied] = useState(false)
+  const share = async (e: MouseEvent) => {
+    e.stopPropagation()
+    const url = `${window.location.origin}/programs?p=${slug}`
+    try {
+      if (navigator.share && window.matchMedia('(pointer: coarse)').matches) {
+        await navigator.share({ title, url })
+        return
+      }
+      await navigator.clipboard.writeText(url)
+    } catch {
+      return
+    }
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 2000)
+  }
+  return (
+    <button
+      type="button"
+      className="psl-share"
+      onClick={share}
+      tabIndex={on ? 0 : -1}
+      aria-label={copied ? 'تم نسخ الرابط' : `مشاركة ${title}`}
+      title={copied ? 'تم نسخ الرابط' : 'مشاركة'}
+      data-copied={copied || undefined}
+    >
+      {copied ? CHECK : ICONS.share}
+      {copied ? <span className="psl-copied" role="status">تم النسخ</span> : null}
+    </button>
+  )
+}
+
+function Facts({
+  date,
+  place,
+  mapUrl,
+  status,
+  on,
+  details,
+  join = '/join',
+}: {
+  date: string
+  place?: string
+  mapUrl?: string
+  status: ProgramStatus
+  on: boolean
+  details: string
+  join?: string
+}) {
   return (
     <div className="psl-facts">
       {/* one line: the date on the right, the place on its left */}
@@ -156,7 +201,11 @@ function Facts({ date, place, mapUrl, status, on, details, join = '/join' }: { d
 
 type Slice = { program: Program } | { past: NewsItem } | null
 
-function Box({ id, name, items, family }: { id: string; name: string; items: Program[]; family: number }) {
+/* the key a shared link uses for a slice: the programme's number, or e + the
+   event's number for an event that already happened (same as their pages) */
+const sliceSlug = (s: Slice) => (!s ? '' : 'past' in s ? `e${s.past.id}` : String(s.program.id))
+
+function Box({ name, items, family, target }: { name: string; items: Program[]; family: number; target: string }) {
   const [search] = useSearchParams()
   const ref = partnerRef(search)
   const sorted = [...items].sort((a, b) => ORDER[a.status] - ORDER[b.status])
@@ -168,7 +217,9 @@ function Box({ id, name, items, family }: { id: string; name: string; items: Pro
   const filled: Slice[] = [...past.map((n) => ({ past: n })), ...sorted.map((program) => ({ program }))].slice(-SLICES)
   const empty = Math.max(0, SLICES - filled.length)
   const slices: Slice[] = [...Array<null>(empty).fill(null), ...filled]
-  const [open, setOpen] = useState(slices.length - 1)
+  /* a shared link (/programs?p=…) opens its own slice, otherwise the newest */
+  const shared = target ? slices.findIndex((s) => sliceSlug(s) === target) : -1
+  const [open, setOpen] = useState(shared >= 0 ? shared : slices.length - 1)
 
   /* the open programme keeps one fixed width while its slice glides open,
      so its photo and words stand still — the slice simply uncovers them */
@@ -194,7 +245,7 @@ function Box({ id, name, items, family }: { id: string; name: string; items: Pro
   }, [])
 
   return (
-    <section id={id} className="psl-box" ref={box} style={{ '--n': slices.length } as CSSProperties} aria-label={name}>
+    <section className="psl-box" ref={box} data-shared={shared >= 0 || undefined} style={{ '--n': slices.length } as CSSProperties} aria-label={name}>
       <div className="psl-cover">
         <b>{name}</b>
         <small>{sorted.length ? count(sorted.length) : past.length ? 'آخر الأحداث' : 'قريبًا'}</small>
@@ -248,7 +299,10 @@ function Box({ id, name, items, family }: { id: string; name: string; items: Pro
               </button>
               <div className="psl-clip">
               <div className="psl-full" aria-hidden={!on}>
-                <span className="psl-code">{last ? 'LAST_EVENT' : `EVENT_${no}`} //</span>
+                <div className="psl-codeline">
+                  <span className="psl-code">{last ? 'LAST_EVENT' : `EVENT_${no}`} //</span>
+                  <Share slug={`e${n.id}`} title={title} on={on} />
+                </div>
                 <span className="psl-kind">{last ? `آخر حدث · ${n.category}` : n.category}</span>
                 <h3 className="psl-name">
                   <Link to={`/programs/e${n.id}`} className="psl-open" tabIndex={on ? 0 : -1}>
@@ -289,7 +343,10 @@ function Box({ id, name, items, family }: { id: string; name: string; items: Pro
             {/* open: the programme */}
             <div className="psl-clip">
             <div className="psl-full" aria-hidden={!on}>
-              <span className="psl-code">PROGRAM_{no} //</span>
+              <div className="psl-codeline">
+                <span className="psl-code">PROGRAM_{no} //</span>
+                <Share slug={String(pr.id)} title={t.name} on={on} />
+              </div>
               <span className="psl-kind">{t.kind}</span>
               {/* the title and the picture open the programme's page */}
               <h3 className="psl-name">
@@ -315,16 +372,49 @@ function Box({ id, name, items, family }: { id: string; name: string; items: Pro
 export default function ProgramsPage() {
   const root = useRef<HTMLElement>(null)
 
-  /* /programs#workshops → glide down to that box once the page is drawn
-     (React doesn't do it by itself when the page opens from such a link) */
-  const { hash } = useLocation()
+  /* a shared programme (/programs?p=1 or ?p=e8): its box opens on it (see
+     Box), and the page glides down to that box once it is drawn. On a slow
+     phone it keeps looking for a few seconds, and lands once more after the
+     fonts and pictures load — unless the visitor has started scrolling. */
+  const [search] = useSearchParams()
+  const target = (search.get('p') || '').trim()
   useEffect(() => {
-    if (!hash) return
-    const t = setTimeout(() => {
-      document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 300)
-    return () => clearTimeout(t)
-  }, [hash])
+    if (!target) return
+    let stop = false
+    let moved = false
+    const onMove = () => {
+      moved = true
+    }
+    window.addEventListener('wheel', onMove, { passive: true })
+    window.addEventListener('touchstart', onMove, { passive: true })
+    const go = (behavior: ScrollBehavior) => {
+      const el = document.querySelector<HTMLElement>('.psl-box[data-shared]')
+      if (el) el.scrollIntoView({ behavior, block: 'start' })
+      return !!el
+    }
+    let tries = 0
+    const find = () => {
+      if (stop) return
+      if (go('smooth') || ++tries > 40) return
+      window.setTimeout(find, 100)
+    }
+    const first = window.setTimeout(find, 300)
+    const settle = () => {
+      if (!stop && !moved) go('auto')
+    }
+    const late = window.setTimeout(settle, 1800)
+    const onLoad = () => window.setTimeout(settle, 200)
+    if (document.readyState !== 'complete') window.addEventListener('load', onLoad)
+    document.fonts?.ready.then(() => window.setTimeout(settle, 200))
+    return () => {
+      stop = true
+      window.clearTimeout(first)
+      window.clearTimeout(late)
+      window.removeEventListener('load', onLoad)
+      window.removeEventListener('wheel', onMove)
+      window.removeEventListener('touchstart', onMove)
+    }
+  }, [target])
 
   /* every kind in GROUPS, then any other kind found in the data */
   const kinds = [...GROUPS, ...Array.from(new Set(programs.map((p) => p.category))).filter((c) => !GROUPS.includes(c))]
@@ -376,7 +466,7 @@ export default function ProgramsPage() {
 
         <div className="psl-boxes">
           {kinds.map((k, i) => (
-            <Box key={k} id={sectionId(k, i)} name={k} family={i} items={programs.filter((p) => p.category === k)} />
+            <Box key={k} name={k} family={i} target={target} items={programs.filter((p) => p.category === k)} />
           ))}
         </div>
       </div>

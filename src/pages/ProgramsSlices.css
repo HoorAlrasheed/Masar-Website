@@ -116,7 +116,7 @@ body.psl-page header a[aria-label='مبادرة مسار'] {
 /* ---------- the box of slices ---------- */
 
 .psl-box {
-  /* opened from /programs#workshops: stop just under the fixed navbar */
+  /* opened from a shared link (/programs?p=…): stop just under the fixed navbar */
   scroll-margin-top: 110px;
 
   /* the closed slices share what is left after the cover and the open one */
@@ -619,4 +619,65 @@ body.psl-page header a[aria-label='مبادرة مسار'] {
   .psl-full {
     transition: none !important;
   }
+}
+
+/* ---------- the share button: a quiet little icon at the end of the
+   open slice's code line (PROGRAM_04 //), darker on hover ---------- */
+.psl-codeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 15px;
+}
+
+.psl-share {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin: -5px -5px -5px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--sl-soft);
+  opacity: 0.8;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.psl-share:hover,
+.psl-share:focus-visible,
+.psl-share[data-copied] {
+  opacity: 1;
+  color: var(--sl-ink);
+  background: color-mix(in srgb, var(--sl-ink) 10%, transparent);
+}
+
+.psl-share svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* "تم النسخ" appears beside it for a moment */
+.psl-copied {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 4px);
+  transform: translateY(-50%);
+  font-family: 'Cairo', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--sl-ink);
+  white-space: nowrap;
+  pointer-events: none;
 }
