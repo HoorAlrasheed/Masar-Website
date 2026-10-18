@@ -101,7 +101,7 @@ p{margin:0;text-wrap:pretty}
 .album{position:relative;height:clamp(262px,72vw,310px);margin:6px 0 4px;cursor:pointer;-webkit-tap-highlight-color:transparent;outline:none;user-select:none;-webkit-user-select:none}
 .pol{position:absolute;left:50%;top:18px;width:min(62vw,250px);margin:0 0 0 calc(min(62vw,250px)/-2);background:var(--paper);padding:9px 9px 40px;border-radius:4px;box-shadow:0 26px 50px rgba(0,0,0,.5),0 2px 0 rgba(255,255,255,.4) inset;will-change:transform}
 .pol img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;display:block;pointer-events:none;-webkit-user-drag:none}
-.pol .tape{position:absolute;top:-11px;left:50%;width:78px;height:22px;transform:translateX(-50%) rotate(-2deg);background:rgba(142,195,230,.55);backdrop-filter:blur(2px)}
+.pol .tape{position:absolute;top:-11px;left:50%;width:78px;height:22px;transform:translateX(-50%) rotate(-2deg);background:rgba(142,195,230,.6)}
 .pol figcaption{position:absolute;bottom:10px;right:12px;left:12px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .pol figcaption b{font-family:var(--display);font-weight:500;font-size:12.5px;color:var(--paper-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pol figcaption span{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--paper-mute);direction:ltr}
@@ -591,7 +591,9 @@ p{margin:0;text-wrap:pretty}
   var vts=$$('.vt');
   if(!window.gsap||reduce){fcs.forEach(function(c){c.classList.add('open')});vts.forEach(function(v){v.classList.add('on')});return;}
   gsap.registerPlugin(ScrollTrigger);
-  if(window.Lenis){var lenis=new Lenis({duration:1.15});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0);}
+  if(window.ScrollTrigger)ScrollTrigger.config({ignoreMobileResize:true});
+  var touchDev=matchMedia('(pointer:coarse)').matches||'ontouchstart' in window;
+  if(window.Lenis&&!touchDev){var lenis=new Lenis({duration:1.15});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0);}
   var E='expo.out';
 
   /* intro */
@@ -696,7 +698,7 @@ p{margin:0;text-wrap:pretty}
 
   /* ---------- three.js scene ---------- */
   var T=THREE,renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(3,devicePixelRatio||1));
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));
   if(T.sRGBEncoding)renderer.outputEncoding=T.sRGBEncoding;
   renderer.toneMapping=T.NoToneMapping;
   var scene=new T.Scene(),camera=new T.PerspectiveCamera(30,1,.1,100);camera.position.set(0,0,10);
@@ -749,7 +751,7 @@ p{margin:0;text-wrap:pretty}
   });
 
   /* ---------- physics (verlet rope + card pendulum + twist) ---------- */
-  var cardScale=1,V=T.Vector3,anchor=new V(),ropeLen=3,seg=ropeLen/N;
+  var asleep=false,still=0,cardScale=1,V=T.Vector3,anchor=new V(),ropeLen=3,seg=ropeLen/N;
   var P=[],Q=[];for(i=0;i<=N;i++){P.push(new V());Q.push(new V())}
   var C=new V(),Cp=new V(),dRC=0; // card centre (holder centre)
   var psi=0,psiV=0,grabbed=false,started=false,viewH=5.36,viewW=3;
@@ -770,7 +772,7 @@ p{margin:0;text-wrap:pretty}
     C.set(P[N].x+.03,P[N].y-dRC,0);Cp.copy(C);psi=reduce?0:-0.2;psiV=0;
   }
   layout();reset();
-  addEventListener('resize',function(){layout()});
+  addEventListener('resize',function(){var w=canvas.getBoundingClientRect().width;if(Math.abs(w-lastW)>1){lastW=w;layout();wake()}});var lastW=canvas.getBoundingClientRect().width;
 
   var G=-13,DT=1/120,acc=0,last=performance.now(),grabT=new V(),grabOff=new V(),relV=new V();
   function step(){
@@ -819,38 +821,46 @@ p{margin:0;text-wrap:pretty}
   var ray=new T.Raycaster(),ndc=new T.Vector2(),plane=new T.Plane(new V(0,0,1),0),hit=new V(),downAt=null,moved=0,lastPt=null,velX=0,velY=0,scrollY0=0,touchScroll=false;
   function toNDC(e){var r=canvas.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1)}
   function pick(e){toNDC(e);ray.setFromCamera(ndc,camera);return ray.intersectObjects([cardMesh,holder],false)[0]}
+  var pend=null;
+  function startGrab(e){grabbed=true;wake();try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+    toNDC(e);ray.setFromCamera(ndc,camera);plane.set(new V(0,0,1),-C.z);ray.ray.intersectPlane(plane,hit);grabOff.subVectors(C,hit);grabT.copy(C);canvas.style.cursor='grabbing'}
+  function flip(){wake();psiV+=(Math.cos(psi)>0?1:-1)*5.2}
   canvas.addEventListener('pointerdown',function(e){
-    var h=pick(e);downAt={x:e.clientX,y:e.clientY,t:performance.now()};moved=0;lastPt={x:e.clientX,y:e.clientY,t:performance.now()};velX=velY=0;
-    if(h){grabbed=true;canvas.setPointerCapture(e.pointerId);plane.set(new V(0,0,1),-C.z);ray.ray.intersectPlane(plane,hit);grabOff.subVectors(C,hit);grabT.copy(C);canvas.style.cursor='grabbing'}
+    var h=pick(e);if(!h)return;downAt={x:e.clientX,y:e.clientY,t:performance.now()};moved=0;lastPt={x:e.clientX,y:e.clientY,t:performance.now()};velX=velY=0;
+    if(e.pointerType==='mouse')startGrab(e);else pend={id:e.pointerId,x:e.clientX,y:e.clientY};
   });
   canvas.addEventListener('pointermove',function(e){
     var n=performance.now();
     if(lastPt){var dt=Math.max(1,n-lastPt.t);velX=velX*.6+((e.clientX-lastPt.x)/dt)*.4;velY=velY*.6+((e.clientY-lastPt.y)/dt)*.4;lastPt={x:e.clientX,y:e.clientY,t:n}}
     if(downAt)moved=Math.max(moved,Math.hypot(e.clientX-downAt.x,e.clientY-downAt.y));
+    if(pend&&!grabbed){var dx=Math.abs(e.clientX-pend.x),dy=Math.abs(e.clientY-pend.y);
+      if(dx>8&&dx>dy*1.1){pend=null;startGrab(e)}else if(dy>8){pend=null;downAt=null}}
     if(grabbed){toNDC(e);ray.setFromCamera(ndc,camera);if(ray.ray.intersectPlane(plane,hit)){grabT.copy(hit).add(grabOff);var mx=(ropeLen+dRC)*1.04,dv=new V().subVectors(grabT,anchor);if(dv.length()>mx)grabT.copy(anchor).add(dv.setLength(mx))}}
     else if(e.pointerType==='mouse'){canvas.style.cursor=pick(e)?'grab':'default'}
   });
   function up_(e){
     if(grabbed){grabbed=false;canvas.style.cursor='grab';
-      if(moved<6){psiV+=(Math.cos(psi)>0?1:-1)*5.2}
-      else{var k=viewH/canvas.getBoundingClientRect().height*1000*DT; // px/ms -> world per step
-        var vx=Math.max(-4,Math.min(4,velX)),vy=Math.max(-4,Math.min(4,velY));Cp.set(C.x-vx*k,C.y+vy*k,C.z);psiV+=vx*8}
-    }
-    touchScroll=false;downAt=null;lastPt=null;
+      if(moved<6){flip()}
+      else{var k=viewH/canvas.getBoundingClientRect().height*1000*DT;
+        var vx=Math.max(-4,Math.min(4,velX)),vy=Math.max(-4,Math.min(4,velY));Cp.set(C.x-vx*k,C.y+vy*k,C.z);psiV+=vx*8}}
+    else if(pend&&moved<8){flip()}
+    pend=null;downAt=null;lastPt=null;
   }
-  var touchOnCard=false;
-  canvas.addEventListener('touchstart',function(e){var t=e.touches[0];touchOnCard=!!pick({clientX:t.clientX,clientY:t.clientY});if(touchOnCard)e.preventDefault()},{passive:false});
-  canvas.addEventListener('touchmove',function(e){if(touchOnCard)e.preventDefault()},{passive:false});
-  canvas.addEventListener('touchend',function(){touchOnCard=false});
-  canvas.addEventListener('pointerup',up_);canvas.addEventListener('pointercancel',up_);
-  canvas.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();psiV+=(Math.cos(psi)>0?1:-1)*5.2}});
+  canvas.addEventListener('pointerup',up_);
+  canvas.addEventListener('pointercancel',function(){if(grabbed){grabbed=false;Cp.copy(C)}pend=null;downAt=null;lastPt=null});
+  canvas.addEventListener('touchmove',function(e){if(grabbed&&e.cancelable)e.preventDefault()},{passive:false});
+  canvas.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
 
-  window.__lan={dbg:function(){return [performance.now()|0,+anchor.y.toFixed(2),+C.x.toFixed(2),+C.y.toFixed(2),+P[N].x.toFixed(2),+P[N].y.toFixed(2),+psi.toFixed(2),+viewH.toFixed(2)]},get psi(){return psi},kick:function(v){psiV+=v},push:function(x){Cp.x-=x}};
+  window.__lan={dbg:function(){return [performance.now()|0,+anchor.y.toFixed(2),+C.x.toFixed(2),+C.y.toFixed(2),+P[N].x.toFixed(2),+P[N].y.toFixed(2),+psi.toFixed(2),+viewH.toFixed(2)]},get psi(){return psi},kick:function(v){wake();psiV+=v},push:function(x){Cp.x-=x}};
   /* ---------- loop ---------- */
   var visible=true;
+  function wake(){if(asleep){asleep=false;still=0;acc=0;last=performance.now()}}
   if('IntersectionObserver' in window)new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)last=performance.now()}).observe(canvas);
   (function loop(now){
-    if(visible){var dt=Math.min(.05,(now-last)/1000);last=now;acc+=dt;var n=0;while(acc>=DT&&n<12){step();acc-=DT;n++}draw()}
+    var dt=Math.min(.05,(now-last)/1000);last=now;
+    if(visible&&!asleep){acc+=dt;var n=0;while(acc>=DT&&n<12){step();acc-=DT;n++}draw();
+      var mv=Math.abs(C.x-Cp.x)+Math.abs(C.y-Cp.y)+Math.abs(C.z-Cp.z)+Math.abs(psiV)*.002;
+      if(!grabbed&&simT>.35+dropDur+.5&&mv<2e-5){if(++still>60)asleep=true}else still=0}
     requestAnimationFrame(loop)})(performance.now());
 })();
 
