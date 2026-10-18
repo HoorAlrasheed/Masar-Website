@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 
 import { SHEETS, sendToSheet } from '../data/sheet'
 import { DEPARTMENTS, DIRECT_COMMITTEES } from '../data/team'
+import { programs } from '../data'
 
 import PageHead from '../components/PageHead'
 
@@ -201,12 +202,24 @@ function CheckedInput({
 
 /* the details every form asks for; a student is asked for the university,
    anyone else for what they do instead */
-function AboutYou({ linkedin = false }: { linkedin?: boolean }) {
+function AboutYou({
+  linkedin = false,
+  statuses,
+  emailNote,
+  nameLabel = 'الاسم',
+}: {
+  nameLabel?: string
+  linkedin?: boolean
+  /* a programme can ask «الحالة الدراسية» with its own choices instead of
+     «هل أنت طالب؟» — then everyone is asked the university and the major */
+  statuses?: string[]
+  emailNote?: string
+}) {
   const [status, setStatus] = useState('')
   return (
     <Section num="01" title="بياناتك">
       <div className="rqf-fields">
-        <Field label="الاسم" required>
+        <Field label={nameLabel} required>
           <input required name="الاسم" type="text" placeholder="الاسم الكامل" autoComplete="name" />
         </Field>
         <Field label="رقم الهوية الوطنية" required>
@@ -236,6 +249,7 @@ function AboutYou({ linkedin = false }: { linkedin?: boolean }) {
             check={checkEmail}
             suggest={suggestEmail}
           />
+          {emailNote ? <small className="rqf-hint">{emailNote}</small> : null}
         </Field>
         <Field label="رقم الجوال" required>
           <CheckedInput
@@ -272,39 +286,177 @@ function AboutYou({ linkedin = false }: { linkedin?: boolean }) {
             />
           </Field>
         ) : null}
-        <div className="rqf-field">
-          <span>
-            هل أنت طالب؟ <b>*</b>
-          </span>
-          <div className="rqf-chips" role="radiogroup">
-            {STATUSES.map((t) => (
-              <label key={t} className="rqf-chip" data-on={status === t || undefined}>
-                <input type="radio" name="الصفة" value={t} required checked={status === t} onChange={() => setStatus(t)} />
-                <span className="rqf-chip-mark">{Icon.check}</span>
-                {t}
-              </label>
-            ))}
-          </div>
-        </div>
-        {status === 'طالب' ? (
+        {statuses ? (
           <>
-            <Field label="اسم الجامعة" required>
-              <input required name="الجامعة" type="text" placeholder="الجامعة التي تدرس فيها" />
-            </Field>
-            <Field label="الرقم الجامعي" required>
-              <input required name="الرقم الجامعي" type="text" placeholder="رقمك الجامعي" dir="ltr" inputMode="numeric" />
+            <div className="rqf-field">
+              <span>
+                الحالة الدراسية <b>*</b>
+              </span>
+              <div className="rqf-chips" role="radiogroup">
+                {statuses.map((t) => (
+                  <label key={t} className="rqf-chip" data-on={status === t || undefined}>
+                    <input type="radio" name="الحالة الدراسية" value={t} required checked={status === t} onChange={() => setStatus(t)} />
+                    <span className="rqf-chip-mark">{Icon.check}</span>
+                    {t}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <Field label="الجامعة" required>
+              <input required name="الجامعة" type="text" placeholder="الجامعة التي تدرس أو تخرّجت فيها" />
             </Field>
             <Field label="التخصص" required>
               <input required name="التخصص" type="text" placeholder="تخصصك الدراسي" />
             </Field>
           </>
-        ) : status ? (
-          <Field label="حدّد صفتك" required>
-            <input required name="الصفة الأخرى" type="text" placeholder="مثال: خريج، موظف..." />
-          </Field>
-        ) : null}
+        ) : (
+          <>
+          <div className="rqf-field">
+            <span>
+              هل أنت طالب؟ <b>*</b>
+            </span>
+            <div className="rqf-chips" role="radiogroup">
+              {STATUSES.map((t) => (
+                <label key={t} className="rqf-chip" data-on={status === t || undefined}>
+                  <input type="radio" name="الصفة" value={t} required checked={status === t} onChange={() => setStatus(t)} />
+                  <span className="rqf-chip-mark">{Icon.check}</span>
+                  {t}
+                </label>
+              ))}
+            </div>
+          </div>
+          {status === 'طالب' ? (
+            <>
+              <Field label="اسم الجامعة" required>
+                <input required name="الجامعة" type="text" placeholder="الجامعة التي تدرس فيها" />
+              </Field>
+              <Field label="الرقم الجامعي" required>
+                <input required name="الرقم الجامعي" type="text" placeholder="رقمك الجامعي" dir="ltr" inputMode="numeric" />
+              </Field>
+              <Field label="التخصص" required>
+                <input required name="التخصص" type="text" placeholder="تخصصك الدراسي" />
+              </Field>
+            </>
+          ) : status ? (
+            <Field label="حدّد صفتك" required>
+              <input required name="الصفة الأخرى" type="text" placeholder="مثال: خريج، موظف..." />
+            </Field>
+          ) : null}
+          </>
+        )}
       </div>
     </Section>
+  )
+}
+
+/* ---------- «من فكرة إلى نموذج أولي»: its own questions ---------- */
+
+const AI_STATUSES = ['طالب', 'على مشارف التخرج', 'خريج']
+const AI_LEVELS = ['لا أملك خبرة برمجية', 'لديّ أساسيات', 'نفّذت مشاريع سابقة']
+const AI_TOOLS = ['Claude', 'ChatGPT / Codex', 'Gemini', 'Cursor', 'أخرى', 'لا يوجد']
+const YES_NO = ['نعم', 'لا']
+
+function Chips({ name, options, value, onChange }: { name: string; options: string[]; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="rqf-chips" role="radiogroup">
+      {options.map((t) => (
+        <label key={t} className="rqf-chip" data-on={value === t || undefined}>
+          <input type="radio" name={name} value={t} required checked={value === t} onChange={() => onChange(t)} />
+          <span className="rqf-chip-mark">{Icon.check}</span>
+          {t}
+        </label>
+      ))}
+    </div>
+  )
+}
+
+function AiPrototype({ commitment }: { commitment: string }) {
+  const [level, setLevel] = useState('')
+  const [laptop, setLaptop] = useState('')
+  const [idea, setIdea] = useState('')
+  const [tools, setTools] = useState<string[]>([])
+  const first = useRef<HTMLInputElement>(null)
+
+  /* «لا يوجد» clears the others, and picking a tool clears «لا يوجد» */
+  const toggle = (t: string) =>
+    setTools((cur) => {
+      if (cur.includes(t)) return cur.filter((x) => x !== t)
+      if (t === 'لا يوجد') return [t]
+      return [...cur.filter((x) => x !== 'لا يوجد'), t]
+    })
+
+  useEffect(() => {
+    first.current?.setCustomValidity(tools.length ? '' : 'اختر خيارًا واحدًا على الأقل')
+  }, [tools])
+
+  return (
+    <>
+      <Section num="02" title="خلفيتك التقنية">
+        <div className="rqf-fields">
+          <div className="rqf-field">
+            <span>
+              مستوى خبرتك التقنية <b>*</b>
+            </span>
+            <Chips name="مستوى الخبرة" options={AI_LEVELS} value={level} onChange={setLevel} />
+          </div>
+          <Field label="حدّثنا عن خبرتك التقنية">
+            <textarea name="الخبرة التقنية" rows={3} placeholder="مثال: اللغات أو الأدوات التي استخدمتها، أو مشاريع نفّذتها..." />
+          </Field>
+          <div className="rqf-field">
+            <span>
+              هل تستطيع إحضار جهاز لابتوب خلال البرنامج؟ <b>*</b>
+            </span>
+            <Chips name="إحضار لابتوب" options={YES_NO} value={laptop} onChange={setLaptop} />
+          </div>
+          <div className="rqf-field">
+            <span>
+              أدوات الذكاء الاصطناعي المشترك فيها <b>*</b>
+            </span>
+            <small className="rqf-hint">يمكنك اختيار أكثر من أداة</small>
+            <div className="rqf-chips">
+              {AI_TOOLS.map((t, i) => (
+                <label key={t} className="rqf-chip" data-on={tools.includes(t) || undefined}>
+                  <input ref={i === 0 ? first : undefined} type="checkbox" checked={tools.includes(t)} onChange={() => toggle(t)} />
+                  <span className="rqf-chip-mark">{Icon.check}</span>
+                  {t}
+                </label>
+              ))}
+            </div>
+            <input type="hidden" name="اشتراكات الذكاء الاصطناعي" value={tools.join('، ')} />
+          </div>
+        </div>
+      </Section>
+
+      <Section num="03" title="فكرتك">
+        <div className="rqf-fields">
+          <div className="rqf-field">
+            <span>
+              هل لديك فكرة أو مشروع تودّ العمل عليه في البرنامج؟ <b>*</b>
+            </span>
+            <Chips name="لديه فكرة" options={YES_NO} value={idea} onChange={setIdea} />
+          </div>
+          {idea === 'نعم' ? (
+            <Field label="صِف الفكرة أو المشكلة باختصار" required>
+              <textarea required name="وصف الفكرة" rows={3} placeholder="ما المشكلة التي تريد حلّها، ولمن؟" />
+            </Field>
+          ) : null}
+        </div>
+      </Section>
+
+      <Section num="04" title="الإقرار">
+        <label className="rqf-agree">
+          <input
+            type="checkbox"
+            required
+            name="الإقرار"
+            value="أقرّ بالالتزام بحضور البرنامج كاملًا"
+            onInvalid={(e) => e.currentTarget.setCustomValidity('يلزم الإقرار للتسجيل')}
+            onChange={(e) => e.currentTarget.setCustomValidity('')}
+          />
+          <span>{commitment}</span>
+        </label>
+      </Section>
+    </>
   )
 }
 
@@ -368,6 +520,9 @@ export default function JoinPage() {
   /* "سجّل الآن" on a programme sends its title (and the partner, if the
      visitor came through one) — the form then registers for it */
   const program = (params.get('program') || '').trim()
+  /* a programme with its own questions, looked up by its title */
+  const programData = programs.find((p) => p.title === program)
+  const aiForm = programData?.form === 'ai-prototype' ? programData : null
   const ref = (params.get('ref') || '').trim()
   const [sent, setSent] = useState<Tab | null>(null)
   const [sending, setSending] = useState(false)
@@ -481,7 +636,13 @@ export default function JoinPage() {
               </p>
               )}
 
-              <AboutYou linkedin={isApply && !program} />
+              {aiForm ? (
+                <AboutYou nameLabel="الاسم الثلاثي" statuses={AI_STATUSES} emailNote="يُرجى إدخال بريد تتابعه باستمرار، فجميع التواصل سيكون عبره." />
+              ) : (
+                <AboutYou linkedin={isApply && !program} />
+              )}
+
+              {aiForm ? <AiPrototype commitment={aiForm.commitment || 'أُقرّ بالتزامي بحضور البرنامج كاملًا.'} /> : null}
 
               {program ? null : isApply ? (
                 <Section num="02" title="عن انضمامك">

@@ -17,8 +17,12 @@ import JoinPage from './pages/JoinPage'
 import ContactPage from './pages/ContactPage'
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  const { pathname, hash } = useLocation()
+  /* a link to a spot on a page (/programs#sab) is scrolled by that page itself */
+  useEffect(() => {
+    if (!hash) window.scrollTo(0, 0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
   return null
 }
 

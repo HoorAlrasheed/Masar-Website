@@ -185,3 +185,32 @@
   text-underline-offset: 3px;
   cursor: pointer;
 }
+
+/* ---------- small grey hint under a question ---------- */
+.rqf-hint {
+  margin-top: -2px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(245, 247, 248, 0.55);
+}
+
+/* ---------- the commitment checkbox ---------- */
+.rqf-agree {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(245, 247, 248, 0.86);
+}
+.rqf-agree input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  accent-color: var(--sky, #9fd8f5);
+  cursor: pointer;
+}

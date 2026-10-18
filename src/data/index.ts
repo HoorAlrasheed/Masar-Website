@@ -15,6 +15,15 @@ export type Program = {
   topics: string[]
   description: string
   image: string
+  /* a programme with its own registration questions (see JoinPage) */
+  form?: 'ai-prototype'
+  /* which part of the image stays in view: 'center 70%' shows more of its
+     lower half (moves the picture up), 'center 30%' more of its top */
+  imageFocus?: string
+  /* the commitment the registrant agrees to, if the programme asks for one */
+  commitment?: string
+  /* the short English name in its share link: masar-initiative.com/programs#idea-to-prototype */
+  slug?: string
 }
 
 /* =================================================================
@@ -41,7 +50,37 @@ export type Program = {
     image: '',                 // '/programs/اسم-الصورة.jpg' — إذا تُركت فاضية تظهر الرسمة
   },
    ================================================================= */
-export const programs: Program[] = []
+export const programs: Program[] = [
+  {
+    id: 1,
+    slug: 'idea-to-prototype',
+    title: 'ورشة عمل: من فكرة إلى نموذج أولي',
+    status: 'open',
+    category: 'ورش العمل',
+    date: '٢١ – ٢٢ أكتوبر ٢٠٢٦',
+    time: '٦:٠٠ م – ٩:٠٠ م',
+    location: 'مقر شركة زد — الرياض',
+    mapUrl: 'https://maps.app.goo.gl/hM9nWbv8bCFuEpkdA',
+    targetAudience: 'الطلاب والطالبات',
+    speaker: 'م. عبدالرحمن الناشري',
+    topics: [
+      'كيف يفكّر الذكاء الاصطناعي، وكيف نستفيد منه على الوجه الصحيح',
+      'اختيار مشكلة حقيقية',
+      'توليد الأفكار وتحليل المشكلة بالذكاء الاصطناعي',
+      'كتابة Prompts احترافية',
+      'تحويل الفكرة إلى تصوّر لحل',
+      'أدوات الذكاء الاصطناعي في التصميم والبرمجة',
+      'بناء نموذج أولي (Prototype) بأدوات الذكاء الاصطناعي',
+      'عرض الحل',
+    ],
+    description:
+      'برنامج من ورشتين على مدى يومين بالتعاون مع شركة زد: في اليوم الأول تتعلّم كيف تفكّر مع الذكاء الاصطناعي لتحويل فكرتك إلى تصوّر لحل تقني، وفي اليوم الثاني تبني بنفسك نموذجًا أوليًا قابلًا للتجربة والعرض.',
+    image: '/programs/zid-poster.jpg',
+    imageFocus: 'center center',
+    form: 'ai-prototype',
+    commitment: 'أُقرّ بالتزامي بحضور البرنامج كاملًا يومَي ٢١ و٢٢ أكتوبر، من الساعة ٦ إلى ٩ مساءً، في مقر شركة زد.',
+  },
+]
 
 export const news = [
   {

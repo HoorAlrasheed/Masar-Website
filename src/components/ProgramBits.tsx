@@ -36,11 +36,14 @@ export function ProgramArt({
   category,
   status,
   image,
+  focus,
   className = '',
 }: {
   category: string
   status: ProgramStatus
   image?: string
+  /* which part of the photo stays in view, e.g. 'center 70%' */
+  focus?: string
   className?: string
 }) {
   /* if the photo's path is wrong or the file is missing, fall back to the
@@ -52,7 +55,7 @@ export function ProgramArt({
     <div className={`prg-art ${className}`} data-art={photo ? 'photo' : (TYPE_ART[category] ?? 'talk')} aria-hidden="true">
       {photo ? (
         <>
-          <img className="prg-art-img" src={photo} alt="" loading="lazy" decoding="async" onError={() => setBroken(photo)} />
+          <img className="prg-art-img" src={photo} alt="" loading="lazy" decoding="async" style={focus ? { objectPosition: focus } : undefined} onError={() => setBroken(photo)} />
           <span className="prg-art-tint" />
         </>
       ) : (

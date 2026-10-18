@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigationType, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 import { programs, type Program } from '../data'
@@ -309,7 +309,7 @@ function Box({ id, name, items, family, target }: { id: string; name: string; it
           /* the place is shown under it, so the title drops "في مساحة …" */
           const title = n.place ? n.title.replace(` في ${n.place}`, '').trim() : n.title
           return (
-            <article key={`past-${n.id}`} className="psl-slice" data-on={on ? '' : undefined} style={style} onClick={() => setOpen(i)}>
+            <article key={`past-${n.id}`} className="psl-slice" data-slug={sliceSlug(p)} data-on={on ? '' : undefined} style={style} onClick={() => setOpen(i)}>
               <span className="psl-tab" aria-hidden="true">
                 {no} //
               </span>
@@ -349,7 +349,7 @@ function Box({ id, name, items, family, target }: { id: string; name: string; it
         const pr = p.program
         const t = splitTitle(pr.title, pr.category)
         return (
-          <article key={pr.id} className="psl-slice" data-on={on ? '' : undefined} style={style} onClick={() => setOpen(i)}>
+          <article key={pr.id} className="psl-slice" data-slug={sliceSlug(p)} data-on={on ? '' : undefined} style={style} onClick={() => setOpen(i)}>
             <span className="psl-tab" aria-hidden="true">
               {no} //
             </span>
@@ -375,7 +375,7 @@ function Box({ id, name, items, family, target }: { id: string; name: string; it
                 </Link>
               </h3>
               <Link to={`/programs/${pr.id}`} className="psl-art-link" tabIndex={-1} aria-hidden="true">
-                <ProgramArt category={pr.category} status={pr.status} image={pr.image} className="psl-art" />
+                <ProgramArt category={pr.category} status={pr.status} image={pr.image} focus={pr.imageFocus} className="psl-art" />
               </Link>
               <Facts date={pr.date} place={pr.location} mapUrl={pr.mapUrl} status={pr.status} on={on} details={`/programs/${pr.id}`} join={joinLink(pr.title, ref)} />
             </div>
@@ -389,6 +389,12 @@ function Box({ id, name, items, family, target }: { id: string; name: string; it
 
 /* ---------- the page ---------- */
 
+function rememberSlice(e: MouseEvent) {
+  const a = (e.target as HTMLElement).closest('a[href^="/programs/"]')
+  const slug = a?.closest<HTMLElement>('.psl-slice')?.dataset.slug
+  if (slug) window.history.replaceState(window.history.state, '', `/programs#${slug}`)
+}
+
 export default function ProgramsPage() {
   const root = useRef<HTMLElement>(null)
 
@@ -398,6 +404,9 @@ export default function ProgramsPage() {
      fonts and pictures load — unless the visitor has started scrolling. */
   const [search] = useSearchParams()
   const { hash } = useLocation()
+  /* coming back (the browser's back button): jump straight to it; from a
+     shared link: glide down to it */
+  const back = useNavigationType() === 'POP'
   const target = (decodeURIComponent(hash.slice(1)) || search.get('p') || '').trim()
   useEffect(() => {
     if (!target) return
@@ -416,7 +425,7 @@ export default function ProgramsPage() {
     let tries = 0
     const find = () => {
       if (stop) return
-      if (go('smooth') || ++tries > 40) return
+      if (go(back ? 'auto' : 'smooth') || ++tries > 40) return
       window.setTimeout(find, 100)
     }
     const first = window.setTimeout(find, 300)
@@ -485,7 +494,10 @@ export default function ProgramsPage() {
           <p className="psl-sub">اضغط على أي شريحة لتفتحها</p>
         </div>
 
-        <div className="psl-boxes">
+        {/* opening a programme's page from its slice first writes that slice
+            into this page's link (/programs#sab), so the back button — or
+            «كل البرامج» on that page — returns right to it, still open */}
+        <div className="psl-boxes" onClickCapture={rememberSlice}>
           {kinds.map((k, i) => (
             <Box key={k} id={boxId(k, i)} name={k} family={i} target={target} items={programs.filter((p) => p.category === k)} />
           ))}

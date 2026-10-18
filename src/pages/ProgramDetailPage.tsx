@@ -63,6 +63,8 @@ type Sheet = {
   rows: { label: string; value: string; map?: string }[]
   topics: string[]
   share: string
+  /* its slice on /programs, so «كل البرامج» returns right to it */
+  slug: string
 }
 
 function sheetOf(id = ''): Sheet | undefined {
@@ -84,6 +86,7 @@ function sheetOf(id = ''): Sheet | undefined {
       ],
       topics: n.highlights ?? [],
       share: n.title,
+      slug: n.slug || `e${n.id}`,
     }
   }
   const p = programs.find((x) => String(x.id) === id)
@@ -104,6 +107,7 @@ function sheetOf(id = ''): Sheet | undefined {
     ].filter((r) => r.value),
     topics: p.topics,
     share: p.title,
+    slug: p.slug || String(p.id),
   }
 }
 
@@ -166,7 +170,7 @@ export default function ProgramDetailPage() {
   return (
     <main className="pgt" ref={root}>
       <div className="pgt-wrap">
-        <Link to="/programs" className="pgt-back">
+        <Link to={`/programs#${program.slug}`} className="pgt-back">
           {svg(<path d="M9 6l6 6-6 6" />)}
           كل البرامج
         </Link>
