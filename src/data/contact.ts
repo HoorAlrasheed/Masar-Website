@@ -3,7 +3,7 @@
    (one place to edit a handle or the email).
    ================================================================= */
 
-export const OFFICIAL_EMAIL = 'masar@iu.edu.sa'
+export const OFFICIAL_EMAIL = 'rbcclubrealition@gmail.com'
 
 export type SocialKey = 'instagram' | 'x' | 'linkedin'
 
