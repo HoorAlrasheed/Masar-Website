@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactElement } from 'react'
+import { Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactElement } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useSearchParams } from 'react-router-dom'
 import { gsap } from 'gsap'
@@ -167,25 +167,17 @@ function Chart({ open }: { open: (o: Opened) => void }) {
               <span className="tm-duo-link" aria-hidden="true" />
               <PersonNode big person={L.president} title={L.president.role || 'رئيس المبادرة'} onOpen={top(L.president, 'رئيس المبادرة')} />
             </div>
+            {ADVISORS.map((a) => (
+              <Fragment key={a.name}>
+                <i />
+                <PersonNode big person={a} title={a.role || 'مستشار المبادرة'} onOpen={top(a, 'مستشار المبادرة')} />
+              </Fragment>
+            ))}
           </div>
           <ul>{branches}</ul>
         </li>
       </ul>
 
-      {ADVISORS.length > 0 && (
-        <div className="tm-advisors">
-          <span className="tm-advisors-label">
-            <i />
-            مستشارو المبادرة
-            <i />
-          </span>
-          <div className="tm-advisors-row">
-            {ADVISORS.map((a) => (
-              <PersonNode big key={a.name} person={a} title={a.role || 'مستشار المبادرة'} onOpen={top(a, 'مستشار المبادرة')} />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

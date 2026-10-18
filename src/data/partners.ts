@@ -19,6 +19,7 @@
 
 import ncfbLogo from '../imports/partner-logo-1.png'
 import t2Logo from '../imports/partner-logo-2.png'
+import zidLogo from '../imports/partner-logo-zid.png'
 
 export type PartnerCategory = 'شريك استراتيجي' | 'شريك إعلامي' | 'شريك ضيافة' | 'شريك مساحة'
 
@@ -39,4 +40,5 @@ export const PARTNERS: Partner[] = [
 
 export const SPONSORS: Sponsor[] = [
   { name: 'المركز الوطني للمنشآت العائلية', logo: ncfbLogo },
+  { name: 'شركة زد', logo: zidLogo },
 ]

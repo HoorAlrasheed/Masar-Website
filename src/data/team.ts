@@ -39,9 +39,8 @@ export const LEADERSHIP = {
   deputy: { name: 'حور ياسر الرشيد', role: 'نائبة رئيس المبادرة', linkedin: 'https://www.linkedin.com/in/hoor-alrasheed-676b27331', image: '' },
 }
 
-/* ---------- مستشارو المبادرة (shown at the bottom of the chart) ---------- */
+/* ---------- مستشار المبادرة (shown under the president and deputy) ---------- */
 export const ADVISORS: Person[] = [
-  { name: 'هيا شافي ال شافي', role: 'مستشارة المبادرة', linkedin: '', image: '' },
   { name: 'فيصل علي الحماد', role: 'مستشار المبادرة', linkedin: '', image: '' },
 ]
 
