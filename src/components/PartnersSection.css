@@ -172,9 +172,8 @@
   margin-inline-end: clamp(10px, 1.3vw, 18px);
 }
 
-/* A single, calm visual treatment for every logo regardless of its
-   original colors — desaturated and dimmed to sit quietly on the dark
-   surface, instead of turning the row into a colorful, busy strip. */
+/* Every logo keeps its own original brand colors — shown exactly as
+   the partner designed it, no grey filter. */
 .prt-logo {
   /* ~3x bigger again — the previous size still read as small/unclear.
      A "premium logo wall" reads the marks clearly at a glance, not as
@@ -184,13 +183,15 @@
   max-width: clamp(280px, 34vw, 480px);
   object-fit: contain;
 
-  filter: grayscale(1) brightness(1.8) contrast(0.85) opacity(0.6);
-  transition: filter 0.4s ease;
+  opacity: 0.92;
+  border-radius: 6px;
+  transition: opacity 0.4s ease, transform 0.4s ease;
   user-select: none;
 }
 
 .prt-logo:hover {
-  filter: grayscale(1) brightness(1.8) contrast(0.85) opacity(0.95);
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 .prt-soon {
