@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../imports/photo_5778249941649133394_x.png'
+import { programs } from '../data'
 
 import './Navbar.css'
 
@@ -54,7 +55,12 @@ export default function Navbar() {
   /* the partnership / sponsorship request pages always lead back to "الشركاء والرعاة", on the same tab */
   const toPartners = path === '/partners/partnership-request' || path === '/partners/sponsorship-request'
   const came = location.state as { from?: string; label?: string } | null
-  const back = path === '/join' ? came : toPartners ? (came?.from ? came : { from: path.endsWith('sponsorship-request') ? '/partners?tab=sponsors' : '/partners', label: 'الشركاء والرعاة' }) : null
+  /* a programme's registration opened straight from a link or QR (nothing of ours behind it):
+     the way back still leads to that programme on /programs */
+  const regFor = path === '/join' ? (new URLSearchParams(location.search).get('program') || '').trim() : ''
+  const regSlug = regFor ? programs.find((p) => p.title === regFor)?.slug : undefined
+  const regBack = regFor ? { from: regSlug ? `/programs#${regSlug}` : '/programs', label: 'البرامج' } : null
+  const back = path === '/join' ? (came?.from ? came : regBack) : toPartners ? (came?.from ? came : { from: path.endsWith('sponsorship-request') ? '/partners?tab=sponsors' : '/partners', label: 'الشركاء والرعاة' }) : null
   const hideLogo = NO_LOGO.includes(location.pathname.replace(/\/+$/, '')) || location.pathname.startsWith('/news/')
 
   // mobile menu: lock the page behind it and close on Escape

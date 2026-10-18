@@ -199,7 +199,7 @@ function Facts({
           التفاصيل
         </Link>
         {status === 'open' ? (
-          <Link to={join} className="psl-btn" tabIndex={on ? 0 : -1}>
+          <Link to={join} state={{ from: '/programs', label: 'البرامج' }} className="psl-btn" tabIndex={on ? 0 : -1}>
             {ACTION.open}
           </Link>
         ) : (

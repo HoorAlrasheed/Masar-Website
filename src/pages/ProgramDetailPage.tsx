@@ -243,7 +243,7 @@ export default function ProgramDetailPage() {
         {/* under the machine: register, and share */}
         <div className="pgt-foot">
           {program.status === 'open' ? (
-            <Link to={joinLink(program.share, ref)} className="pgt-register">
+            <Link to={joinLink(program.share, ref)} state={{ from: window.location.pathname, label: 'التفاصيل' }} className="pgt-register">
               <span>{STATE.open.button}</span>
               {SHARE.arrow}
             </Link>
