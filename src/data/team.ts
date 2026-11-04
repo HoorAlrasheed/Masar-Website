@@ -127,7 +127,6 @@ export const DEPARTMENTS: Department[] = [
           { name: 'ندى خالد الكريداء', linkedin: 'https://www.linkedin.com/in/%D9%86%D8%AF%D9%89-%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D8%AF%D8%A7%D8%A1-037028387', image: '' },
           { name: 'سديم وليد الشقاري', linkedin: '', image: '' },
           { name: 'فواز فرحان العنزي', linkedin: '', image: '' },
-          { name: 'بدرى سعود العتيبي', linkedin: 'https://www.linkedin.com/in/badra-al-atabi-2339b6387', image: '' },
         ],
       },
     ],

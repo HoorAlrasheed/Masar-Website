@@ -89,6 +89,7 @@ export const MONTHS: FeaturedMonth[] = [
       ],
       pr: [
         { name: 'جود عبدالعزيز البراك', committee: 'قائدة لجنة الشراكات', leader: true, linkedin: 'https://www.linkedin.com/in/joudaz', image: '' },
+        { name: 'غاده سيف القحطاني', committee: 'نائبة قائدة لجنة الشراكات', leader: true, linkedin: 'https://www.linkedin.com/in/ghada-alqahtani-3a2b773a8', image: '' },
         { name: 'همس عادل العنزي', committee: 'لجنة الشراكات', linkedin: 'https://www.linkedin.com/in/hams-alanzi-152173390', image: '' },
         { name: 'عبدالعزيز خالد العتيبي', committee: 'لجنة الشراكات', linkedin: '', image: '' },
         { name: 'لطيفة عبدالسلام الحصين', committee: 'لجنة الشراكات', linkedin: 'https://www.linkedin.com/in/latifah-alhusayn-170449425', image: '' },
