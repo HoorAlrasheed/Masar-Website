@@ -57,11 +57,77 @@ export const FEATURED_DEPARTMENTS: { id: DepartmentId; name: string; short: stri
   { id: 'pr', name: 'إدارة العلاقات العامة', short: 'العلاقات العامة', color: '#9fd8f5' },
   { id: 'media', name: 'إدارة الإعلام', short: 'الإعلام', color: '#9fd8f5' },
   { id: 'planning', name: 'إدارة التخطيط والتنظيم', short: 'التخطيط والتنظيم', color: '#9fd8f5' },
-  { id: 'tech', name: 'لجنة المنصات والحلول التقنية', short: 'التقنية', color: '#9fd8f5' },
+  { id: 'tech', name: 'إدارة التقنية', short: 'التقنية', color: '#9fd8f5' },
 ]
 
 /* newest month first */
 export const MONTHS: FeaturedMonth[] = [
+  {
+    id: '2026-10',
+    label: 'أكتوبر ٢٠٢٦',
+    honours: {
+      departments: ['tech', 'planning', 'pr'],
+      committees: [
+        { name: 'لجنة التغطيات والمونتاج', dept: 'media' },
+        { name: 'لجنة التسويق وكتابة المحتوى', dept: 'media' },
+        { name: 'لجنة الاستقطاب', dept: 'hr' },
+        { name: 'لجنة الشراكات', dept: 'pr' },
+        { name: 'لجنة التنظيم', dept: 'planning' },
+        { name: 'لجنة المنصات والحلول التقنية', dept: 'tech' },
+      ],
+    },
+    people: {
+      hr: [
+        { name: 'رهف ملهي العريفي', committee: 'قائدة إدارة الموارد البشرية', leader: true, linkedin: 'https://www.linkedin.com/in/rahaf-alarifi-187712402', image: '' },
+        { name: 'دينا عبدالرحمن المطيري', committee: 'قائدة لجنة الاستقطاب', leader: true, linkedin: '', image: '' },
+        { name: 'الجوري ثامر بن طلحه', committee: 'لجنة الاستقطاب', linkedin: '', image: '' },
+        { name: 'زهراء امير الشخص', committee: 'لجنة الاستقطاب', linkedin: '', image: '' },
+        { name: 'رغد فهد بن سدره', committee: 'لجنة الاستقطاب', linkedin: 'https://www.linkedin.com/in/%D8%B1%D8%BA%D8%AF-%D8%A8%D9%86-%D8%B3%D8%AF%D8%B1%D9%87-2a5a98266', image: '' },
+        { name: 'نوره ماجد السحيباني', committee: 'لجنة الاستقطاب', linkedin: '', image: '' },
+        { name: 'فرح مسفر العتيبي', committee: 'لجنة المتابعة', linkedin: 'https://www.linkedin.com/in/%D9%81%D8%B1%D8%AD-%D8%A7%D9%84%D8%B9%D8%AA%D9%8A%D8%A8%D9%8A-2a8364384', image: '' },
+        { name: 'رؤى عادل الغامدي', committee: 'لجنة المتابعة', linkedin: 'https://www.linkedin.com/in/%D8%B1%D8%A4%D9%89-%D8%A7%D9%84%D8%BA%D8%A7%D9%85%D8%AF%D9%8A-77a423440', image: '' },
+      ],
+      pr: [
+        { name: 'جود عبدالعزيز البراك', committee: 'قائدة لجنة الشراكات', leader: true, linkedin: 'https://www.linkedin.com/in/joudaz', image: '' },
+        { name: 'همس عادل العنزي', committee: 'لجنة الشراكات', linkedin: 'https://www.linkedin.com/in/hams-alanzi-152173390', image: '' },
+        { name: 'عبدالعزيز خالد العتيبي', committee: 'لجنة الشراكات', linkedin: '', image: '' },
+        { name: 'لطيفة عبدالسلام الحصين', committee: 'لجنة الشراكات', linkedin: 'https://www.linkedin.com/in/latifah-alhusayn-170449425', image: '' },
+        { name: 'جنان عبدالعزيز البراك', committee: 'لجنة الشراكات', linkedin: '', image: '' },
+        { name: 'عزام سعد الصليب', committee: 'لجنة الشراكات', linkedin: '', image: '' },
+        { name: 'لطيفة عبدالعزيز العروان', committee: 'لجنة الشراكات', linkedin: 'https://www.linkedin.com/in/latifa-alarwan', image: '' },
+      ],
+      media: [
+        { name: 'لجين عبدالله العريفي', committee: 'قائدة لجنة التغطيات والمونتاج', leader: true, linkedin: 'https://www.linkedin.com/in/lujain-alarifi-8983a531b', image: '' },
+        { name: 'ليان مصلح العتيبي', committee: 'لجنة التغطيات والمونتاج', linkedin: 'https://www.linkedin.com/in/layan-al-otaibi-b7522734a', image: '' },
+        { name: 'علي حسين الحرز', committee: 'لجنة التغطيات والمونتاج', linkedin: '', image: '' },
+        { name: 'سارا فهد المطيري', committee: 'لجنة التغطيات والمونتاج', linkedin: '', image: '' },
+        { name: 'نوره عبدالله العيبان', committee: 'لجنة التغطيات والمونتاج', linkedin: '', image: '' },
+        { name: 'رند سعد الحوشان', committee: 'لجنة التصاميم والهوية البصرية', linkedin: 'https://www.linkedin.com/in/r-h-358b042a3', image: '' },
+        { name: 'جوليان عايد العنزي', committee: 'لجنة التصاميم والهوية البصرية', linkedin: 'https://www.linkedin.com/in/%D8%AC%D9%88%D9%84%D9%8A%D8%A7%D9%86-%D8%A7%D9%84%D8%B9%D9%86%D8%B2%D9%8A-7a5a91422', image: '' },
+        { name: 'ياسر ابراهيم اللاحم', committee: 'لجنة التصاميم والهوية البصرية', linkedin: 'https://www.linkedin.com/in/yaser-allahim', image: '' },
+        { name: 'الجود سعد آل حمود', committee: 'لجنة التصاميم والهوية البصرية', linkedin: '', image: '' },
+        { name: 'عبدالحكيم فرج العتيبي', committee: 'لجنة التسويق وكتابة المحتوى', linkedin: '', image: '' },
+        { name: 'لمى عبدالرحمن اليمني', committee: 'لجنة التسويق وكتابة المحتوى', linkedin: '', image: '' },
+        { name: 'شهد بنت عبدالرحمن العليوي', committee: 'لجنة التسويق وكتابة المحتوى', linkedin: '', image: '' },
+      ],
+      planning: [
+        { name: 'سالم حسن آل صغير', committee: 'نائب قائدة إدارة التخطيط والتنظيم', leader: true, linkedin: 'https://www.linkedin.com/in/salim-alsaghir', image: '' },
+        { name: 'هدى فلاح الدلبحي', committee: 'قائدة لجنة التنظيم', leader: true, linkedin: 'https://www.linkedin.com/in/houda-aldalbahi-36bb63384', image: '' },
+        { name: 'عبدالعزيز اسماعيل الدبيخي', committee: 'لجنة التخطيط', linkedin: '', image: '' },
+        { name: 'سعود يوسف العامر', committee: 'لجنة التخطيط', linkedin: '', image: '' },
+        { name: 'غادة سعد الشهري', committee: 'لجنة التنظيم', linkedin: '', image: '' },
+        { name: 'لينا محمد التويجري', committee: 'لجنة التنظيم', linkedin: 'https://www.linkedin.com/in/leena-mohammed-1aa585432', image: '' },
+        { name: 'مها عبداللطيف السهيل', committee: 'لجنة التنظيم', linkedin: 'https://www.linkedin.com/in/maha-abdullatif-52735b3a8', image: '' },
+        { name: 'وصايف عبدالعزيز الجبالي', committee: 'لجنة التنظيم', linkedin: 'https://www.linkedin.com/in/wosayf-abdulaziz-87b100325', image: '' },
+      ],
+      tech: [
+        { name: 'الجوهره محمد الداعج', committee: 'قائدة إدارة التقنية', leader: true, linkedin: 'https://www.linkedin.com/in/aljoharh-aldaej-485203345', image: '' },
+        { name: 'ريهام سلام الخميس', committee: 'لجنة المنصات والحلول التقنية', linkedin: 'https://www.linkedin.com/in/reham-alkhamees-19232a413', image: '' },
+        { name: 'ليان عبدالله السلوم', committee: 'لجنة المنصات والحلول التقنية', linkedin: 'https://www.linkedin.com/in/layan-abdullah-503055432', image: '' },
+        { name: 'اريام عطاالله الشيباني', committee: 'لجنة المنصات والحلول التقنية', linkedin: 'https://www.linkedin.com/in/aryamata', image: '' },
+      ],
+    },
+  },
   {
     id: '2026-09',
     label: 'سبتمبر ٢٠٢٦',
@@ -74,8 +140,8 @@ export const MONTHS: FeaturedMonth[] = [
     },
     people: {
       hr: [
-        { name: 'رهف ملهي العريفي', committee: 'رئيسة إدارة الموارد البشرية', leader: true, linkedin: 'https://www.linkedin.com/in/rahaf-alarifi-187712402', image: '' },
-        { name: 'جنى عبدالله العصيمي', committee: 'نائبة رئيسة إدارة الموارد البشرية', leader: true, linkedin: 'https://www.linkedin.com/in/jana-alosaimi-46bb0338a', image: '' },
+        { name: 'رهف ملهي العريفي', committee: 'قائدة إدارة الموارد البشرية', leader: true, linkedin: 'https://www.linkedin.com/in/rahaf-alarifi-187712402', image: '' },
+        { name: 'جنى عبدالله العصيمي', committee: 'نائبة قائدة إدارة الموارد البشرية', leader: true, linkedin: 'https://www.linkedin.com/in/jana-alosaimi-46bb0338a', image: '' },
         { name: 'دينا عبدالرحمن المطيري', committee: 'قائدة لجنة الاستقطاب', leader: true, linkedin: '', image: '' },
         { name: 'رولا فهد البقمي', committee: 'لجنة الاستقطاب', linkedin: '', image: '' },
         { name: 'لين خالد الشهري', committee: 'لجنة الاستقطاب', linkedin: 'https://www.linkedin.com/in/leen-alshehri-05427438a', image: '' },
@@ -85,7 +151,7 @@ export const MONTHS: FeaturedMonth[] = [
         { name: 'فرح مسفر العتيبي', committee: 'لجنة المتابعة', linkedin: 'https://www.linkedin.com/in/%D9%81%D8%B1%D8%AD-%D8%A7%D9%84%D8%B9%D8%AA%D9%8A%D8%A8%D9%8A-2a8364384', image: '' },
       ],
       pr: [
-        { name: 'راكان خالد العتيبي', committee: 'رئيس إدارة العلاقات العامة', leader: true, linkedin: 'https://www.linkedin.com/in/rakan-alotaibi-a941ab376', image: '' },
+        { name: 'راكان خالد العتيبي', committee: 'قائد إدارة العلاقات العامة', leader: true, linkedin: 'https://www.linkedin.com/in/rakan-alotaibi-a941ab376', image: '' },
         { name: 'جود عبدالعزيز البراك', committee: 'قائدة لجنة الشراكات', leader: true, linkedin: 'https://www.linkedin.com/in/joudaz', image: '' },
         { name: 'ميس تركي الشهري', committee: 'نائبة قائدة لجنة التعاونات', leader: true, linkedin: 'https://www.linkedin.com/in/mays-alshehri-13846733a', image: '' },
         { name: 'همس عادل العنزي', committee: 'لجنة الشراكات', linkedin: 'https://www.linkedin.com/in/hams-alanzi-152173390', image: '' },
@@ -98,7 +164,7 @@ export const MONTHS: FeaturedMonth[] = [
         { name: 'جوليان عايد العنزي', committee: 'لجنة التصاميم والهوية البصرية', linkedin: 'https://www.linkedin.com/in/%D8%AC%D9%88%D9%84%D9%8A%D8%A7%D9%86-%D8%A7%D9%84%D8%B9%D9%86%D8%B2%D9%8A-7a5a91422', image: '' },
       ],
       planning: [
-        { name: 'سالم حسن آل صغير', committee: 'نائب رئيسة إدارة التخطيط والتنظيم', leader: true, linkedin: 'https://www.linkedin.com/in/salim-alsaghir', image: '' },
+        { name: 'سالم حسن آل صغير', committee: 'نائب قائدة إدارة التخطيط والتنظيم', leader: true, linkedin: 'https://www.linkedin.com/in/salim-alsaghir', image: '' },
         { name: 'هدى فلاح الدلبحي', committee: 'قائدة لجنة التنظيم', leader: true, linkedin: 'https://www.linkedin.com/in/houda-aldalbahi-36bb63384', image: '' },
         { name: 'مها محمد السعيدان', committee: 'لجنة التخطيط', linkedin: '', image: '' },
         { name: 'رند حسين الشرهان', committee: 'لجنة التخطيط', linkedin: '', image: '' },

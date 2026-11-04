@@ -41,6 +41,8 @@ export const LEADERSHIP = {
 
 /* ---------- مستشار المبادرة (shown under the president and deputy) ---------- */
 export const ADVISORS: Person[] = [
+  { name: 'محمد خالد المرشدي', role: 'مسؤول المبادرات', linkedin: '', image: '' },
+  { name: 'هيا شافي آل شافي', role: 'مستشارة المبادرة', linkedin: '', image: '' },
   { name: 'فيصل علي الحماد', role: 'مستشار المبادرة', linkedin: '', image: '' },
 ]
 
@@ -74,7 +76,6 @@ export const DEPARTMENTS: Department[] = [
         deputy: null,
         members: [
           { name: 'فرح مسفر العتيبي', linkedin: 'https://www.linkedin.com/in/%D9%81%D8%B1%D8%AD-%D8%A7%D9%84%D8%B9%D8%AA%D9%8A%D8%A8%D9%8A-2a8364384', image: '' },
-          { name: 'نوف مسفر ال رشيد', linkedin: '', image: '' },
           { name: 'فيصل محمد أباحسين', linkedin: 'https://www.linkedin.com/in/faisal-abahussain-784a74382', image: '' },
           { name: 'رؤى عادل الغامدي', linkedin: 'https://www.linkedin.com/in/%D8%B1%D8%A4%D9%89-%D8%A7%D9%84%D8%BA%D8%A7%D9%85%D8%AF%D9%8A-77a423440', image: '' },
         ],
@@ -135,7 +136,7 @@ export const DEPARTMENTS: Department[] = [
     id: 'media',
     name: 'إدارة الإعلام',
     lead: { name: 'ريماس ابراهيم الدريهم', role: 'قائدة الإدارة', linkedin: 'https://www.linkedin.com/in/remas-ibrahim-132529370', image: '' },
-    deputy: { name: 'اروى منصور السالم', role: 'نائبة الإدارة', linkedin: '', image: '' },
+    deputy: { name: 'عبدالله عبدالمجيد العتيق', role: 'نائب الإدارة', linkedin: 'https://www.linkedin.com/in/abdullahalateeq72', image: '' },
     committees: [
       {
         id: 'coverage',
@@ -153,13 +154,14 @@ export const DEPARTMENTS: Department[] = [
           { name: 'سارا فهد المطيري', linkedin: '', image: '' },
           { name: 'رغد نايف السبيعي', linkedin: '', image: '' },
           { name: 'مشعل بن محمد الحميضي', linkedin: '', image: '' },
+          { name: 'شروق باتل محمد', linkedin: '', image: '' },
         ],
       },
       {
         id: 'design',
         name: 'لجنة التصاميم والهوية البصرية',
         lead: { name: 'هند بدر المرسال', role: 'قائدة اللجنة', linkedin: 'https://www.linkedin.com/in/hind-bader-116884331', image: '' },
-        deputy: null,
+        deputy: { name: 'ريوف عويف العتيبي', role: 'نائبة اللجنة', linkedin: '', image: '' },
         members: [
           { name: 'جوليان عايد العنزي', linkedin: 'https://www.linkedin.com/in/%D8%AC%D9%88%D9%84%D9%8A%D8%A7%D9%86-%D8%A7%D9%84%D8%B9%D9%86%D8%B2%D9%8A-7a5a91422', image: '' },
           { name: 'سمر مسعد الحربي', linkedin: 'https://www.linkedin.com/in/samar-alharbi-606278394', image: '' },
@@ -167,13 +169,19 @@ export const DEPARTMENTS: Department[] = [
           { name: 'ليان خالد الشمري', linkedin: 'https://www.linkedin.com/in/layan-alshammari-%D9%84%D9%8A%D9%80%D8%A7%D9%86-%D8%A7%D9%84%D8%B4%D9%80%D9%85%D8%B1%D9%8A-834241260', image: '' },
           { name: 'ياسر ابراهيم اللاحم', linkedin: 'https://www.linkedin.com/in/yaser-allahim', image: '' },
           { name: 'ساره خالد العصيمي', linkedin: '', image: '' },
+          { name: 'ليان عبدالرحمن المسهر', linkedin: '', image: '' },
+          { name: 'سجى عبدالرحمن العنزي', linkedin: '', image: '' },
+          { name: 'منيره عبدالرحمن الخميس', linkedin: '', image: '' },
+          { name: 'جود عبدالله مطرد', linkedin: '', image: '' },
+          { name: 'الجود سعد آل حمود', linkedin: '', image: '' },
+          { name: 'يمان محمد محمود', linkedin: '', image: '' },
         ],
       },
       {
         id: 'marketing',
         name: 'لجنة التسويق وكتابة المحتوى',
         lead: { name: 'رغد سامي الخالدي', role: 'قائدة اللجنة', linkedin: 'https://www.linkedin.com/in/raghad-alkhaldi-8525ab2b4', image: '' },
-        deputy: { name: 'عبدالله عبدالمجيد العتيق', role: 'نائب اللجنة', linkedin: 'https://www.linkedin.com/in/abdullahalateeq72', image: '' },
+        deputy: null,
         members: [
           { name: 'جود فهد الحميد', linkedin: '', image: '' },
           { name: 'رهام منصور الدوسري', linkedin: '', image: '' },
@@ -185,7 +193,6 @@ export const DEPARTMENTS: Department[] = [
           { name: 'دانة ماجد بن سلمه', linkedin: 'https://www.linkedin.com/in/danah-m-b05975340', image: '' },
           { name: 'شوق عبدالله الحناكي', linkedin: 'https://www.linkedin.com/in/shoug-abdullah-843151383', image: '' },
           { name: 'خالد محمد الزعبي', linkedin: 'https://www.linkedin.com/in/%D8%AE%D8%A7%D9%84%D8%AF-%D8%A7%D9%84%D8%B2%D8%B9%D8%A8%D9%8A-9617503a9', image: '' },
-          { name: 'جود بنت مرزوق المطيري', linkedin: '', image: '' },
           { name: 'شهد عبدالعزيز السلطان', linkedin: '', image: '' },
           { name: 'الارجوان منصور المرداس', linkedin: '', image: '' },
           { name: 'نوال حنس المطيري', linkedin: '', image: '' },
@@ -198,6 +205,8 @@ export const DEPARTMENTS: Department[] = [
           { name: 'ميلاف نواف القحطاني', linkedin: '', image: '' },
           { name: 'دينا منصور العنزي', linkedin: '', image: '' },
           { name: 'شهد بنت عبدالرحمن العليوي', linkedin: '', image: '' },
+          { name: 'دلال خالد الحقان', linkedin: '', image: '' },
+          { name: 'جنى حسين المطيري', linkedin: '', image: '' },
         ],
       },
     ],
@@ -276,6 +285,7 @@ export const DIRECT_COMMITTEES: Committee[] = [
       { name: 'ريهام سلام الخميس', linkedin: 'https://www.linkedin.com/in/reham-alkhamees-19232a413', image: '' },
       { name: 'ليان عبدالله السلوم', linkedin: 'https://www.linkedin.com/in/layan-abdullah-503055432', image: '' },
       { name: 'اريام عطاالله الشيباني', linkedin: 'https://www.linkedin.com/in/aryamata', image: '' },
+      { name: 'نوره بنت سلطان الأحمد', linkedin: '', image: '' },
     ],
   },
 ]
