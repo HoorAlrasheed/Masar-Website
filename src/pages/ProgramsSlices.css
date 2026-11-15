@@ -336,8 +336,9 @@ body.psl-page header a[aria-label='مبادرة مسار'] {
   outline-offset: 4px;
 }
 
+/* posters and photos show in their true colours — no fading */
 .psl-art .prg-art-img {
-  filter: saturate(0.6);
+  filter: none;
 }
 
 .psl-art .prg-badge {

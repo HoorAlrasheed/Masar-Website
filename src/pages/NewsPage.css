@@ -744,3 +744,33 @@ body.tk-reading header a[aria-label='مبادرة مسار'] {
     height: 15px;
   }
 }
+
+/* «فتح تسجيل» with no photo: a calm navy band that says so */
+.tk-band-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  background:
+    radial-gradient(60% 120% at 50% 0%, rgba(141, 187, 216, 0.35), transparent 65%),
+    linear-gradient(160deg, #2e4470 0%, #23304f 55%, #16203a 100%);
+}
+
+.tk-band-new small {
+  padding: 3px 14px;
+  border: 1px solid rgba(239, 237, 219, 0.55);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #efeddb;
+}
+
+.tk-band-new b {
+  font-size: clamp(24px, 4.2vw, 42px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #f5f7f8;
+}

@@ -411,14 +411,9 @@
   object-position: center 30%;
 }
 
+/* no tint over photos: posters keep their own colours and contrast */
 .prg-art-tint {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(7, 17, 27, 0.35) 0%, rgba(7, 17, 27, 0) 35%),
-    linear-gradient(0deg, rgba(7, 17, 27, 0.45) 0%, rgba(7, 17, 27, 0) 45%),
-    rgba(21, 52, 77, 0.18);
+  display: none;
 }
 
 /* talks: a soft moon and an arch */

@@ -331,8 +331,14 @@ function Box({ id, name, items, family, target }: { id: string; name: string; it
                 </h3>
                 <Link to={`/programs/e${n.id}`} className="psl-art-link" tabIndex={-1} aria-hidden="true">
                 <div className="prg-art psl-art" aria-hidden="true">
-                  {n.image ? (
-                    <img className="prg-art-img" src={n.image} alt="" draggable={false} style={n.focus ? { objectPosition: n.focus } : undefined} />
+                  {n.poster || n.image ? (
+                    <img
+                      className="prg-art-img"
+                      src={n.poster || n.image}
+                      alt=""
+                      draggable={false}
+                      style={(n.poster ? n.posterFocus : n.focus) ? { objectPosition: n.poster ? n.posterFocus : n.focus } : undefined}
+                    />
                   ) : null}
                   <span className="prg-badge" data-status="closed">
                     أُقيم

@@ -62,13 +62,31 @@ function Barcode({ seed, vertical }: { seed: number; vertical?: boolean }) {
   )
 }
 
+function NewBand({ item }: { item: NewsItem }) {
+  return item.category === 'فتح تسجيل' ? (
+    <span className="tk-band-empty tk-band-new" aria-hidden="true">
+      <small>جديد</small>
+      <b>التسجيل مفتوح</b>
+    </span>
+  ) : (
+    <span className="tk-band-empty" aria-hidden="true" />
+  )
+}
+
 function Picture({ item }: { item: NewsItem }) {
   return (
     <span className="tk-pic">
       {item.image ? (
         <img src={item.image} alt="" loading="lazy" draggable={false} style={item.focus ? { objectPosition: item.focus } : undefined} />
       ) : (
-        <span className="tk-pic-empty" aria-hidden="true" />
+        item.category === 'فتح تسجيل' ? (
+          <span className="tk-pic-empty tk-band-new" aria-hidden="true">
+            <small>جديد</small>
+            <b>التسجيل مفتوح</b>
+          </span>
+        ) : (
+          <span className="tk-pic-empty" aria-hidden="true" />
+        )
       )}
       <i className="tk-hole tk-hole--a" aria-hidden="true" />
       <i className="tk-hole tk-hole--b" aria-hidden="true" />
@@ -124,7 +142,7 @@ function Ticket({ item }: { item: NewsItem }) {
         {item.image ? (
           <img src={item.image} alt="" loading="lazy" draggable={false} style={item.focus ? { objectPosition: item.focus } : undefined} />
         ) : (
-          <span className="tk-band-empty" aria-hidden="true" />
+          <NewBand item={item} />
         )}
       </span>
       <span className="tk-row">

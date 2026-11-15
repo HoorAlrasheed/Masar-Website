@@ -144,11 +144,13 @@
   position: absolute;
   inset: 0;
 
+  /* only a dark strip behind the title at the bottom, so the white text
+     reads — the rest of the photo keeps its true colours */
   background: linear-gradient(
     to top,
-    rgba(3, 7, 12, 0.88),
-    rgba(3, 7, 12, 0.15) 55%,
-    rgba(3, 7, 12, 0.05)
+    rgba(3, 7, 12, 0.85),
+    rgba(3, 7, 12, 0.35) 22%,
+    rgba(3, 7, 12, 0) 42%
   );
 
   pointer-events: none;
