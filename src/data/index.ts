@@ -79,7 +79,7 @@ export const programs: Program[] = [
     id: 1,
     slug: 'idea-to-prototype',
     title: 'ورشة عمل: من فكرة إلى نموذج أولي',
-    status: 'open',
+    status: 'closed',
     category: 'ورش العمل',
     date: '٢١ – ٢٢ أكتوبر ٢٠٢٦',
     time: '٦:٠٠ م – ٩:٠٠ م',
