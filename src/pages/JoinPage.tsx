@@ -23,7 +23,19 @@ type Tab = 'apply' | 'session'
 
 const SESSION_TYPES = ['توجيه مهني', 'توجيه أكاديمي', 'مراجعة السيرة الذاتية', 'تطوير المهارات']
 
-const STATUSES = ['طالب', 'غير ذلك']
+const STATUSES = ['طالب', 'حديث تخرج']
+
+/* the last 12 months, newest first — a recent graduate picks the month they
+   graduated, so only graduates of the past year can apply */
+const AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+const arDigits = (n: number) => String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)])
+const gradMonths = () => {
+  const now = new Date()
+  return Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    return `${AR_MONTHS[d.getMonth()]} ${arDigits(d.getFullYear())}`
+  })
+}
 
 const Chevron = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -136,7 +148,7 @@ const suggestEmail = (v: string) => {
 /* LinkedIn: must be a personal profile link (linkedin.com/in/…) */
 const LI_RE = /^(?:https?:\/\/)?(?:[a-z]{2,3}\.)?(?:www\.)?linkedin\.com\/in\/([^/?#\s]+)\/?(?:[?#].*)?$/i
 const checkLinkedIn = (v: string) => {
-  if (!v) return 'رابط حساب لينكدإن مطلوب'
+  if (!v) return '' // optional: some applicants have no account
   if (!/linkedin\.com/i.test(v)) return 'الصق رابط حسابك من لينكدإن، مثل: linkedin.com/in/name'
   if (!/linkedin\.com\/in\//i.test(v)) return 'هذا ليس رابط حساب شخصي، رابط الحساب يحتوي على \u2066/in/\u2069'
   if (!LI_RE.test(v)) return 'الرابط ناقص، تأكد من نسخه كاملًا من صفحة حسابك'
@@ -270,9 +282,8 @@ function AboutYou({
           />
         </Field>
         {linkedin ? (
-          <Field label="رابط حسابك في لينكدإن" required>
+          <Field label="رابط حسابك في لينكدإن (اختياري)">
             <CheckedInput
-              required
               name="لينكدإن"
               type="text"
               placeholder="linkedin.com/in/name"
@@ -313,7 +324,7 @@ function AboutYou({
           <>
           <div className="rqf-field">
             <span>
-              هل أنت طالب؟ <b>*</b>
+              حالتك الدراسية <b>*</b>
             </span>
             <div className="rqf-chips" role="radiogroup">
               {STATUSES.map((t) => (
@@ -337,10 +348,31 @@ function AboutYou({
                 <input required name="التخصص" type="text" placeholder="تخصصك الدراسي" />
               </Field>
             </>
-          ) : status ? (
-            <Field label="حدّد صفتك" required>
-              <input required name="الصفة الأخرى" type="text" placeholder="مثال: خريج، موظف..." />
-            </Field>
+          ) : status === 'حديث تخرج' ? (
+            <>
+              <Field label="الجامعة التي تخرّجت فيها" required>
+                <input required name="الجامعة" type="text" placeholder="اسم الجامعة" />
+              </Field>
+              <Field label="التخصص" required>
+                <input required name="التخصص" type="text" placeholder="تخصصك الدراسي" />
+              </Field>
+              <Field label="شهر وسنة التخرج" required>
+                <span className="rqf-select">
+                  <select required name="تاريخ التخرج" defaultValue="">
+                    <option value="" disabled>
+                      اختر شهر تخرّجك
+                    </option>
+                    {gradMonths().map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                  {Chevron}
+                </span>
+                <small className="rqf-hint">يُقبل التقديم لحديثي التخرج خلال السنة الأخيرة فقط.</small>
+              </Field>
+            </>
           ) : null}
           </>
         )}
@@ -651,8 +683,8 @@ export default function JoinPage() {
                     <Field label="لماذا تريد الانضمام إلى مسار؟" required>
                       <textarea required name="لماذا تريد الانضمام" rows={4} placeholder="أخبرنا عن دوافعك وما تأمل تحقيقه..." />
                     </Field>
-                    <Field label="مهاراتك وخبراتك">
-                      <textarea name="المهارات والخبرات" rows={3} placeholder="اذكر مهاراتك وأي خبرات سابقة..." />
+                    <Field label="مهاراتك وخبراتك" required>
+                      <textarea required name="المهارات والخبرات" rows={3} placeholder="اذكر مهاراتك وأي خبرات سابقة..." />
                     </Field>
                   </div>
                 </Section>
